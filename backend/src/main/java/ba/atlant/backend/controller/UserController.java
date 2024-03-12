@@ -8,13 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/save")
-    public ResponseEntity getUser() {
+    public ResponseEntity getUser(@RequestParam String name) {
         User user = new User();
         user.setName("Ahmedin");
         userRepository.save(user);
