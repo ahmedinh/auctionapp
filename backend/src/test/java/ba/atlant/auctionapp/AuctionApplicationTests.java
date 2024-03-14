@@ -1,4 +1,4 @@
-package ba.atlant.auctionapp.backend;
+package ba.atlant.auctionapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package ba.atlant.auctionapp.backend;
+package ba.atlant.auctionapp;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
