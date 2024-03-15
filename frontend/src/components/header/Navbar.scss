@@ -1,0 +1,43 @@
+.navbar {
+    background-color: #252525;
+    color: #fff;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); // Defines 8 columns
+    grid-template-areas: 
+        ". icons . . . account account ."; // Explicitly placing content
+    height: 40px; // Navbar height
+    align-items: center; // Center items vertically
+
+    .chunk {
+        display: flex;
+        justify-content: center; // Center content horizontally within the chunk
+        align-items: center; // Center content vertically within the chunk
+        height: 100%; // Ensure each chunk fills the height
+
+        a {
+            margin: 0;
+        }
+
+        &.icons {
+            color: #9B9B9B;
+            gap: 16px;
+        }
+        &.account {
+            color: #9B9B9B;
+            gap: 20px;
+            a {
+                color: #fff;
+                text-decoration: none;
+            }
+        }
+
+    }
+}
+
+@media (max-width: 600px) {
+    .chunk.icons {
+        gap: 8px; /* Reduce gap between icons for small screens */
+        height: 40px;
+        margin-top: -45px;
+    }
+}
