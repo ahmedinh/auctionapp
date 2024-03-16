@@ -1,10 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
-import Navbar from './components/header/Navbar';
+import NavbarBlack from './components/header/NavbarBlack';
+import NavbarWhite from './components/header/NavbarWhite';
 
 function App() {
   return (
-    <Navbar/>
+    <body>
+      <NavbarBlack/>
+      <NavbarWhite/>
+    </body>
   );
 }
 

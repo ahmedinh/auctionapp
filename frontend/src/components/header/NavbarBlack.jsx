@@ -1,13 +1,13 @@
 import React from "react";
-import "./Navbar.scss";
+import "./NavbarBlack.scss";
 import FacebookIcon from "../icons/FacebookIcon";
 import InstagramIcon from "../icons/InstagramIcon";
 import TwitterIcon from "../icons/TwitterIcon";
 
 const Navbar = () => {
     return (
-        <nav className="navbar">
-            <div className="chunk icons" style={{ gridArea: 'icons' }}> {/* Chunk 2 with Icons */}
+        <nav className="navbar-black">
+            <div className="chunk icons" style={{ gridArea: 'icons' }}>
                 <FacebookIcon size="24px"/>
                 <InstagramIcon size="24px"/>
                 <TwitterIcon size="24px"/>
