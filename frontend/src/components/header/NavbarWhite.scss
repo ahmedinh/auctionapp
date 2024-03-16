@@ -1,45 +1,70 @@
 .navbar-white {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
-    .logo {
-        height: 56px;
-        width: 153px;
-        margin-right: 30px;
+    padding: 0 10px;
+    height: 60px; // Example height, adjust as necessary
+
+    .left-container {
+        flex: 0.5;
+        display: flex;
+        justify-content: right;
+        align-items: right; // Ensure alignment if not explicitly setting height
+        padding-right: 12%;
     }
+
+    .logo {
+        height: 56px; // Adjust if you want the logo to be slightly less than the navbar height
+        width: auto; // Maintain aspect ratio
+    }
+    
     .search-container {
-        width: 30%;
+        flex: 0.6;
         display: flex;
         align-items: center;
         position: relative;
-        margin-right: 30px;
+        height: 100%; // Ensure it takes the full height of its parent
 
         .search-bar {
-            margin-top: 5px;
-            margin-bottom: 5px;
             width: 100%;
-            height: 30px;
-            padding-left: 10px;
-            border-color: #D8D8D8;
+            height: 90%; // Match the height of the search container/navbar
+            padding: 0 10px;
+            border-radius: 0; // Adjust styling as necessary
+            border-bottom: 1px solid #d8d8d8;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #d8d8d8;
+            border-top: 1px solid #d8d8d8
         }
         
         .search-icon {
             position: absolute;
-            right: 0;
-            margin-right: 10px;
+            right: 10px;
+            height: 100%; // Ensure icon/button matches the height of the search bar
             background: none;
             border: none;
-            padding: 0px;
             cursor: pointer;
         }
     }
 
-    .nav-btn {
-        background: none;
-        margin-left: 10px;
-        margin-right: 10px;
-        font-size: 16px;
-        border: none;
-    }
+    .buttons {
+        display: flex;
+        flex: 0.74;
+        gap: 30px;
+        align-items: center; // Center buttons if they do not fill the height
+        padding-left: 24px;
 
+        .nav-btn {
+            background: none;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            height: 100%; // Optional: If you want buttons to match navbar height
+            display: flex;
+            align-items: center; // Center text inside the button
+            padding: 0 10px; // Adjust padding as necessary
+        }
+    }
 }
