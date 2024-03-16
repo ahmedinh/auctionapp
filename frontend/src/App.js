@@ -1,13 +1,15 @@
 import './App.css';
 import NavbarBlack from './components/header/NavbarBlack';
 import NavbarWhite from './components/header/NavbarWhite';
+import Footer from './components/footer/Footer';
 
 function App() {
   return (
-    <body>
+    <div>
       <NavbarBlack/>
       <NavbarWhite/>
-    </body>
+      <Footer/>
+    </div>
   );
 }
 
