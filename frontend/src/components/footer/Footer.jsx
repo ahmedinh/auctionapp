@@ -6,7 +6,7 @@ import TwitterIcon from "../icons/TwitterIcon";
 
 const Footer = () => {
     return (
-        <div className="footer">
+        <footer className="footer">
             <div className="auction">
                 <p className="auction-text">
                     AUCTION
@@ -43,7 +43,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </footer>
     );
 };
 

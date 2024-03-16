@@ -11,7 +11,7 @@
         display: flex;
         justify-content: right;
         align-items: right; // Ensure alignment if not explicitly setting height
-        padding-right: 12%;
+        margin-left: 3%;
     }
 
     .logo {
@@ -20,10 +20,11 @@
     }
     
     .search-container {
-        flex: 0.6;
+        flex: 0.5;
         display: flex;
         align-items: center;
         position: relative;
+        margin-left: 9%;
         height: 100%; // Ensure it takes the full height of its parent
 
         .search-bar {

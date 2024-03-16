@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -35,4 +38,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.main-content {
+  flex: 1; /* Allows this element to expand and fill available space */
 }
