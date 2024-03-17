@@ -11,7 +11,7 @@
         display: flex;
         justify-content: right;
         align-items: right; // Ensure alignment if not explicitly setting height
-        margin-left: 3%;
+        margin-left: 1%;
     }
 
     .logo {
@@ -20,11 +20,11 @@
     }
     
     .search-container {
-        flex: 0.5;
+        flex: 0.6;
         display: flex;
         align-items: center;
         position: relative;
-        margin-left: 9%;
+        margin-left: 6%;
         height: 100%; // Ensure it takes the full height of its parent
 
         .search-bar {
@@ -50,7 +50,7 @@
 
     .buttons {
         display: flex;
-        flex: 0.74;
+        flex: 0.63;
         gap: 30px;
         align-items: center; // Center buttons if they do not fill the height
         padding-left: 24px;
@@ -65,7 +65,7 @@
             height: 100%; // Optional: If you want buttons to match navbar height
             display: flex;
             align-items: center; // Center text inside the button
-            padding: 0 10px; // Adjust padding as necessary
+            padding: 0;
         }
     }
 }
