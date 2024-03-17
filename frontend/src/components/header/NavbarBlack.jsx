@@ -4,15 +4,15 @@ import FacebookIcon from "../icons/FacebookIcon";
 import InstagramIcon from "../icons/InstagramIcon";
 import TwitterIcon from "../icons/TwitterIcon";
 
-const Navbar = () => {
+const NavbarBlack = () => {
     return (
         <nav className="navbar-black">
-            <div className="chunk icons" style={{ gridArea: 'icons' }}>
+            <div className="chunk icons">
                 <FacebookIcon size="24px"/>
                 <InstagramIcon size="24px"/>
                 <TwitterIcon size="24px"/>
             </div>
-            <div className="chunk account" style={{ gridArea: 'account' }}>
+            <div className="chunk account">
                 <a href="https://www.facebook.com">
                     Login
                 </a>
@@ -25,4 +25,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default NavbarBlack;
