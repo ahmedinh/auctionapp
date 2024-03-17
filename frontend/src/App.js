@@ -1,14 +1,18 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import AboutUs from './components/pages/AboutUs';
+import Terms from './components/pages/Terms';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <AboutUs/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Specify routes for AboutUs and Terms pages */}
+        <Route path="about-us" element={<AboutUs />} />
+        <Route path="terms-and-conditions" element={<Terms />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-
 
 export default App;
