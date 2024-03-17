@@ -12,10 +12,10 @@ const Footer = () => {
                     AUCTION
                 </p>
                 <div className="options">
-                    <a href="https://www.google.com" className="auction-options">
+                    <a href="/about-us" className="auction-options">
                         About Us
                     </a>
-                    <a href="https://www.google.com" className="auction-options">
+                    <a href="/terms-and-conditions" className="auction-options">
                         Terms And Conditions
                     </a>
                     <a href="https://www.google.com" className="auction-options">
