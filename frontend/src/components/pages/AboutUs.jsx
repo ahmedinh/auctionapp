@@ -12,13 +12,13 @@ const AboutUs = () => {
         <div className="page">
             <NavbarBlack/>
             <NavbarWhite/>
-            <div className="menu">
-                <div className="left-part">
+            <div className="menu-a">
+                <div className="left-part-a">
                     <p className="about-us-p">
                         About Us
                     </p>
                 </div>
-                <div className="right-part">
+                <div className="right-part-a">
                     <a href="" className="home">Home</a>
                     <span>&#8594;</span>
                     <a href="" className="about-us-link">About Us</a>
