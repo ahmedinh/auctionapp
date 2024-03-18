@@ -18,7 +18,7 @@ const Terms = () => {
                 <div className="right-part">
                     <a href="" className="home">Home</a>
                     <span>&#8594;</span>
-                    <a href="" className="about-us-link">Terms and Conditions</a>
+                    <a href="/terms-and-conditions" className="about-us-link">Terms and Conditions</a>
                 </div>
             </div>
             <div className="content">
