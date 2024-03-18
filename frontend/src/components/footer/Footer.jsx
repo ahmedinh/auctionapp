@@ -18,7 +18,7 @@ const Footer = () => {
                     <a href="/terms-and-conditions" className="auction-options">
                         Terms And Conditions
                     </a>
-                    <a href="https://www.google.com" className="auction-options">
+                    <a href="/privacy-and-policy" className="auction-options">
                         Privacy And Policy
                     </a>
                 </div>
