@@ -1,6 +1,7 @@
 package ba.atlant.auctionapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Category name must not be null")
+    @NotEmpty(message = "Category name must not be empty")
+    @Size(min = 2, max = 30, message = "Category name must be between 2 and 255 characters long")
+    @Pattern(regexp = "^[A-Z][a-zA-Z0-9]*$", message = "Category name must start with a capital letter and only contain alphanumeric characters and spaces")
     private String name;
 
     @OneToMany(mappedBy = "category")
