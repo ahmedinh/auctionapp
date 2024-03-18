@@ -2,13 +2,17 @@ package ba.atlant.auctionapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Category {
