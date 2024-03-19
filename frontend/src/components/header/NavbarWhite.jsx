@@ -5,10 +5,8 @@ import Logo from "../icons/logo.png";
 import Magnifier from "../icons/Magnifier";
 
 const NavbarWhite = () => {
-    const location = useLocation(); // Get the current location object
-    const currentPath = location.pathname; // Extract the path from location
-
-    // Determine if the current path matches one of the specified routes
+    const location = useLocation();
+    const currentPath = location.pathname;
     const isSpecialRoute = ['/about-us', '/privacy-and-policy', '/terms-and-conditions'].includes(currentPath);
     
     return (
@@ -30,5 +28,4 @@ const NavbarWhite = () => {
         </div>
     );
 };
-
 export default NavbarWhite;

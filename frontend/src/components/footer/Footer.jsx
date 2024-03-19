@@ -7,24 +7,24 @@ import TwitterIcon from "../icons/TwitterIcon";
 const Footer = () => {
     return (
         <footer className="footer">
-            <div className="auction">
-                <p className="auction-text">
+            <div className="auction-section">
+                <p className="auction-title">
                     AUCTION
                 </p>
                 <div className="options">
-                    <a href="/about-us" className="auction-options">
+                    <a href="/about-us">
                         About Us
                     </a>
-                    <a href="/terms-and-conditions" className="auction-options">
+                    <a href="/terms-and-conditions">
                         Terms And Conditions
                     </a>
-                    <a href="/privacy-and-policy" className="auction-options">
+                    <a href="/privacy-and-policy">
                         Privacy And Policy
                     </a>
                 </div>
             </div>
-            <div className="git">
-                <div className="get-in-touch">
+            <div className="get-in-touch">
+                <div className="get-in-touch-content">
                     <p className="get-in-touch-text">
                         GET IN TOUCH
                     </p>
@@ -36,9 +36,9 @@ const Footer = () => {
                             support@auction.com
                         </p>
                         <div className="icons">
-                            <FacebookIcon size="24px"/>
-                            <InstagramIcon size="24px"/>
-                            <TwitterIcon size="24px"/>
+                            <FacebookIcon />
+                            <InstagramIcon />
+                            <TwitterIcon />
                         </div>
                     </div>
                 </div>
@@ -46,5 +46,4 @@ const Footer = () => {
         </footer>
     );
 };
-
 export default Footer;

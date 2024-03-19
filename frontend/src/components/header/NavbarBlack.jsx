@@ -12,7 +12,7 @@ const NavbarBlack = () => {
                 <InstagramIcon size="24px"/>
                 <TwitterIcon size="24px"/>
             </div>
-            <div className="chunk account">
+            <div className="chunk sign-in">
                 <a href="https://www.facebook.com">
                     Login
                 </a>
@@ -24,5 +24,4 @@ const NavbarBlack = () => {
         </nav>
     );
 };
-
 export default NavbarBlack;

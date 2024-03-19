@@ -4,19 +4,19 @@
     align-items: center;
     margin-top: 10px;
     padding: 0 10px;
-    height: 60px; // Example height, adjust as necessary
+    height: 60px; 
 
     .left-container {
         flex: 0.5;
         display: flex;
         justify-content: right;
-        align-items: right; // Ensure alignment if not explicitly setting height
+        align-items: right; 
         margin-left: 1%;
     }
 
     .logo {
-        height: 56px; // Adjust if you want the logo to be slightly less than the navbar height
-        width: auto; // Maintain aspect ratio
+        height: 56px; 
+        width: auto;
     }
     
     .search-container {
@@ -25,13 +25,13 @@
         align-items: center;
         position: relative;
         margin-left: 6%;
-        height: 100%; // Ensure it takes the full height of its parent
+        height: 100%; 
 
         .search-bar {
             width: 100%;
-            height: 90%; // Match the height of the search container/navbar
+            height: 90%;
             padding: 0 10px;
-            border-radius: 0; // Adjust styling as necessary
+            border-radius: 0;
             border-bottom: 1px solid #d8d8d8;
             border-left: 1px solid #ccc;
             border-right: 1px solid #d8d8d8;
@@ -41,7 +41,7 @@
         .search-icon {
             position: absolute;
             right: 10px;
-            height: 100%; // Ensure icon/button matches the height of the search bar
+            height: 100%;
             background: none;
             border: none;
             cursor: pointer;
@@ -52,7 +52,7 @@
         display: flex;
         flex: 0.6;
         gap: 30px;
-        align-items: center; // Center buttons if they do not fill the height
+        align-items: center;
         padding-left: 24px;
 
         .nav-btn {
@@ -63,9 +63,9 @@
             cursor: pointer;
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            height: 100%; // Optional: If you want buttons to match navbar height
+            height: 100%;
             display: flex;
-            align-items: center; // Center text inside the button
+            align-items: center;
             padding: 0;
             color: #252525;
 

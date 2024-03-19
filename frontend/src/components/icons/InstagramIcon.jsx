@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InstagramIcon = ({ size = '20px', color = 'currentColor', href = 'https://www.instagram.com' }) => {
+const InstagramIcon = ({ size = '24px', color = 'currentColor', href = 'https://www.instagram.com' }) => {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: color, display: 'inline-flex' }}>
       <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 20 20" fill="currentColor">

@@ -1,40 +1,40 @@
 .navbar-black {
     background-color: #252525;
     color: #fff;
-    display: flex; // Changed to flex for a simpler layout
-    justify-content: space-between; // Space out the children equally
-    height: 40px; // Navbar height
-    align-items: center; // Center items vertically
-    padding: 0 20%; // Add padding on both sides
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+    align-items: center;
+    padding: 0 20%;
 
     .chunk {
         display: flex;
-        justify-content: center; // Center content horizontally within the chunk
-        align-items: center; // Center content vertically within the chunk
-        height: 100%; // Ensure each chunk fills the height
+        justify-content: center;
+        align-items: center;
+        height: 100%;
 
         a {
             margin: 0;
-            color: #fff; // Ensure anchor tags are white
+            color: #fff;
             text-decoration: none;
         }
 
 
-        &.icons, &.account {
+        &.icons, &.sign-in {
             color: #9B9B9B;
-            gap: 16px; // Adjusted for simplicity
+            gap: 16px;
         }
     }
 }
 
 @media (max-width: 600px) {
     .navbar-black {
-        flex-direction: column; // Stack vertically on small screens
-        height: auto; // Adjust height for stacked layout
+        flex-direction: column;
+        height: auto;
 
         .chunk {
             &:not(:last-child) {
-                margin-bottom: 10px; // Add space between the chunks
+                margin-bottom: 10px;
             }
         }
     }

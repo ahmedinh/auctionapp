@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
 
-    .auction {
+    .auction-section {
         display: flex;
         flex-direction: column;
         gap: 24px;
@@ -18,7 +18,7 @@
         width: 100%;
         margin-left: 19%;
 
-        .auction-text {
+        .auction-title {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
             color: #9B9B9B;
@@ -30,23 +30,24 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            .auction-options {
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            a {
+                color: #D8D8D8;
                 text-decoration: none;
-                font-family: 'Lato', sans-serif;
-                font-weight: 400;
-                color: #fff;
-                font-size: 16px;
             }
         }
     }
 
 
-    .git {
+    .get-in-touch {
         text-align: left;
         width: 100%;
         align-items: right;
         margin-left: 18%;
-        .get-in-touch {
+        .get-in-touch-content {
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -68,4 +69,3 @@
         }
     }
   }
-  
