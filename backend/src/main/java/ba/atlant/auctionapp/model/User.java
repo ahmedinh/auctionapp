@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "_user")
+@Table(name = "Profile")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
