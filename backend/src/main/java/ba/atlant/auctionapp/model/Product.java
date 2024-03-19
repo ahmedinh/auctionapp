@@ -34,7 +34,7 @@ public class Product {
 
     private String description;
 
-    @Min(value = 0, message = "Start price cannot be negative.")
+    @Min(value = 0, message = "Start price must be greater than {value}.")
     @Column(name = "start_price")
     private BigDecimal startPrice;
 
