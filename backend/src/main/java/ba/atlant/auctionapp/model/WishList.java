@@ -1,8 +1,13 @@
 package ba.atlant.auctionapp.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class WishList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
