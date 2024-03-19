@@ -35,10 +35,12 @@ public class User {
     @NotBlank(message = "Email cannot be blank.")
     @NotNull(message = "Email cannot be null.")
     @Email
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "Username cannot be blank.")
     @NotNull(message = "Username cannot be null.")
+    @Column(nullable = false, unique = true)
     private String username;
 
     @NotBlank(message = "Birth date cannot be blank.")
@@ -59,7 +61,7 @@ public class User {
     private String country;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToMany(mappedBy = "user")
