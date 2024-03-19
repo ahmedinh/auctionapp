@@ -50,11 +50,11 @@ public class User {
 
     private String phoneNumber;
 
-    private String shippingStreet;
+    private String shippingAddress;
 
     private String shippingCity;
 
-    private String zipcode;
+    private String zipCode;
 
     private String state;
 
@@ -65,14 +65,14 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<CreditCard> creditCards;
+    private List<CreditCard> creditCardList;
 
     @OneToMany(mappedBy = "user")
-    private List<WishList> wishes;
+    private List<WishList> wishList;
 
     @OneToMany(mappedBy = "user")
-    private List<Product> products;
+    private List<Product> productList;
 
     @OneToMany(mappedBy = "user")
-    private List<Bid> bids;
+    private List<Bid> bidList;
 }
