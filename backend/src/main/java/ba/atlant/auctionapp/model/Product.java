@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class Product {
 
     @Min(value = 0, message = "Start price cannot be negative.")
     @Column(name = "start_price")
-    private Double startPrice;
+    private BigDecimal startPrice;
 
     @NotBlank(message = "Auction start date cannot be blank.")
     @NotNull(message = "Auction start date cannot be null.")
