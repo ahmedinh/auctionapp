@@ -18,5 +18,4 @@ const FacebookIcon = ({ size = '24px', color = 'currentColor', href = 'https://w
     </a>
   );
 };
-
 export default FacebookIcon;

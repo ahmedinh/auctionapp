@@ -1,11 +1,12 @@
 import React from "react";
 import "./Privacy.scss";
 import Layout from "../utilities/Layout";
+import ArrowRightIcon from "../icons/ArrowRightIcon";
 
 const Privacy = () => {
     return (
         <Layout>
-            <div className="full">
+            <div className="full-page">
                 <div className="menu">
                     <div className="left-part">
                         <p className="about-us-p">
@@ -13,12 +14,12 @@ const Privacy = () => {
                         </p>
                     </div>
                     <div className="right-part">
-                        <a href="" className="home">Home</a>
-                        <span>&#8594;</span>
+                        <a href="/" className="home">Home</a>
+                        <ArrowRightIcon className="arrow"/>
                         <a href="/privacy-and-policy" className="about-us-link">Privacy and Policy</a>
                     </div>
                 </div>
-                <div className="page">
+                <div className="page-content">
                     <div className="page-chapter">
                         <h2>Auction Website Privacy Policy</h2>
                     </div>
@@ -70,5 +71,4 @@ const Privacy = () => {
         </Layout>
     );
 };
-
 export default Privacy;

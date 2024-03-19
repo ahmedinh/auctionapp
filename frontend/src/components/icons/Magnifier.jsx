@@ -7,5 +7,4 @@ const Magnifier = ({ size = '24px', color = 'currentColor', href = 'https://www.
     </svg>
   );
 };
-
 export default Magnifier;

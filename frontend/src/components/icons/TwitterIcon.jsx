@@ -9,5 +9,4 @@ const TwitterIcon = ({ size = '20px', color = 'currentColor', href = 'https://ww
     </a>
   );
 };
-
 export default TwitterIcon;

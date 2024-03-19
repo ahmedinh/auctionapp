@@ -4,6 +4,7 @@ import PictureTop from "../icons/about_us1.png";
 import PictureLeft from "../icons/about_us2.png";
 import PictureRight from "../icons/about_us3.png";
 import Layout from "../utilities/Layout";
+import ArrowRightIcon from "../icons/ArrowRightIcon"
 
 const AboutUs = () => {
     return (
@@ -16,9 +17,9 @@ const AboutUs = () => {
                         </p>
                     </div>
                     <div className="right-part-a">
-                        <a href="" className="home">Home</a>
-                        <span>&#8594;</span>
-                        <a href="" className="about-us-link">About Us</a>
+                        <a href="/" className="home">Home</a>
+                        <ArrowRightIcon className="arrow"/>
+                        <a href="/about-us" className="about-us-link">About Us</a>
                     </div>
                 </div>
                 <div className="about-us">
@@ -61,5 +62,4 @@ const AboutUs = () => {
         </Layout>
     );
 };
-
 export default AboutUs;

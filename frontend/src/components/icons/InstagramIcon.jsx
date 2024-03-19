@@ -9,5 +9,4 @@ const InstagramIcon = ({ size = '24px', color = 'currentColor', href = 'https://
     </a>
   );
 };
-
 export default InstagramIcon;

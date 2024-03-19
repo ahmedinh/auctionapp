@@ -1,6 +1,7 @@
 import React from "react";
 import "./Terms.scss";
 import Layout from "../utilities/Layout";
+import ArrowRightIcon from "../icons/ArrowRightIcon";
 
 const Terms = () => {
     return (
@@ -13,8 +14,8 @@ const Terms = () => {
                         </p>
                     </div>
                     <div className="right-part">
-                        <a href="" className="home">Home</a>
-                        <span>&#8594;</span>
+                        <a href="/" className="home">Home</a>
+                        <ArrowRightIcon className="arrow"/>
                         <a href="/terms-and-conditions" className="about-us-link">Terms and Conditions</a>
                     </div>
                 </div>

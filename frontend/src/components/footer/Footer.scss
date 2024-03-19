@@ -41,16 +41,17 @@
         }
     }
 
-
     .get-in-touch {
         text-align: left;
         width: 100%;
         align-items: right;
         margin-left: 18%;
+
         .get-in-touch-content {
             display: flex;
             flex-direction: column;
             gap: 12px;
+
             .get-in-touch-text {
                 font-family: 'Lato', sans-serif;
                 font-weight: 400;
@@ -68,4 +69,4 @@
             }
         }
     }
-  }
+}
