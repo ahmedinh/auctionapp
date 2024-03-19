@@ -21,7 +21,8 @@ public class CreditCard {
 
     @NotBlank(message = "Card number cannot be blank.")
     @NotNull(message = "Card number cannot be null.")
-    @Pattern(regexp = "^[0-9]{16}$", message = "Card number must be exactly 16 digits.")
+    @Pattern(regexp = "^[0-9]*$", message = "Card number must contain only digits.")
+    @Size(min = 13, max = 19, message = "Card number must contain between 13 and 19 digits.")
     @Column(name = "card_number")
     private String cardNumber;
 
@@ -39,8 +40,8 @@ public class CreditCard {
 
     @NotNull(message = "CVV number cannot be null.")
     @NotBlank(message = "CVV number cannot be blank.")
-    @Pattern(regexp = "^[0-9]{3,4}$", message = "CVV must be exactly 3 digits.")
-    private String CVV;
+    @Size(min = 100, max = 9999, message = "CVV must be a three- or a four-digit number.")
+    private Integer CVV;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -49,7 +50,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(Long id, String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, String CVV, User user) {
+    public CreditCard(Long id, String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, User user) {
         this.id = id;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -99,11 +100,11 @@ public class CreditCard {
         this.expiration_year = expiration_year;
     }
 
-    public String getCVV() {
+    public Integer getCVV() {
         return CVV;
     }
 
-    public void setCVV(String CVV) {
+    public void setCVV(Integer CVV) {
         this.CVV = CVV;
     }
 
