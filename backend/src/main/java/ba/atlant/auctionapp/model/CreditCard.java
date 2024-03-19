@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+/**
+ * Represents a credit card information associated with a user in the auction system.
+ * Stores details necessary for processing transactions.
+ */
 
 @Entity
 @NoArgsConstructor

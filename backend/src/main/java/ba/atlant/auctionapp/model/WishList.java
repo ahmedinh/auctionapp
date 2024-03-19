@@ -3,6 +3,11 @@ package ba.atlant.auctionapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Represents a wish list entry in the auction system, linking users to products they are interested in.
+ * This entity facilitates tracking of products that a user wishes to monitor or purchase later.
+ */
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

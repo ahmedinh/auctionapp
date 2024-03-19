@@ -11,6 +11,12 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Represents a product that can be auctioned in the system.
+ * Each product has associated details like name, description, starting price,
+ * auction start and end times, and is linked to categories, bids, and users.
+ */
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

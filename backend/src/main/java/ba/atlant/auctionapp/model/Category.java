@@ -9,8 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
+
+/**
+ * Entity representing a category for products in the auction system.
+ * Each category is defined by a unique name and can be associated with multiple products.
+ */
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))

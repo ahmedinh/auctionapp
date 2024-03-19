@@ -1,15 +1,19 @@
 package ba.atlant.auctionapp.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
+
+/**
+ * Represents a bid in an auction system.
+ * Each bid is associated with a user and a product,
+ * indicating the amount offered by the user for the product.
+ */
 
 @Entity
 @AllArgsConstructor
@@ -32,5 +36,4 @@ public class Bid {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
 }

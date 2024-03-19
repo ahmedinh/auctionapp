@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 
+/**
+ * Represents a role within the auction system, which can be assigned to users.
+ * Roles are used to define different levels of access and permissions for users within the system.
+ */
+
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @NoArgsConstructor

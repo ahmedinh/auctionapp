@@ -7,8 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
+
+/**
+ * Represents a size dimension for products within the auction system.
+ * This entity is designed to accommodate various types of sizes (e.g., for shoes, t-shirts),
+ * making it flexible for different product categories.
+ */
 
 @Entity
 @AllArgsConstructor

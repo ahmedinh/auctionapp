@@ -9,6 +9,11 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Represents a user of the auction system. This entity stores personal and contact information,
+ * as well as relationships with roles, bids, credit cards, wish lists, and products.
+ */
+
 @Entity
 @Table(name = "_user")
 @NoArgsConstructor

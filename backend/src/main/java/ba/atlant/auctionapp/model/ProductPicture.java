@@ -3,6 +3,11 @@ package ba.atlant.auctionapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Represents a picture associated with a product in the auction system.
+ * Each product can have multiple pictures, and each picture is identified by a unique URL.
+ */
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
