@@ -3,10 +3,6 @@ package ba.atlant.auctionapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.math.BigDecimal;
 
 /**
@@ -16,10 +12,6 @@ import java.math.BigDecimal;
  */
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +28,46 @@ public class Bid {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    public Bid() {
+    }
+
+    public Bid(Long id, BigDecimal amount, User user, Product product) {
+        this.id = id;
+        this.amount = amount;
+        this.user = user;
+        this.product = product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

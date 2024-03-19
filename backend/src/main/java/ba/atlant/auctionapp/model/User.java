@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,10 +15,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Profile")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,4 +75,179 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Bid> bidList;
+
+    public User() {
+    }
+
+    public User(Long id,
+                String firstName,
+                String lastName,
+                String email,
+                String username,
+                LocalDate birthDate,
+                String phoneNumber,
+                String shippingAddress,
+                String shippingCity,
+                String zipCode,
+                String state,
+                String country,
+                Role role,
+                List<CreditCard> creditCardList,
+                List<WishList> wishList,
+                List<Product> productList,
+                List<Bid> bidList) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.shippingAddress = shippingAddress;
+        this.shippingCity = shippingCity;
+        this.zipCode = zipCode;
+        this.state = state;
+        this.country = country;
+        this.role = role;
+        this.creditCardList = creditCardList;
+        this.wishList = wishList;
+        this.productList = productList;
+        this.bidList = bidList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public String getShippingCity() {
+        return shippingCity;
+    }
+
+    public void setShippingCity(String shippingCity) {
+        this.shippingCity = shippingCity;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<CreditCard> getCreditCardList() {
+        return creditCardList;
+    }
+
+    public void setCreditCardList(List<CreditCard> creditCardList) {
+        this.creditCardList = creditCardList;
+    }
+
+    public List<WishList> getWishList() {
+        return wishList;
+    }
+
+    public void setWishList(List<WishList> wishList) {
+        this.wishList = wishList;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
+
+    public List<Bid> getBidList() {
+        return bidList;
+    }
+
+    public void setBidList(List<Bid> bidList) {
+        this.bidList = bidList;
+    }
 }
