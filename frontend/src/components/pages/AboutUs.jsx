@@ -4,7 +4,7 @@ import PictureTop from "../icons/about_us1.png";
 import PictureLeft from "../icons/about_us2.png";
 import PictureRight from "../icons/about_us3.png";
 import Layout from "../utilities/Layout";
-import ArrowRightIcon from "../icons/ArrowRightIcon"
+import { GoArrowRight } from "react-icons/go";
 
 const AboutUs = () => {
     return (
@@ -18,7 +18,7 @@ const AboutUs = () => {
                     </div>
                     <div className="right-part-a">
                         <a href="/" className="home">Home</a>
-                        <ArrowRightIcon className="arrow"/>
+                        <GoArrowRight className="arrow"/>
                         <a href="/about-us" className="about-us-link">About Us</a>
                     </div>
                 </div>

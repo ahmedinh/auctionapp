@@ -1,7 +1,7 @@
 import React from "react";
 import "./Privacy.scss";
 import Layout from "../utilities/Layout";
-import ArrowRightIcon from "../icons/ArrowRightIcon";
+import { GoArrowRight } from "react-icons/go";
 
 const Privacy = () => {
     return (
@@ -15,7 +15,7 @@ const Privacy = () => {
                     </div>
                     <div className="right-part">
                         <a href="/" className="home">Home</a>
-                        <ArrowRightIcon className="arrow"/>
+                        <GoArrowRight className="arrow"/>
                         <a href="/privacy-and-policy" className="about-us-link">Privacy and Policy</a>
                     </div>
                 </div>
