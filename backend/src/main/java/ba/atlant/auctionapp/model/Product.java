@@ -4,12 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.cglib.core.Local;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,25 +39,24 @@ public class Product {
     @NotNull(message = "Auction end date cannot be null.")
     private LocalDateTime auctionEnd;
 
-    private Integer shoeSize;
-
-    private String clothesSize;
-
-    @OneToMany(mappedBy = "product")
-    private List<WishList> wishes;
+    @ManyToOne
+    @JoinColumn(name = "size_id", nullable = false)
+    private Size size;
 
     @OneToMany(mappedBy = "product")
-    private List<Bid> bids;
+    private List<WishList> wishList;
 
     @OneToMany(mappedBy = "product")
-    private List<ProductPicture> productPictures;
+    private List<Bid> bidList;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductPicture> productPictureList;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }
