@@ -9,7 +9,7 @@ const Privacy = () => {
             <div className="full-page">
                 <div className="menu">
                     <div className="left-part">
-                        <p className="about-us-p">
+                        <p className="privacy-and-policy">
                             Privacy and Policy
                         </p>
                     </div>
