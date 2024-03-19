@@ -30,18 +30,13 @@ public class Category {
     public Category() {
     }
 
-    public Category(Long id, String name, List<Product> products) {
-        this.id = id;
+    public Category(String name, List<Product> products) {
         this.name = name;
         this.products = products;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

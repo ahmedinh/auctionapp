@@ -50,8 +50,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(Long id, String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, User user) {
-        this.id = id;
+    public CreditCard(String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, User user) {
         this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expirationMonth = expirationMonth;
@@ -62,10 +61,6 @@ public class CreditCard {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCardName() {

@@ -32,8 +32,7 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(Long id, BigDecimal amount, User user, Product product) {
-        this.id = id;
+    public Bid(BigDecimal amount, User user, Product product) {
         this.amount = amount;
         this.user = user;
         this.product = product;
@@ -41,10 +40,6 @@ public class Bid {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public BigDecimal getAmount() {

@@ -24,18 +24,13 @@ public class WishList {
     public WishList() {
     }
 
-    public WishList(Long id, User user, Product product) {
-        this.id = id;
+    public WishList(User user, Product product) {
         this.user = user;
         this.product = product;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getUser() {

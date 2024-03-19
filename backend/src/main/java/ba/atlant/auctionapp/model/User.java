@@ -79,8 +79,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id,
-                String firstName,
+    public User(String firstName,
                 String lastName,
                 String email,
                 String username,
@@ -117,10 +116,6 @@ public class User {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {

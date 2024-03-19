@@ -23,18 +23,13 @@ public class ProductPicture {
     public ProductPicture() {
     }
 
-    public ProductPicture(Long id, String url, Product product) {
-        this.id = id;
+    public ProductPicture(String url, Product product) {
         this.url = url;
         this.product = product;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUrl() {

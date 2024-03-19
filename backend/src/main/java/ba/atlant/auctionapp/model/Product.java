@@ -66,8 +66,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id,
-                   String name,
+    public Product(String name,
                    String description,
                    BigDecimal startPrice,
                    LocalDateTime auctionStart,
@@ -78,7 +77,6 @@ public class Product {
                    List<ProductPicture> productPictureList,
                    Category category,
                    User user) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.startPrice = startPrice;
@@ -94,10 +92,6 @@ public class Product {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
