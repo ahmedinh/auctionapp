@@ -2,13 +2,14 @@ import React from 'react';
 import NavbarBlack from '../header/NavbarBlack';
 import NavbarWhite from '../header/NavbarWhite';
 import Footer from '../footer/Footer';
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
     return (
         <>
             <NavbarBlack />
             <NavbarWhite />
-            <main>{children}</main>
+            <main><Outlet/></main>
             <Footer />
         </>
     );
