@@ -7,55 +7,32 @@
 
         .left-part-a {
             flex: 1;
-            .about-us-p {
-                font-weight: 400;
-                font-family: 'Lato', sans-serif;
-                font-size: 16px;
-                line-height: 24px;
-                color: #252525;
-                margin-right: 13.5%;
+
+            .left-part-text {
+                margin-right: 13.5% !important;
             }
         }
 
-        .right-part-a {
+        .right-part {
             flex: 1;
             display: flex;
             justify-content: center;
-            gap: 16px;
-
-            a {
-                text-decoration: none;
-                font-weight: 400;
-                font-family: 'Lato', sans-serif;
-                font-size: 16px;
-                line-height: 24px;
-                color: #DBDBDB;
-            }
-
-            .arrow {
-                transform: translateY(25%);
-                color: #9B9B9B;
-            }
-
-            .about-us-link {
-                color: #8367D8;
-            }
         }
     }
 
     .about-us {
-        font-family: 'Lato', sans-serif;
         display: flex;
         justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
         margin-bottom: 100px;
-    
-        .left-side, .images {
+
+        .left-side,
+        .images {
             flex: 1;
             max-width: calc(50% - 100px);
         }
-    
+
         .left-side {
             .text {
                 display: flex;
@@ -63,34 +40,35 @@
                 gap: 32px;
                 padding-left: 15%;
                 margin-left: 17%;
-                
-                .chapter2, .chapter3, .chapter4 {
+
+                .chapter2,
+                .chapter3,
+                .chapter4 {
                     margin: 0;
                 }
-                
+
                 .headline {
                     display: flex;
                     flex-direction: column;
                     gap: 32px;
                 }
-                
+
                 h5 {
                     font-weight: 600;
                     font-size: 24px;
                     color: #252525
                 }
-                
+
                 p {
                     font-weight: 400;
                     font-size: 16px;
-                    line-height: 24px;
                     color: #9B9B9B;
                     width: 543px;
                     margin: 0;
                 }
             }
         }
-    
+
         .images {
             display: flex;
             flex-direction: column;
@@ -98,19 +76,20 @@
             gap: 24px;
             padding-top: 5%;
             margin-top: 3%;
-    
+
             .bottom-images {
                 display: flex;
                 gap: 24px;
             }
-    
+
             .picture-top {
                 width: 548px;
                 height: 381px;
                 object-fit: cover;
             }
-    
-            .picture-left, .picture-right {
+
+            .picture-left,
+            .picture-right {
                 width: 262px;
                 height: 199px;
             }
