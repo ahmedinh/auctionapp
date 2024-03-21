@@ -1,8 +1,8 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import "./Footer.scss";
-import FacebookIcon from "../icons/FacebookIcon";
-import InstagramIcon from "../icons/InstagramIcon";
-import TwitterIcon from "../icons/TwitterIcon";
+import { common } from "../messages/Text";
+import SocialIcons from "../icons/SocialIcons";
 
 const Footer = () => {
     return (
@@ -12,15 +12,15 @@ const Footer = () => {
                     AUCTION
                 </p>
                 <div className="options">
-                    <a href="/about-us">
-                        About Us
-                    </a>
-                    <a href="/terms-and-conditions">
-                        Terms And Conditions
-                    </a>
-                    <a href="/privacy-and-policy">
-                        Privacy And Policy
-                    </a>
+                    <NavLink to="/home/about-us" activeClassName="active">
+                        {common.about_us}
+                    </NavLink>
+                    <NavLink to="/home/terms-and-conditions" activeClassName="active">
+                        {common.terms_and_conditions}
+                    </NavLink>
+                    <NavLink to="/home/privacy-and-policy" activeClassName="active">
+                        {common.privacy_and_policy}
+                    </NavLink>
                 </div>
             </div>
             <div className="get-in-touch">
@@ -35,11 +35,7 @@ const Footer = () => {
                         <p className="email">
                             support@auction.com
                         </p>
-                        <div className="icons">
-                            <FacebookIcon />
-                            <InstagramIcon />
-                            <TwitterIcon />
-                        </div>
+                        <SocialIcons/>
                     </div>
                 </div>
             </div>
