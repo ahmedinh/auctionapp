@@ -1,17 +1,10 @@
 import React from "react";
 import "./NavbarBlack.scss";
-import FacebookIcon from "../icons/FacebookIcon";
-import InstagramIcon from "../icons/InstagramIcon";
-import TwitterIcon from "../icons/TwitterIcon";
-
+import SocialIcons from "../icons/SocialIcons";
 const NavbarBlack = () => {
     return (
         <nav className="navbar-black">
-            <div className="chunk icons">
-                <FacebookIcon size="24px"/>
-                <InstagramIcon size="24px"/>
-                <TwitterIcon size="24px"/>
-            </div>
+            <SocialIcons/>
             <div className="chunk sign-in">
                 <a href="https://www.facebook.com">
                     Login
