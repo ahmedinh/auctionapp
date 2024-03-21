@@ -12,9 +12,12 @@ code {
     monospace;
 }
 
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
+  font-family: 'Lato', sans-serif;
+  line-height: 24px;
 }
 
 .content-wrapper {
@@ -25,4 +28,16 @@ body, html {
 
 main {
   flex: 1;
+}
+
+.left-part-text {
+  font-weight: 400;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #252525;
+}
+
+.right-part {
+  flex: 1.55;
 }
