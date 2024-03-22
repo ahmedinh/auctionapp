@@ -1,0 +1,14 @@
+.menu-a {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .left-part-a {
+        text-align: left;
+        margin-left: 20%;
+    }
+    .right-part {
+        text-align: right;
+        margin-right: 20%;
+      }
+}
