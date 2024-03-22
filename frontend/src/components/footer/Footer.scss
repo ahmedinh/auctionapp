@@ -1,0 +1,59 @@
+@import "../utilities/Style.scss";
+
+.footer {
+    height: 324px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: $color-black;
+    padding-top: 32px;
+    color: $color-white;
+    display: flex;
+    justify-content: space-between;
+
+    .auction-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        text-align: left;
+        margin: 0;
+        width: 100%;
+        margin-left: 19%;
+
+        .auction-title {
+            color: $color-grey;
+            font-size: 16px;
+            opacity: 50%;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 16px;
+            a {
+                color: $color-white;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .get-in-touch {
+        text-align: left;
+        width: 100%;
+        align-items: right;
+        margin-left: 18%;
+
+        .get-in-touch-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .get-in-touch-text {
+                color: $color-grey;
+                font-size: 16px;
+                opacity: 50%;
+            }
+        }
+    }
+}

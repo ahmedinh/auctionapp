@@ -1,0 +1,26 @@
+@import "../utilities/Style.scss";
+
+.page {
+    .content {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        margin: 0% 30% 0% 30%;
+        gap: 32px;
+
+        h6 {
+            font-size: 20px;
+            letter-spacing: 0.84px;
+            color: #252525;
+        }
+
+        p,
+        li {
+            color: $color-grey;
+        }
+
+        .chapter {
+            gap: 24px;
+        }
+    }
+}

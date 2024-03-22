@@ -11,3 +11,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.left-part-text {
+  font-weight: 400;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #252525;
+}
+
+.right-part {
+  flex: 1.55;
+}
+
+:root {
+  --color-white: #d8d8d8;
+  --color-black: #252525;
+  --color-purple: #8367D8;
+  --color-grey: #9B9B9B;
+}

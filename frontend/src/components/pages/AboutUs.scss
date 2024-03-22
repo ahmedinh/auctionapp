@@ -1,0 +1,92 @@
+ @import "../utilities/Style.scss";
+
+.page {
+    .about-us {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 100px;
+
+        .left-side,
+        .images {
+            flex: 1;
+            max-width: calc(50% - 100px);
+        }
+
+        .left-side {
+            .text {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                padding-left: 15%;
+                margin-left: 17%;
+
+                .chapter2,
+                .chapter3,
+                .chapter4 {
+                    margin: 0;
+                }
+
+                .headline {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 32px;
+                }
+
+                h5 {
+                    font-weight: 600;
+                    font-size: $font-size-large;
+                    color: #252525
+                }
+
+                p {
+                    font-weight: $font-weight-normal;
+                    font-size: $font-size-normal;
+                    color: $color-grey;
+                    width: 543px;
+                    margin: 0;
+                }
+            }
+        }
+
+        .images {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            gap: 24px;
+            padding-top: 5%;
+            margin-top: 3%;
+
+            .bottom-images {
+                display: flex;
+                gap: 24px;
+            }
+
+            .picture-top {
+                width: 548px;
+                height: 381px;
+                object-fit: cover;
+            }
+
+            .picture-left,
+            .picture-right {
+                width: 262px;
+                height: 199px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1600px) {
+    .page {
+        .about-us {
+            .left-side {
+                .text p {
+                    width: fit-content;
+                    margin-right: 50px;
+                }
+            }
+        }
+    }
+}

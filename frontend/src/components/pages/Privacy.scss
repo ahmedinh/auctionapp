@@ -1,0 +1,24 @@
+@import "../utilities/Style.scss";
+
+.full-page {
+    .page-content {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        margin: 0% 32% 5% 32%;
+
+        h2,
+        h4 {
+            font-weight: 600;
+            font-size: $font-size-normal;
+        }
+
+        p,
+        ul,
+        li,
+        a {
+            color: $color-grey;
+            font-size: $font-size-normal;
+        }
+    }
+}
