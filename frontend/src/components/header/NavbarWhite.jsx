@@ -1,14 +1,10 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../icons/logo.png";
 import Magnifier from "../icons/Magnifier";
 
 const NavbarWhite = () => {
-    const location = useLocation();
-    const currentPath = location.pathname;
-    const isSpecialRoute = ['/about-us', '/privacy-and-policy', '/terms-and-conditions'].includes(currentPath);
-    
     return (
         <div className="navbar-white">
             <div className="left-container">
@@ -21,9 +17,15 @@ const NavbarWhite = () => {
                 </button>
             </div>
             <div className="buttons">
-                <button className={`nav-btn ${isSpecialRoute ? 'special-route' : ''}`}>HOME</button>
-                <button className="nav-btn">SHOP</button>
-                <button className="nav-btn">MY ACCOUNT</button>
+                <NavLink to="/home" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                  HOME
+                </NavLink>
+                <NavLink to="/shop" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                  SHOP
+                </NavLink>
+                <NavLink to="/my-account" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                  MY ACCOUNT
+                </NavLink>
             </div>
         </div>
     );

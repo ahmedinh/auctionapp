@@ -57,7 +57,6 @@
 
         .nav-btn {
             background: none;
-            line-height: 24px;
             font-size: 14px;
             border: none;
             cursor: pointer;
@@ -68,12 +67,12 @@
             align-items: center;
             padding: 0;
             color: #252525;
+            text-decoration: none;
+        }
 
-            &.special-route {
-                color: #8367D8;
-                font-weight: 700;
-                font-size: 16px;
-            }
+        .active {
+            color: #8367D8;
+            font-weight: 700;
         }
     }
 }
