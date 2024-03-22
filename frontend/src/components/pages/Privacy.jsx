@@ -8,16 +8,6 @@ const Privacy = () => {
     ScrollToTop();
     return (
         <div className="full-page">
-            <div className="menu">
-                <div className="left-part">
-                    <p className="left-part-text">
-                        {common.privacy_and_policy}
-                    </p>
-                </div>
-                <div className="right-part">
-                    <Breadcrumbs />
-                </div>
-            </div>
             <div className="page-content">
                 <div className="page-chapter">
                     <h2>Auction Website {common.privacy_and_policy}</h2>

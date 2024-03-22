@@ -12,16 +12,6 @@ const AboutUs = () => {
     ScrollToTop();
     return (
         <div className="page">
-            <div className="menu-a">
-                <div className="left-part-a">
-                    <p className="left-part-text">
-                        {common.about_us}
-                    </p>
-                </div>
-                <div className="right-part">
-                    <Breadcrumbs />
-                </div>
-            </div>
             <div className="about-us">
                 <div className="left-side">
                     <div className="text">

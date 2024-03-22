@@ -1,25 +1,11 @@
 import React from "react";
 import "./Terms.scss";
-import Layout from "../utilities/Layout";
-import { GoArrowRight } from "react-icons/go";
-import { common } from "../messages/Text";
 import ScrollToTop from "../utilities/ScrollToTop";
-import Breadcrumbs from "../utilities/Breadcrumbs";
 
 const Terms = () => {
     ScrollToTop();
     return (
         <div className="page">
-            <div className="menu">
-                <div className="left-part">
-                    <p className="left-part-text">
-                        {common.terms_and_conditions}
-                    </p>
-                </div>
-                <div className="right-part">
-                    <Breadcrumbs />
-                </div>
-            </div>
             <div className="content">
                 <div className="chapter">
                     <h6>Introduction</h6>

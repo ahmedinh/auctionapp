@@ -1,27 +1,6 @@
  @import "../utilities/Style.scss";
 
 .page {
-    .menu-a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-
-        .left-part-a {
-            flex: 1;
-
-            .left-part-text {
-                margin-right: 13.5% !important;
-            }
-        }
-
-        .right-part {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-    }
-
     .about-us {
         display: flex;
         justify-content: center;

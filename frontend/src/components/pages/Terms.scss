@@ -1,24 +1,11 @@
 @import "../utilities/Style.scss";
 
 .page {
-    .menu {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .left-part {
-            text-align: right;
-            flex: 1.3;
-            margin-right: 39%;
-        }
-    }
-
     .content {
         display: flex;
         flex-direction: column;
         text-align: left;
-        margin-left: 30%;
-        margin-right: 30%;
+        margin: 0% 30% 0% 30%;
         gap: 32px;
 
         h6 {
@@ -35,6 +22,5 @@
         .chapter {
             gap: 24px;
         }
-
     }
 }
