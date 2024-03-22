@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../icons/logo.png";
 import Magnifier from "../icons/Magnifier";
