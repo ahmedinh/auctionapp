@@ -1,3 +1,5 @@
+@import "../utilities/Style.scss";
+
 .navbar-white {
     display: flex;
     justify-content: space-between;
@@ -35,7 +37,7 @@
             border-bottom: 1px solid #d8d8d8;
             border-left: 1px solid #ccc;
             border-right: 1px solid #d8d8d8;
-            border-top: 1px solid #d8d8d8
+            border-top: 1px solid #d8d8d8;
         }
         
         .search-icon {
@@ -60,18 +62,16 @@
             font-size: 14px;
             border: none;
             cursor: pointer;
-            font-family: 'Lato', sans-serif;
-            font-weight: 400;
             height: 100%;
             display: flex;
             align-items: center;
             padding: 0;
-            color: #252525;
+            color: $color-black;
             text-decoration: none;
         }
 
         .active {
-            color: #8367D8;
+            color: $color-purple;
             font-weight: 700;
         }
     }

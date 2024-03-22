@@ -1,5 +1,7 @@
+@import "../utilities/Style.scss";
+
 .navbar-black {
-    background-color: #252525;
+    background-color: $color-black;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -15,12 +17,12 @@
 
         a {
             margin: 0;
-            color: #fff;
+            color: $color-white;
             text-decoration: none;
         }
 
         &.sign-in {
-            color: #9B9B9B;
+            color: $color-grey;
             gap: 16px;
         }
     }

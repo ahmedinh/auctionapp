@@ -1,3 +1,5 @@
+@import "../utilities/Style.scss";
+
 .full-page {
     .menu {
         display: flex;
@@ -22,21 +24,15 @@
         h2,
         h4 {
             font-weight: 600;
-            font-size: 16px;
-            line-height: 24px;
+            font-size: $font-size-normal;
         }
 
         p,
         ul,
-        li {
-            color: #9b9b9b;
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 24px;
-        }
-
+        li,
         a {
-            color: #9b9b9b;
+            color: $color-grey;
+            font-size: $font-size-normal;
         }
     }
 }

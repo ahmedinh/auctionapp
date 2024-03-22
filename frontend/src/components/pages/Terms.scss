@@ -1,3 +1,5 @@
+@import "../utilities/Style.scss";
+
 .page {
     .menu {
         display: flex;
@@ -17,9 +19,6 @@
         text-align: left;
         margin-left: 30%;
         margin-right: 30%;
-        font-family: 'Lato', sans-serif;
-        font-weight: 400;
-        line-height: 24px;
         gap: 32px;
 
         h6 {
@@ -30,7 +29,7 @@
 
         p,
         li {
-            color: #9B9B9B;
+            color: $color-grey;
         }
 
         .chapter {

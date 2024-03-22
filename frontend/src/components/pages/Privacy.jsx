@@ -1,6 +1,5 @@
 import React from "react";
 import "./Privacy.scss";
-import { GoArrowRight } from "react-icons/go";
 import { common } from "../messages/Text";
 import ScrollToTop from "../utilities/ScrollToTop";
 import Breadcrumbs from "../utilities/Breadcrumbs";
@@ -16,7 +15,7 @@ const Privacy = () => {
                     </p>
                 </div>
                 <div className="right-part">
-                    <Breadcrumbs/>
+                    <Breadcrumbs />
                 </div>
             </div>
             <div className="page-content">

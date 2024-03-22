@@ -19,7 +19,7 @@ const AboutUs = () => {
                     </p>
                 </div>
                 <div className="right-part">
-                    <Breadcrumbs/>
+                    <Breadcrumbs />
                 </div>
             </div>
             <div className="about-us">

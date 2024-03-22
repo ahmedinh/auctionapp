@@ -1,3 +1,5 @@
+ @import "../utilities/Style.scss";
+
 .page {
     .menu-a {
         display: flex;
@@ -55,14 +57,14 @@
 
                 h5 {
                     font-weight: 600;
-                    font-size: 24px;
+                    font-size: $font-size-large;
                     color: #252525
                 }
 
                 p {
-                    font-weight: 400;
-                    font-size: 16px;
-                    color: #9B9B9B;
+                    font-weight: $font-weight-normal;
+                    font-size: $font-size-normal;
+                    color: $color-grey;
                     width: 543px;
                     margin: 0;
                 }

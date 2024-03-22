@@ -17,7 +17,7 @@ const Terms = () => {
                     </p>
                 </div>
                 <div className="right-part">
-                    <Breadcrumbs/>
+                    <Breadcrumbs />
                 </div>
             </div>
             <div className="content">
