@@ -2,7 +2,11 @@
 
 .breadcrumbs {
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: 16px;
+    text-align: right;
+    transform: translateY(50%);
     a {
         text-decoration: none;
         font-size: $font-size-normal;
@@ -14,5 +18,9 @@
     .current {
         color: $color-purple;
         font-weight: $font-weight-bold;
+    }
+    .crumb {
+        display: inline-flex;
+        align-items: center;
     }
 }
