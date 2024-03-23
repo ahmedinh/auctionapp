@@ -50,10 +50,12 @@ public class Category {
     }
 
     public List<Product> getProducts() {
-        return products;
+        return productList;
     }
 
     public void setProducts(List<Product> products) {
-        this.products = products;
+        this.productList = products;
+    }
+
     }
 }
