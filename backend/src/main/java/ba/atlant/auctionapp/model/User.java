@@ -1,10 +1,12 @@
 package ba.atlant.auctionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +40,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password cannot be blank.")
+    @NotNull(message = "Password cannot be null.")
+    @Column(nullable = false)
+    private String password;
+
     @NotBlank(message = "Username cannot be blank.")
     @NotNull(message = "Username cannot be null.")
     @Column(nullable = false, unique = true)
@@ -64,15 +71,19 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<CreditCard> creditCardList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<WishList> wishList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Product> productList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Bid> bidList;
 
@@ -140,6 +151,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUsername() {
