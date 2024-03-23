@@ -57,5 +57,7 @@ public class Category {
         this.productList = products;
     }
 
+    public void addProduct(Product product) {
+        this.productList.add(product);
     }
 }
