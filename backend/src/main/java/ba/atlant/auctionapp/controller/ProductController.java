@@ -12,8 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/product")
 @Tag(name = "Product Controller")
 public class ProductController {
-    @Autowired
-    private ProductService productService;
+    
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
 
     @GetMapping("/all/new-arrivals")
     public ResponseEntity getNewArrivals() {
