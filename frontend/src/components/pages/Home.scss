@@ -1,0 +1,55 @@
+@import "../utilities/Style.scss";
+
+.page {
+    .upper-part {
+        display: flex;
+        gap: 119px;
+        margin-left: 20%;
+        margin-right: 20%;
+
+        .categories {
+            ul {
+                color: $color-black;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        .highlight {
+            display: flex;
+
+            .left-side {
+                .product-about {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+
+                    p {
+                        margin: 0;
+                        padding: 0;
+                        font-weight: $font-weight-semibold;
+                        font-size: $font-size-normal;
+                    }
+
+                    .product-name {
+                        color: $color-black;
+                    }
+
+                    .product-price {
+                        color: $color-purple;
+                    }
+
+                    .product-description {
+                        color: $color-grey;
+                        font-weight: $font-weight-normal;
+                    }
+                }
+                .bid-now {
+                    
+                    
+                }
+            }
+        }
+    }
+}
