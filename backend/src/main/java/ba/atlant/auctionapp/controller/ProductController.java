@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/product")
 @Tag(name = "Product Controller")
+@CrossOrigin("*")
 public class ProductController {
-    
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -28,5 +29,10 @@ public class ProductController {
     @GetMapping("/all/last-chance")
     public ResponseEntity getLastChance() {
         return productService.getLastChance();
+    }
+
+    @GetMapping("/highlight")
+    public ResponseEntity getHighlighted() {
+        return productService.getHighlighted();
     }
 }
