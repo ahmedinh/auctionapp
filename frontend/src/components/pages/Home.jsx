@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import { fetchCategories, fetchHighlight } from "../utilities/Api";
+import { NavLink } from "react-router-dom";
+import { Icon } from '@iconify/react';
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
@@ -29,11 +31,19 @@ const Home = () => {
         <div className="page">
             <div className="upper-part">
                 <div className="categories">
-                    <ul>
-                        {categories.map((category) => (
-                            <li key={category.id}>{category.name}</li>
-                        ))}
-                    </ul>
+                    <div className="categories-text">
+                        <p>CATEGORIES</p>
+                    </div>
+                    <div className="list">
+                        <ul>
+                            {categories.map((category) => (
+                                <React.Fragment key={category.id}>
+                                    <li><NavLink to={`/categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
+                                </React.Fragment>
+                            ))}
+                            <li><NavLink to="/categories" style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="highlight">
                     <div className="left-side">
@@ -43,10 +53,10 @@ const Home = () => {
                             <p className="product-description">{highlight.description}</p>
                         </div>
                         <div className="bid-now">
-                            <button type="button">BID NOW</button>
+                            <button type="button">BID NOW <Icon icon="akar-icons:chevron-right" /></button>
                         </div>
                     </div>
-                    <img src={highlight.picture_url} alt="" srcset="" />
+                    <img src={highlight.picture_url} alt="HighlightPicture" />
                 </div>
             </div>
         </div>
