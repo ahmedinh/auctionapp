@@ -4,20 +4,20 @@ import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.User;
 import ba.atlant.auctionapp.repository.CategoryRepository;
-import ba.atlant.auctionapp.repository.ProductPictureRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -34,6 +34,23 @@ public class ProductService {
         this.objectMapper = objectMapper;
     }
 
+    public ResponseEntity addProduct(Product product) {
+        Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+        Category category = optionalCategory.get();
+        category.addProduct(product);
+
+        Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
+        User user = optionalUser.get();
+        user.addProduct(product);
+
+        product.setUser(user);
+        product.setCategory(category);
+
+        userRepository.save(user);
+        productRepository.save(product);
+        categoryRepository.save(category);
+        return ResponseEntity.status(HttpStatus.OK).body(objectNode(product));
+    }
 
     public ResponseEntity getProducts() {
         List<Product> productList = productRepository.findAll();
@@ -41,15 +58,25 @@ public class ProductService {
     }
 
     public ResponseEntity getNewArrivals(int page, int size) {
-        Page<Product> productPage = productRepository.findAll(PageRequest.of(page,size, Sort.by("createdAt").descending()));
-        List<Product> productList = productPage.getContent();
-        return ResponseEntity.status(HttpStatus.OK).body(productJson(productList));
+        Page<Product> productPage = productRepository.findAll(
+                PageRequest.of(page, size, Sort.by("createdAt").descending()));
+        return getProductsForHome(productPage);
     }
 
     public ResponseEntity getLastChance(int page, int size) {
-        Page<Product> productPage = productRepository.findAll(PageRequest.of(page,size, Sort.by("auctionEnd").ascending()));
+        Page<Product> productPage = productRepository.findAll(
+                PageRequest.of(page, size, Sort.by("auctionEnd").ascending()));
+        return getProductsForHome(productPage);
+    }
+
+    private ResponseEntity getProductsForHome(Page<Product> productPage) {
         List<Product> productList = productPage.getContent();
-        return ResponseEntity.status(HttpStatus.OK).body(productJson(productList));
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", productJson(productList));
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", productPage.getTotalPages());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     private ArrayNode productJson(List<Product> productList) {
