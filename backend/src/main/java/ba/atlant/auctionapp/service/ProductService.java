@@ -40,15 +40,15 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
-    public ResponseEntity getNewArrivals() {
-        List<Product> productList = productRepository.findAll();
-        productList.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
+    public ResponseEntity getNewArrivals(int page, int size) {
+        Page<Product> productPage = productRepository.findAll(PageRequest.of(page,size, Sort.by("createdAt").descending()));
+        List<Product> productList = productPage.getContent();
         return ResponseEntity.status(HttpStatus.OK).body(productJson(productList));
     }
 
-    public ResponseEntity getLastChance() {
-        List<Product> productList = productRepository.findAll();
-        productList.sort(Comparator.comparing(Product::getAuctionEnd));
+    public ResponseEntity getLastChance(int page, int size) {
+        Page<Product> productPage = productRepository.findAll(PageRequest.of(page,size, Sort.by("auctionEnd").ascending()));
+        List<Product> productList = productPage.getContent();
         return ResponseEntity.status(HttpStatus.OK).body(productJson(productList));
     }
 

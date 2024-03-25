@@ -22,13 +22,13 @@ public class ProductController {
 
 
     @GetMapping("/all/new-arrivals")
-    public ResponseEntity getNewArrivals() {
-        return productService.getNewArrivals();
+    public ResponseEntity getNewArrivals(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+        return productService.getNewArrivals(page, size);
     }
 
     @GetMapping("/all/last-chance")
-    public ResponseEntity getLastChance() {
-        return productService.getLastChance();
+    public ResponseEntity getLastChance(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+        return productService.getLastChance(page, size);
     }
 
     @GetMapping("/highlight")
