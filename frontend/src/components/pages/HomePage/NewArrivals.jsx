@@ -11,7 +11,7 @@ const NewArrivals = () => {
     const loadingRef = useRef(false);
 
     const loadProducts = useCallback(async () => {
-        if (loadingRef.current) return; // Prevent fetch if already loading
+        if (loadingRef.current) return;
         loadingRef.current = true;
 
         const data = await fetchNewArrivals(page);
@@ -22,14 +22,12 @@ const NewArrivals = () => {
         loadingRef.current = false;
     }, [page]);
 
-    // Initial fetch & subsequent fetches when 'page' updates
     useEffect(() => {
         if (hasMore) loadProducts();
     }, [loadProducts, hasMore]);
 
-    // Setup IntersectionObserver for infinite scrolling
     useEffect(() => {
-        if (!hasMore) return; // Stop setting up the observer if no more products
+        if (!hasMore) return;
 
         const lastProductElement = document.querySelector(".product:last-child");
         if (!lastProductElement) return;
@@ -43,7 +41,7 @@ const NewArrivals = () => {
         observer.current.observe(lastProductElement);
 
         return () => observer.current?.disconnect();
-    }, [hasMore, products.length]); // Depend on products.length to re-initiate observer setup
+    }, [hasMore, products.length]);
 
     return (
         <div className="products">
