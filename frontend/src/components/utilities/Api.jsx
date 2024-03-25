@@ -26,9 +26,9 @@ export const fetchHighlight = async () => {
     }
 }
 
-export const fetchNewArrivals = async () => {
+export const fetchNewArrivals = async (pageNum) => {
     try {
-        const response = await fetch('http://localhost:8086/api/product/all/new-arrivals');
+        const response = await fetch(`http://localhost:8086/api/product/all/new-arrivals?page=${pageNum}&size=8`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
