@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
-import { fetchCategories, fetchHighlight } from "../utilities/Api";
-import { NavLink } from "react-router-dom";
+import { fetchCategories, fetchHighlight } from "../../utilities/Api";
+import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
 
 const Home = () => {
@@ -58,6 +58,18 @@ const Home = () => {
                     </div>
                     <img src={highlight.picture_url} alt="HighlightPicture" />
                 </div>
+            </div>
+            <div className="bottom">
+                <div className="menu-bar">
+                    <NavLink to="/home/new-arrivals" className="link" activeClassName="active">
+                        New Arrivals
+                    </NavLink>
+                    <NavLink to="/home/last-chance" className="link" activeClassName="active">
+                        Last Chance
+                    </NavLink>
+                </div>
+                <hr />
+                <main><Outlet /></main>
             </div>
         </div>
     );

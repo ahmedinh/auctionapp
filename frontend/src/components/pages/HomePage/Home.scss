@@ -1,4 +1,4 @@
-@import "../utilities/Style.scss";
+@import "../../utilities/Style.scss";
 
 .page {
     display: flex;
@@ -119,6 +119,40 @@
                     }
                 }
             }
+        }
+    }
+
+    .bottom {
+        margin: 0 20% 10% 20%;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        .menu-bar {
+            display: flex;
+            gap: 64px;
+            align-items: flex-end;
+            line-height: $line-height-large;
+
+            .link {
+                text-decoration: none;
+                color: $color-black;
+                font-size: 20px;
+            }
+
+            .active {
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-large;
+                letter-spacing: 0.84px;
+            }
+        }
+
+        hr {
+            width: 100%;
+            color: $color-grey;
+            border-style: inset;
+            border-width: 1px;
+            margin: 0;
         }
     }
 }
