@@ -257,6 +257,10 @@ public class User {
         this.productList = productList;
     }
 
+    public void addProduct(Product product) {
+        this.productList.add(product);
+    }
+
     public List<Bid> getBidList() {
         return bidList;
     }
