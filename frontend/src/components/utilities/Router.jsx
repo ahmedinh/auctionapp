@@ -4,8 +4,8 @@ import Privacy from '../pages/Privacy';
 import Home from '../pages/HomePage/Home';
 import Layout from './Layout';
 import Page from '../pages/Page';
-import NewArrivals from '../pages/HomePage/NewArrivals';
-import LastChance from '../pages/HomePage/LastChance';
+import NewArrivals from '../pages/HomePage/Products/NewArrivals';
+import LastChance from '../pages/HomePage/Products/LastChance';
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 
 const Router = createBrowserRouter(
