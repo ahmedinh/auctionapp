@@ -23,11 +23,8 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final UserRepository userRepository;
-
     private final ObjectMapper objectMapper;
 
     public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, UserRepository userRepository, ObjectMapper objectMapper) {
@@ -67,6 +64,7 @@ public class ProductService {
             objectNode.put("auction_start", product.getAuctionStart().format(DateTimeFormatter.ISO_DATE_TIME));
             objectNode.put("auction_end", product.getAuctionEnd().format(DateTimeFormatter.ISO_DATE_TIME));
             objectNode.put("size",product.getSize().name());
+            objectNode.put("picture_url", product.getProductPictureList().get(0).getUrl());
             arrayNode.add(objectNode);
         }
         return arrayNode;
