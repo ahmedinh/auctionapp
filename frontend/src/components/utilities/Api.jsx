@@ -40,9 +40,9 @@ export const fetchNewArrivals = async (pageNum) => {
     }
 }
 
-export const fetchLastChance = async () => {
+export const fetchLastChance = async (pageNum) => {
     try {
-        const response = await fetch('http://localhost:8086/api/product/all/last-chance');
+        const response = await fetch(`http://localhost:8086/api/product/all/last-chance?page=${pageNum}&size=8`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
