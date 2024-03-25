@@ -3,43 +3,7 @@
 .products {
     .products-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr); // 4 products per row
-        gap: 20px; // Adjust the gap as needed
-
-        .product {
-            // Basic product styling
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-
-            img {
-                width: 262px;
-                height: 262px;
-            }
-
-            h5 {
-                text-align: left;
-                font-weight: $font-weight-semibold;
-                font-size: $font-size-large;
-                line-height: $line-height-large;
-                margin: 0;
-                color: $color-black
-            }
-            
-            p {
-                margin: 0;
-                text-align: left;
-                font-weight: 500;
-                line-height: 19.2px;
-                letter-spacing: 0.84px;
-                color: $color-grey;
-            }
-
-            .price {
-                color: $color-purple;
-                font-weight: $font-weight-bold
-            }
-        }
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
     }
 }
