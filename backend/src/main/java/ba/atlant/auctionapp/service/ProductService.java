@@ -7,9 +7,11 @@ import ba.atlant.auctionapp.model.User;
 import ba.atlant.auctionapp.repository.CategoryRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.repository.UserRepository;
+import ba.atlant.auctionapp.service.exception.ServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,16 +40,22 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity addProduct(Product product) {
-        Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
-        if (optionalCategory.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
+        try {
+            Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+            if (optionalCategory.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
 
-        Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
-        if (optionalUser.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
+            Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
+            if (optionalUser.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
 
-        productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.OK).body("{\"id\":" + product.getId() + "}");
+            productRepository.save(product);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"id\":" + product.getId() + "}");
+        } catch (DataAccessException e) {
+            throw new ServiceException("Database access error occurred", e);
+        } catch (Exception e) {
+            throw new ServiceException("An unexpected error occurred", e);
+        }
     }
 
     public ResponseEntity getProducts() {
@@ -58,26 +66,26 @@ public class ProductService {
     public ResponseEntity getNewArrivals(int page, int size) {
         Page<Product> productPage = productRepository.findAll(
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
-        return getProductsForHome(productPage);
+        return productJsonPaging(productPage);
     }
 
     public ResponseEntity getLastChance(int page, int size) {
         Page<Product> productPage = productRepository.findAll(
                 PageRequest.of(page, size, Sort.by("auctionEnd").ascending()));
-        return getProductsForHome(productPage);
+        return productJsonPaging(productPage);
     }
 
-    private ResponseEntity getProductsForHome(Page<Product> productPage) {
+    private ResponseEntity productJsonPaging(Page<Product> productPage) {
         List<Product> productList = productPage.getContent();
         Map<String, Object> response = new HashMap<>();
-        response.put("content", productJson(productList));
+        response.put("content", productJsonArray(productList));
         response.put("currentPage", productPage.getNumber());
         response.put("totalItems", productPage.getTotalElements());
         response.put("totalPages", productPage.getTotalPages());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    private ArrayNode productJson(List<Product> productList) {
+    private ArrayNode productJsonArray(List<Product> productList) {
         ArrayNode arrayNode = objectMapper.createArrayNode();
         for (Product product: productList) {
             ObjectNode objectNode = objectMapper.createObjectNode();
@@ -95,7 +103,7 @@ public class ProductService {
         return arrayNode;
     }
 
-    private ObjectNode objectNode(Product product) {
+    private ObjectNode productJsonObject(Product product) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("id",product.getId());
         objectNode.put("name", product.getName());
@@ -109,7 +117,7 @@ public class ProductService {
         Optional<Product> optionalProduct = productRepository.findById(9L);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            return ResponseEntity.status(HttpStatus.OK).body(objectNode(product));
+            return ResponseEntity.status(HttpStatus.OK).body(productJsonObject(product));
         }
         return null;
     }
