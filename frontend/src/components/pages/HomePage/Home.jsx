@@ -1,32 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Home.scss";
-import { fetchCategories } from "../../../api/categoriesApi";
-import { fetchHighlight } from "../../../api/productsApi";
+import useCategories from "../../../hooks/useCategories";
+import useHighlight from "../../../hooks/useHighlight";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
 
 const Home = () => {
-    const [categories, setCategories] = useState([]);
-    const [highlight, setHighlight] = useState({
-        id: null,
-        name: "",
-        description: "",
-        start_price: 0,
-        picture_url: ""
-    });
-
-    useEffect(() => {
-        const getCategories = async () => {
-            const fetchedCategories = await fetchCategories();
-            setCategories(fetchedCategories);
-        };
-        getCategories();
-        const getHighlight = async () => {
-            const fetchedHighlight = await fetchHighlight();
-            setHighlight(fetchedHighlight);
-        };
-        getHighlight();
-    }, []);
+    const { categories, isCategoriesLoading, categoriesError  } = useCategories();
+    const { highlight, iHighlightLoading, highlightError  } = useHighlight();
 
     return (
         <div className="page">
