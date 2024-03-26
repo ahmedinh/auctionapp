@@ -49,4 +49,8 @@ public class Role {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
+
+    public void addUser(User user) {
+        this.userList.add(user);
+    }
 }
