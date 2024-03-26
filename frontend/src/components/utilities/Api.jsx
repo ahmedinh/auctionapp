@@ -1,6 +1,8 @@
+const apiUrl = process.env.REACT_APP_API_URL
+
 export const fetchCategories = async () => {
     try {
-        const response = await fetch('http://localhost:8086/api/category');
+        const response = await fetch(`${apiUrl}/api/category`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
