@@ -7,7 +7,10 @@ import { Icon } from '@iconify/react';
 
 const Home = () => {
     const { categories, isCategoriesLoading, categoriesError  } = useCategories();
-    const { highlight, iHighlightLoading, highlightError  } = useHighlight();
+    const { highlight, isHighlightLoading, highlightError  } = useHighlight();
+
+    if (isCategoriesLoading || isHighlightLoading) return <p>Loading...</p>;
+    if (categoriesError || highlightError) return <p>Error fetching data</p>;
 
     return (
         <div className="page">
