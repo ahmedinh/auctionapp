@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.User;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,12 +36,17 @@ public class ProductService {
         this.objectMapper = objectMapper;
     }
 
+    @Transactional
     public ResponseEntity addProduct(Product product) {
         Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+        if (optionalCategory.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
         Category category = optionalCategory.get();
         category.addProduct(product);
 
         Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
+        if (optionalUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
         User user = optionalUser.get();
         user.addProduct(product);
 
