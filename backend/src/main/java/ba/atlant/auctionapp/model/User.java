@@ -80,7 +80,7 @@ public class User {
     private List<WishList> wishList;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Product> productList;
 
     @JsonIgnore
@@ -106,7 +106,6 @@ public class User {
                 List<WishList> wishList,
                 List<Product> productList,
                 List<Bid> bidList) {
-        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -255,10 +254,6 @@ public class User {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
-    }
-
-    public void addProduct(Product product) {
-        this.productList.add(product);
     }
 
     public List<Bid> getBidList() {
