@@ -41,22 +41,13 @@ public class ProductService {
         Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
         if (optionalCategory.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
-        Category category = optionalCategory.get();
-        category.addProduct(product);
 
         Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
         if (optionalUser.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
-        User user = optionalUser.get();
-        user.addProduct(product);
 
-        product.setUser(user);
-        product.setCategory(category);
-
-        userRepository.save(user);
         productRepository.save(product);
-        categoryRepository.save(category);
-        return ResponseEntity.status(HttpStatus.OK).body(objectNode(product));
+        return ResponseEntity.status(HttpStatus.OK).body("{\"id\":" + product.getId() + "}");
     }
 
     public ResponseEntity getProducts() {
