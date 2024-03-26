@@ -26,7 +26,7 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> productList;
 
     public Category() {
@@ -55,9 +55,5 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.productList = products;
-    }
-
-    public void addProduct(Product product) {
-        this.productList.add(product);
     }
 }
