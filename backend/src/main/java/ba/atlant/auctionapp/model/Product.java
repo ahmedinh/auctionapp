@@ -61,7 +61,7 @@ public class Product {
     private List<Bid> bidList;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPicture> productPictureList;
 
     @ManyToOne
