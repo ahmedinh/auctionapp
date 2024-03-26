@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Products.scss";
-import { fetchNewArrivals } from "../../../utilities/Api";
+import { fetchNewArrivals } from "../../../../api/productsApi";
 import ProductCard from "./ProductCard";
 
 const NewArrivals = () => {

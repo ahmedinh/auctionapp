@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
-import { fetchCategories, fetchHighlight } from "../../utilities/Api";
+import { fetchCategories } from "../../../api/categoriesApi";
+import { fetchHighlight } from "../../../api/productsApi";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Products.scss";
-import { fetchLastChance } from "../../../utilities/Api";
+import { fetchLastChance } from "../../../../api/productsApi";
 import ProductCard from "./ProductCard";
 
 const LastChance = () => {
