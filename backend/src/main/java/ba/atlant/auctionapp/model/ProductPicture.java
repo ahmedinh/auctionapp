@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 /**
@@ -19,6 +20,7 @@ public class ProductPicture {
     @Column(nullable = false)
     private String url;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

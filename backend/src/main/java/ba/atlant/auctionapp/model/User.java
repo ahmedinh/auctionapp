@@ -80,10 +80,6 @@ public class User {
     private List<WishList> wishList;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Product> productList;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Bid> bidList;
 
@@ -104,7 +100,6 @@ public class User {
                 Role role,
                 List<CreditCard> creditCardList,
                 List<WishList> wishList,
-                List<Product> productList,
                 List<Bid> bidList) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -120,7 +115,6 @@ public class User {
         this.role = role;
         this.creditCardList = creditCardList;
         this.wishList = wishList;
-        this.productList = productList;
         this.bidList = bidList;
     }
 
@@ -246,14 +240,6 @@ public class User {
 
     public void setWishList(List<WishList> wishList) {
         this.wishList = wishList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
     }
 
     public List<Bid> getBidList() {

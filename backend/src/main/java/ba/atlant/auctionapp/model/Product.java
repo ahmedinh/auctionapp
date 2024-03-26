@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.model;
 
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -36,14 +38,17 @@ public class Product {
 
     @NotBlank(message = "Time of creation cannot be blank.")
     @NotNull(message = "Time of creation cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @NotBlank(message = "Auction start date cannot be blank.")
     @NotNull(message = "Auction start date cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime auctionStart;
 
     @NotBlank(message = "Auction end date cannot be blank.")
     @NotNull(message = "Auction end date cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime auctionEnd;
 
     @Enumerated(EnumType.STRING)
@@ -60,7 +65,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Bid> bidList;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPicture> productPictureList;
 
@@ -185,14 +189,6 @@ public class Product {
 
     public List<ProductPicture> getProductPictureList() {
         return productPictureList;
-    }
-
-    public void setProductPictureList(List<ProductPicture> productPictureList) {
-        this.productPictureList = productPictureList;
-    }
-
-    public void addProductPicture(ProductPicture productPicture) {
-        this.productPictureList.add(productPicture);
     }
 
     public Category getCategory() {

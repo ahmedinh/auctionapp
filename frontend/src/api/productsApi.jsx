@@ -7,7 +7,14 @@ export const fetchHighlight = async () => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data;
+        const simplifiedData = {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            start_price: data.startPrice,
+            picture_url: data.productPictureList.length > 0 ? data.productPictureList[0].url : ""
+        };
+        return simplifiedData;
     } catch (error) {
         console.error("Failed to fetch highlight: ", error);
         return [];

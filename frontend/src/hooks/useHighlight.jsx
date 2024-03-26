@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchHighlight } from "../api/productsApi";
+import { fetchHighlight } from '../api/productsApi';
 
 const useHighlight = () => {
   const [highlight, setHighlight] = useState({

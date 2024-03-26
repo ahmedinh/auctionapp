@@ -25,16 +25,7 @@ public class Category {
     @Size(min = 2, max = 30, message = "Category name must be between 2 and 30 characters long")
     private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Product> productList;
-
     public Category() {
-    }
-
-    public Category(String name, List<Product> productList) {
-        this.name = name;
-        this.productList = productList;
     }
 
     public Long getId() {
@@ -47,13 +38,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Product> getProducts() {
-        return productList;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.productList = products;
     }
 }
