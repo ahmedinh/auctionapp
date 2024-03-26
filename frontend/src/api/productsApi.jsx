@@ -2,7 +2,7 @@ const apiUrl = process.env.REACT_APP_API_URL
 
 export const fetchHighlight = async () => {
     try {
-        const response = await fetch('http://localhost:8086/api/product/highlight');
+        const response = await fetch(`${apiUrl}/api/product/highlight`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -16,7 +16,7 @@ export const fetchHighlight = async () => {
 
 export const fetchNewArrivals = async (pageNum) => {
     try {
-        const response = await fetch(`http://localhost:8086/api/product/all/new-arrivals?page=${pageNum}&size=8`);
+        const response = await fetch(`${apiUrl}/api/product/all/new-arrivals?page=${pageNum}&size=8`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -30,7 +30,7 @@ export const fetchNewArrivals = async (pageNum) => {
 
 export const fetchLastChance = async (pageNum) => {
     try {
-        const response = await fetch(`http://localhost:8086/api/product/all/last-chance?page=${pageNum}&size=8`);
+        const response = await fetch(`${apiUrl}/api/product/all/last-chance?page=${pageNum}&size=8`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
