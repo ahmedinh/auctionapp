@@ -1,9 +1,9 @@
 import React from "react";
 import "./AboutUs.scss";
-import PictureTop from "../icons/about_us1.png";
-import PictureLeft from "../icons/about_us2.png";
-import PictureRight from "../icons/about_us3.png";
-import { AboutUsPage, common } from "../messages/Text";
+import PictureTop from "../../assets/about_us1.png";
+import PictureLeft from "../../assets/about_us2.png";
+import PictureRight from "../../assets/about_us3.png";
+import { AboutUsPage, common } from "../../messages/Text";
 import ScrollToTop from "../utilities/ScrollToTop";
 
 const AboutUs = () => {

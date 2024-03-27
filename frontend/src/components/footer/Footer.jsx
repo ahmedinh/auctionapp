@@ -1,8 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Footer.scss";
-import { common } from "../messages/Text";
-import SocialIcons from "../icons/SocialIcons";
+import { common } from "../../messages/Text";
+import SocialIcons from "../../assets/icons/SocialIcons";
 
 const Footer = () => {
     return (
