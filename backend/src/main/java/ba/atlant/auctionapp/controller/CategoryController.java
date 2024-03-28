@@ -1,10 +1,7 @@
 package ba.atlant.auctionapp.controller;
 
-import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping
     public ResponseEntity getAllCategories() {
