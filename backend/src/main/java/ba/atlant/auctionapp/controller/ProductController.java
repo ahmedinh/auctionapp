@@ -4,7 +4,6 @@ import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +19,10 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @PostMapping()
+    public ResponseEntity addProduct(@Valid @RequestBody Product product) {
+        return productService.addProduct(product);
+    }
 
     @GetMapping("/all/new-arrivals")
     public ResponseEntity getNewArrivals(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
