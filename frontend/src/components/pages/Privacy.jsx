@@ -1,6 +1,6 @@
 import React from "react";
 import "./Privacy.scss";
-import { common } from "../messages/Text";
+import { common } from "../../messages/Text";
 import ScrollToTop from "../utilities/ScrollToTop";
 
 const Privacy = () => {

@@ -1,55 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./Products.scss";
-import { fetchLastChance } from "../../../../api/productsApi";
-import ProductCard from "./ProductCard";
+import React from 'react';
+import './Products.scss';
+import { getLastChance } from '../../../../api/productsApi';
+import { Products } from './Products';
 
 const LastChance = () => {
-    const [products, setProducts] = useState([]);
-    const [page, setPage] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const observer = useRef();
-    const loadingRef = useRef(false);
-
-    const loadProducts = useCallback(async () => {
-        if (loadingRef.current) return;
-        loadingRef.current = true;
-
-        const data = await fetchLastChance(page);
-        setProducts(prev => [...prev, ...data.content]);
-        setPage(prevPage => prevPage + 1);
-        setHasMore(page + 1 < data.totalPages);
-
-        loadingRef.current = false;
-    }, [page]);
-
-    useEffect(() => {
-        if (hasMore) loadProducts();
-    }, [loadProducts, hasMore]);
-
-    useEffect(() => {
-        if (!hasMore) return;
-
-        const lastProductElement = document.querySelector(".product:last-child");
-        if (!lastProductElement) return;
-
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && !loadingRef.current && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        }, { threshold: 1.0 });
-
-        observer.current.observe(lastProductElement);
-
-        return () => observer.current?.disconnect();
-    }, [hasMore, products.length]);
-
     return (
-        <div className="products">
-            <div className="products-grid">
-                {products.map(product => <ProductCard key={product.id} product={product} />)}
-            </div>
-        </div>
+        <>
+            <Products fetchFunction={getLastChance} queryKeyPrefix="lastChance" />
+        </>
     );
 };
-
 export default LastChance;

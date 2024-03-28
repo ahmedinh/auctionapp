@@ -1,3 +1,4 @@
+import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_URL
 
 export const fetchHighlight = async () => {
@@ -21,30 +22,18 @@ export const fetchHighlight = async () => {
     }
 }
 
-export const fetchNewArrivals = async (pageNum) => {
-    try {
-        const response = await fetch(`${apiUrl}/api/product/all/new-arrivals?page=${pageNum}&size=8`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Failed to fetch highlight: ", error);
-        return [];
-    }
+export function getNewArrivals({ page, size = 8 }) {
+    return axios.get(`${apiUrl}/api/product/all/new-arrivals`, {
+        params: { page: page, size: size }
+    }).then(res => {
+        return res.data;
+    });
 }
 
-export const fetchLastChance = async (pageNum) => {
-    try {
-        const response = await fetch(`${apiUrl}/api/product/all/last-chance?page=${pageNum}&size=8`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Failed to fetch highlight: ", error);
-        return [];
-    }
+export function getLastChance({ page, size = 8 }) {
+    return axios.get(`${apiUrl}/api/product/all/last-chance`, {
+        params: { page: page, size: size }
+    }).then(res => {
+        return res.data;
+    });
 }
