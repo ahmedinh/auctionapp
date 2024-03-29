@@ -38,4 +38,9 @@ public class ProductController {
     public ResponseEntity getHighlighted() {
         return productService.getHighlighted();
     }
+
+    @GetMapping()
+    public ResponseEntity getProduct(@RequestParam Long id) {
+        return productService.getProduct(id);
+    }
 }
