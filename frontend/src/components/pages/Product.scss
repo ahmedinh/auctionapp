@@ -1,0 +1,50 @@
+@import "../utilities/Style.scss";
+
+.product-page {
+    .product {
+        display: flex;
+        flex-direction: row;
+        margin: 0% 20% 5% 20%;
+        justify-content: center;
+        gap: 117px;
+        .product-pictures {
+            display: inline-block;
+            width: 453px;
+            .main-picture {
+                height: 75%;
+            }
+        }
+        
+        .product-info {
+            .basics {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                .headline {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    .product-name {
+                        font-weight: $font-weight-semibold;
+                        color: $color-black;
+                    }
+                    .start-price {
+                        font-weight: 300;
+                        color: $color-purple;
+                    }
+                }
+                .bids {
+                    display: flex;
+                    width: fit-content;
+                    flex-direction: column;
+                    gap: 16px;
+                    padding: 24px 32px 24px 32px;
+                    border: 1px solid $color-grey;
+                }
+            }
+
+            .details {}
+        }
+
+    }
+}
