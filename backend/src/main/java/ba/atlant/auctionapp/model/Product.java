@@ -2,12 +2,16 @@ package ba.atlant.auctionapp.model;
 
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -32,12 +36,19 @@ public class Product {
     @Column(name = "start_price")
     private BigDecimal startPrice;
 
+    @NotBlank(message = "Time of creation cannot be blank.")
+    @NotNull(message = "Time of creation cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime createdAt;
+
     @NotBlank(message = "Auction start date cannot be blank.")
     @NotNull(message = "Auction start date cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime auctionStart;
 
     @NotBlank(message = "Auction end date cannot be blank.")
     @NotNull(message = "Auction end date cannot be null.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime auctionEnd;
 
     @Enumerated(EnumType.STRING)
@@ -46,13 +57,15 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Color color;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<WishList> wishList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<Bid> bidList;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPicture> productPictureList;
 
     @ManyToOne
@@ -118,6 +131,14 @@ public class Product {
         this.startPrice = startPrice;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public LocalDateTime getAuctionStart() {
         return auctionStart;
     }
@@ -168,10 +189,6 @@ public class Product {
 
     public List<ProductPicture> getProductPictureList() {
         return productPictureList;
-    }
-
-    public void setProductPictureList(List<ProductPicture> productPictureList) {
-        this.productPictureList = productPictureList;
     }
 
     public Category getCategory() {

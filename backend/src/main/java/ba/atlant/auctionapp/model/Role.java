@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Role {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<User> userList;
 
@@ -46,5 +48,9 @@ public class Role {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public void addUser(User user) {
+        this.userList.add(user);
     }
 }

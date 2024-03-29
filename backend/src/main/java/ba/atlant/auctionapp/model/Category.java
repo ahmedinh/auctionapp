@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -24,15 +25,7 @@ public class Category {
     @Size(min = 2, max = 30, message = "Category name must be between 2 and 30 characters long")
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
-
     public Category() {
-    }
-
-    public Category(String name, List<Product> products) {
-        this.name = name;
-        this.products = products;
     }
 
     public Long getId() {
@@ -45,13 +38,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 }

@@ -1,10 +1,12 @@
 package ba.atlant.auctionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +40,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password cannot be blank.")
+    @NotNull(message = "Password cannot be null.")
+    @Column(nullable = false)
+    private String password;
+
     @NotBlank(message = "Username cannot be blank.")
     @NotNull(message = "Username cannot be null.")
     @Column(nullable = false, unique = true)
@@ -64,15 +71,15 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<CreditCard> creditCardList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<WishList> wishList;
 
-    @OneToMany(mappedBy = "user")
-    private List<Product> productList;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Bid> bidList;
 
@@ -93,9 +100,7 @@ public class User {
                 Role role,
                 List<CreditCard> creditCardList,
                 List<WishList> wishList,
-                List<Product> productList,
                 List<Bid> bidList) {
-        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -110,7 +115,6 @@ public class User {
         this.role = role;
         this.creditCardList = creditCardList;
         this.wishList = wishList;
-        this.productList = productList;
         this.bidList = bidList;
     }
 
@@ -140,6 +144,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUsername() {
@@ -228,14 +240,6 @@ public class User {
 
     public void setWishList(List<WishList> wishList) {
         this.wishList = wishList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
     }
 
     public List<Bid> getBidList() {

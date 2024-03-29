@@ -1,0 +1,161 @@
+@import "../../utilities/Style.scss";
+
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+
+    .upper-part {
+        display: flex;
+        gap: 119px;
+        margin: 34px 20% 0% 20%;
+
+        .categories {
+            width: 262px;
+
+            .categories-text {
+                height: 56px;
+                display: flex;
+                padding-left: 16px;
+                align-items: center;
+
+                p {
+                    color: $color-purple;
+                    margin: 0;
+                    padding: 0;
+                    font-size: $font-size-normal;
+                }
+            }
+
+            .list {
+                width: 261px;
+
+                ul {
+                    display: flex;
+                    flex-direction: column;
+                    color: $color-black;
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                li {
+                    position: relative;
+                    padding: 16px 0 16px 16px;
+
+                    ::after {
+                        content: "";
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: 1px;
+                        background-color: $color-grey;
+                    }
+                }
+
+                hr {
+                    color: $color-grey;
+                    height: 0px;
+                }
+            }
+        }
+
+        .highlight {
+            display: flex;
+            gap: 36px;
+            margin-top: 6rem;
+            margin-bottom: 11rem;
+
+            img {
+                width: 357px;
+                height: 420px;
+            }
+
+            .left-side {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 8.5rem;
+                width: 346px;
+
+                .product-about {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+
+                    p {
+                        margin: 0;
+                        padding: 0;
+                        font-weight: $font-weight-semibold;
+                        font-size: $font-size-normal;
+                    }
+
+                    .product-name {
+                        color: $color-black;
+                    }
+
+                    .product-price {
+                        color: $color-purple;
+                    }
+
+                    .product-description {
+                        color: $color-grey;
+                        font-weight: $font-weight-normal;
+                    }
+                }
+
+                .bid-now {
+                    button {
+                        display: flex;
+                        gap: 16px;
+                        justify-content: center;
+                        padding: 12px 24px 12px 24px;
+                        border: 2px solid $color-black;
+                        background-color: #fff;
+                        font-weight: $font-weight-bold;
+                        cursor: pointer;
+
+                        &:hover {
+                            border-color: $color-purple;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .bottom {
+        margin: 0 20% 10% 20%;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        .menu-bar {
+            display: flex;
+            gap: 64px;
+            align-items: flex-end;
+            line-height: $line-height-large;
+
+            .link {
+                text-decoration: none;
+                color: $color-black;
+                font-size: 20px;
+            }
+
+            .active {
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-large;
+                letter-spacing: 0.84px;
+            }
+        }
+
+        hr {
+            width: 100%;
+            color: $color-grey;
+            border-style: inset;
+            border-width: 1px;
+            margin: 0;
+        }
+    }
+}
