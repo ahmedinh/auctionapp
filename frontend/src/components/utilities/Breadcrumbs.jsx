@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import { GoArrowRight } from "react-icons/go";
 import "./Breadcrumbs.scss";
 
-export default function Breadcrumbs() {
+export default function Breadcrumbs({locationLink}) {
     const location = useLocation();
 
     const formatCrumb = (crumb) => {
@@ -12,7 +12,7 @@ export default function Breadcrumbs() {
 
     let currentLink = '';
 
-    const crumbs = location.pathname.split('/')
+    const crumbs = locationLink.split('/')
         .filter(crumb => crumb !== '')
         .map((crumb, index, array) => {
             currentLink += `/${crumb}`;
