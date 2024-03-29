@@ -1,4 +1,3 @@
-// Products component file
 import React, { useRef, useEffect } from "react";
 import "./Products.scss";
 import ProductCard from "./ProductCard";
