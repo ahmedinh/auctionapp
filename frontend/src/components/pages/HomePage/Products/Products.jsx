@@ -1,7 +1,8 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+// Products component file
+import React, { useRef, useEffect } from "react";
 import "./Products.scss";
 import ProductCard from "./ProductCard";
-import { useRef, useEffect } from "react";
+import { useProducts } from "../../../../hooks/useProducts";
 
 export function Products({ fetchFunction, queryKeyPrefix }) {
     const {
@@ -11,14 +12,7 @@ export function Products({ fetchFunction, queryKeyPrefix }) {
         isFetchingNextPage,
         hasNextPage,
         fetchNextPage,
-    } = useInfiniteQuery({
-        queryKey: [queryKeyPrefix, "infinite"],
-        getNextPageParam: (lastPage, pages) => {
-            if (lastPage.last) return undefined;
-            return lastPage.pageable?.pageNumber !== undefined ? lastPage.pageable.pageNumber + 1 : undefined;
-        },
-        queryFn: ({ pageParam = 0 }) => fetchFunction({ page: pageParam }),
-    });
+    } = useProducts(fetchFunction, queryKeyPrefix);
 
     const loadMoreRef = useRef(null);
 
