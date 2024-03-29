@@ -28,11 +28,8 @@ public class ProductDTO {
     private List<ProductPicture> productPictureList;
     private Category category;
     private User user;
-    private BigDecimal largestBid
+    private BigDecimal largestBid;
     private Integer numberOfBids;
-
-    public ProductDTO() {
-    }
 
     public ProductDTO(Product product) {
         this.id = product.getId();
