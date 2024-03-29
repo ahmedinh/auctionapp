@@ -1,17 +1,22 @@
 import React from "react";
 import "./Home.scss";
-import useCategories from "../../../hooks/useCategories";
-import useHighlight from "../../../hooks/useHighlight";
+import { useCategories } from "../../../hooks/useCategories";
+import { useHighlight } from "../../../hooks/useHighlight";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
 
 const Home = () => {
-    const { categories, isCategoriesLoading, categoriesError  } = useCategories();
-    const { highlight, isHighlightLoading, highlightError  } = useHighlight();
-
-    if (isCategoriesLoading || isHighlightLoading) return <p>Loading...</p>;
-    if (categoriesError || highlightError) return <p>Error fetching data</p>;
-
+    const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
+    const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
+    if (categoriesStatus === 'pending' || highlightStatus==='pending') {
+        return <span>Loading...</span>;
+    }
+    if (categoriesStatus === 'error') {
+        return <span>Error: {categoriesError.message}</span>;
+    }
+    if (highlightStatus === 'error') {
+        return <span>Error: {highlightError.message}</span>;
+    }
     return (
         <div className="page">
             <div className="upper-part">
@@ -21,7 +26,7 @@ const Home = () => {
                     </div>
                     <div className="list">
                         <ul>
-                            {categories.map((category) => (
+                            {categoriesData?.map((category) => (
                                 <React.Fragment key={category.id}>
                                     <li><NavLink to={`/categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
                                 </React.Fragment>
@@ -33,15 +38,15 @@ const Home = () => {
                 <div className="highlight">
                     <div className="left-side">
                         <div className="product-about">
-                            <p className="product-name">{highlight.name}</p>
-                            <p className="product-price">Start from ${highlight.start_price.toFixed(2)}</p>
-                            <p className="product-description">{highlight.description}</p>
+                            <p className="product-name">{highlightData?.name}</p>
+                            <p className="product-price">Start from ${highlightData?.startPrice.toFixed(2)}</p>
+                            <p className="product-description">{highlightData?.description}</p>
                         </div>
                         <div className="bid-now">
                             <button type="button">BID NOW <Icon icon="akar-icons:chevron-right" /></button>
                         </div>
                     </div>
-                    <img src={highlight.picture_url} alt="HighlightPicture" />
+                    <img src={highlightData?.productPictureList[0].url} alt="HighlightPicture" />
                 </div>
             </div>
             <div className="bottom">
