@@ -1,6 +1,9 @@
-@import "../utilities/Style.scss";
+@import "../../utilities/Style.scss";
 
-.page {
+.terms-page {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
     .content {
         display: flex;
         flex-direction: column;
@@ -12,6 +15,7 @@
             font-size: 20px;
             letter-spacing: 0.84px;
             color: #252525;
+            margin: 0;
         }
 
         p,

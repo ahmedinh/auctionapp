@@ -1,15 +1,17 @@
 import React from "react";
 import "./AboutUs.scss";
-import PictureTop from "../../assets/about_us1.png";
-import PictureLeft from "../../assets/about_us2.png";
-import PictureRight from "../../assets/about_us3.png";
-import { AboutUsPage, common } from "../../messages/Text";
-import ScrollToTop from "../utilities/ScrollToTop";
+import PictureTop from "../../../assets/about_us1.png";
+import PictureLeft from "../../../assets/about_us2.png";
+import PictureRight from "../../../assets/about_us3.png";
+import { AboutUsPage, common } from "../../../messages/Text";
+import ScrollToTop from "../../utilities/ScrollToTop";
+import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 
 const AboutUs = () => {
     ScrollToTop();
     return (
         <div className="page">
+            <BreadCrumbsMenu title="About Us" rightLink="home/about-us" />
             <div className="about-us">
                 <div className="left-side">
                     <div className="text">

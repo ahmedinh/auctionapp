@@ -1,12 +1,14 @@
 import React from "react";
 import "./Privacy.scss";
-import { common } from "../../messages/Text";
-import ScrollToTop from "../utilities/ScrollToTop";
+import { common } from "../../../messages/Text";
+import ScrollToTop from "../../utilities/ScrollToTop";
+import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 
 const Privacy = () => {
     ScrollToTop();
     return (
         <div className="full-page">
+            <BreadCrumbsMenu title="Privacy and policy" rightLink="home/privacy-and-policy" />
             <div className="page-content">
                 <div className="page-chapter">
                     <h2>Auction Website {common.privacy_and_policy}</h2>
