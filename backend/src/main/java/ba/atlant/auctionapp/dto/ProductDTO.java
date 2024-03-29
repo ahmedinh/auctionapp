@@ -25,12 +25,15 @@ public class ProductDTO {
     private LocalDateTime auctionEnd;
     private Size size;
     private Color color;
-    private List<ProductPicture> productPictureList; // Assume this is another DTO for pictures
-    private Category category; // Assume this is a DTO for the category
-    private User user; // Assume this is a DTO for the user
-    private BigDecimal largestBid; // New field
+    private List<ProductPicture> productPictureList;
+    private Category category;
+    private User user;
+    private BigDecimal largestBid
     private Integer numberOfBids;
-    public ProductDTO() {}
+
+    public ProductDTO() {
+    }
+
     public ProductDTO(Product product) {
         this.id = product.getId();
         this.name = product.getName();
