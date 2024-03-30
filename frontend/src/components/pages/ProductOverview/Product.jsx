@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import "./Product.scss"
 import { getProduct } from "../../../api/productsApi";
-import { NavLink, Outlet, useLocation, useOutletContext, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
 import AuctionCountdown from "./AuctionCountdown";
@@ -9,7 +9,7 @@ import AuctionCountdown from "./AuctionCountdown";
 export default function Product() {
     let { id } = useParams();
     const {
-        status, data, error, isSuccess
+        status, data, error
     } = useQuery({
         queryKey: ['product', id],
         queryFn: () => getProduct({ id }),
@@ -46,7 +46,7 @@ export default function Product() {
                         <img src={mainImage?.url} alt="" className="main-picture" />
                     </div>
                     <div className="preview-pictures">
-                        {data?.productPictureList.filter(img => img.id !== mainImage.id).map((img) => (
+                        {data?.productPictureList.filter(img => img.id !== (mainImage === null ? data?.productPictureList[0].id : mainImage.id)).map((img) => (
                             <img
                                 key={img.id}
                                 src={img.url}
