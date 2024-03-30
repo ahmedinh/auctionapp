@@ -10,12 +10,14 @@
 
         .product-pictures {
             width: 453px;
+
             .main-image {
                 width: 100%;
                 height: 622px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
                 img {
                     max-width: 400px;
                     max-height: 400px;
@@ -29,6 +31,7 @@
                 overflow: auto;
                 justify-content: center;
                 gap: 8px;
+
                 img {
                     width: 18%;
                     cursor: pointer;
@@ -40,6 +43,7 @@
             display: flex;
             flex-direction: column;
             gap: 64px;
+
             .basics {
                 display: flex;
                 flex-direction: column;
@@ -75,32 +79,39 @@
                 display: flex;
                 flex-direction: column;
                 gap: 32px;
+
                 .tabs {
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
+
                     .inner {
                         display: flex;
                         justify-content: center;
                         gap: 107px;
+
                         .link {
                             text-decoration: none;
                             color: $color-black;
                             font-size: 14px;
                         }
+
                         .active {
                             font-weight: $font-weight-bold;
                             color: $color-purple;
                             font-size: $font-size-normal;
                         }
                     }
+
                     hr {
                         width: 100%;
                         margin: 0;
                     }
                 }
+
                 .tab-content {
                     width: 548px;
+
                     .description {
                         font-style: italic;
                         white-space: pre-wrap;
