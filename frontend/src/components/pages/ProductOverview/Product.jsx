@@ -43,7 +43,7 @@ export default function Product() {
             <div className="product">
                 <div className="product-pictures">
                     <div className="main-image">
-                        <img src={mainImage?.url} alt="" className="main-picture" />
+                        <img src={mainImage === null ? data?.productPictureList[0].url : mainImage?.url} alt="" className="main-picture" />
                     </div>
                     <div className="preview-pictures">
                         {data?.productPictureList.filter(img => img.id !== (mainImage === null ? data?.productPictureList[0].id : mainImage.id)).map((img) => (
