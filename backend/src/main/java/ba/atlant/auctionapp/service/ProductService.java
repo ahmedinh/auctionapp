@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.model.Product;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,11 +55,6 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity getProducts() {
-        List<Product> productList = productRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
-    }
-
     public ResponseEntity getNewArrivals(int page, int size) {
         Page<Product> productPage = productRepository.findAll(
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
@@ -76,5 +73,21 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
         Product product = optionalProduct.get();
         return ResponseEntity.status(HttpStatus.OK).body(product);
+    }
+
+    public ResponseEntity getProduct(Long id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
+        Product product = optionalProduct.get();
+        ProductDTO productDTO = new ProductDTO(product);
+        if (product.getMaxBid().isEmpty()) {
+            productDTO.setLargestBid(BigDecimal.valueOf(0));
+            productDTO.setNumberOfBids(0);
+        } else {
+            productDTO.setLargestBid(product.getMaxBid().get().getAmount());
+            productDTO.setNumberOfBids(product.getBidList().size());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
 }
