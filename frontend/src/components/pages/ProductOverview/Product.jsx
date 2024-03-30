@@ -9,7 +9,7 @@ import AuctionCountdown from "./AuctionCountdown";
 export default function Product() {
     let { id } = useParams();
     const {
-        status, data, error
+        status, data, error, isSuccess
     } = useQuery({
         queryKey: ['product', id],
         queryFn: () => getProduct({ id }),
@@ -33,8 +33,6 @@ export default function Product() {
         setMainImage(selectedImage);
     };
 
-    const previewImages = data?.productPictureList.filter(img => img.id !== mainImage.id);
-
     const detailsPath = `/shop/product/${data?.id}/details`;
     const sellerPath = `/shop/product/${data?.id}/seller-information`;
     const reviewPath = `/shop/product/${data?.id}/reviews`;
@@ -48,7 +46,7 @@ export default function Product() {
                         <img src={mainImage?.url} alt="" className="main-picture" />
                     </div>
                     <div className="preview-pictures">
-                        {previewImages.map((img) => (
+                        {data?.productPictureList.filter(img => img.id !== mainImage.id).map((img) => (
                             <img
                                 key={img.id}
                                 src={img.url}
