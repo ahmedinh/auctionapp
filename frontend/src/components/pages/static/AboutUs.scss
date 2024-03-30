@@ -1,6 +1,9 @@
  @import "../../utilities/Style.scss";
 
-.page {
+.about-us-page {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
     .about-us {
         display: flex;
         justify-content: center;
@@ -37,7 +40,8 @@
                 h5 {
                     font-weight: 600;
                     font-size: $font-size-large;
-                    color: #252525
+                    color: #252525;
+                    margin-top: 0;
                 }
 
                 p {

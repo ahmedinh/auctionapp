@@ -10,7 +10,7 @@ import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 const AboutUs = () => {
     ScrollToTop();
     return (
-        <div className="page">
+        <div className="about-us-page">
             <BreadCrumbsMenu title="About Us" rightLink="home/about-us" />
             <div className="about-us">
                 <div className="left-side">
