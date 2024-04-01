@@ -28,7 +28,7 @@ const Home = () => {
                         <ul>
                             {categoriesData?.map((category) => (
                                 <React.Fragment key={category.id}>
-                                    <li><NavLink to={`/categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
+                                    <li><NavLink to={`/home/categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
                                 </React.Fragment>
                             ))}
                             <li><NavLink to="/categories" style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
