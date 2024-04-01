@@ -1,11 +1,10 @@
 @import "../../../utilities/Style.scss";
 .product {
-    // Basic product styling
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 12px;
-
+    
     .picture {
         width: 262px;
         height: 262px;
