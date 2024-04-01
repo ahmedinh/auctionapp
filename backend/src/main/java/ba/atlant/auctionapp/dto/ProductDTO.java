@@ -1,7 +1,5 @@
 package ba.atlant.auctionapp.dto;
 
-import ba.atlant.auctionapp.enumeration.Color;
-import ba.atlant.auctionapp.enumeration.Size;
 import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.ProductPicture;

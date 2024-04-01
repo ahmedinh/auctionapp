@@ -71,18 +71,6 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<CreditCard> creditCardList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<WishList> wishList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Bid> bidList;
-
     public User() {
     }
 
@@ -97,10 +85,7 @@ public class User {
                 String zipCode,
                 String state,
                 String country,
-                Role role,
-                List<CreditCard> creditCardList,
-                List<WishList> wishList,
-                List<Bid> bidList) {
+                Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -113,9 +98,6 @@ public class User {
         this.state = state;
         this.country = country;
         this.role = role;
-        this.creditCardList = creditCardList;
-        this.wishList = wishList;
-        this.bidList = bidList;
     }
 
     public Long getId() {
@@ -224,29 +206,5 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public List<CreditCard> getCreditCardList() {
-        return creditCardList;
-    }
-
-    public void setCreditCardList(List<CreditCard> creditCardList) {
-        this.creditCardList = creditCardList;
-    }
-
-    public List<WishList> getWishList() {
-        return wishList;
-    }
-
-    public void setWishList(List<WishList> wishList) {
-        this.wishList = wishList;
-    }
-
-    public List<Bid> getBidList() {
-        return bidList;
-    }
-
-    public void setBidList(List<Bid> bidList) {
-        this.bidList = bidList;
     }
 }

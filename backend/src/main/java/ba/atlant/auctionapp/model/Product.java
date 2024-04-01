@@ -57,14 +57,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<WishList> wishList;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<Bid> bidList;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -82,8 +74,6 @@ public class Product {
                    LocalDateTime auctionStart,
                    LocalDateTime auctionEnd,
                    Size size,
-                   List<WishList> wishList,
-                   List<Bid> bidList,
                    Category category,
                    User user) {
         this.name = name;
@@ -92,8 +82,6 @@ public class Product {
         this.auctionStart = auctionStart;
         this.auctionEnd = auctionEnd;
         this.size = size;
-        this.wishList = wishList;
-        this.bidList = bidList;
         this.category = category;
         this.user = user;
     }
@@ -166,13 +154,6 @@ public class Product {
         this.color = color;
     }
 
-    public List<WishList> getWishList() {
-        return wishList;
-    }
-
-    public List<Bid> getBidList() {
-        return bidList;
-    }
 
     public Category getCategory() {
         return category;
@@ -188,9 +169,5 @@ public class Product {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Optional<Bid> getMaxBid() {
-        return bidList.stream().max(Comparator.comparing(Bid::getAmount));
     }
 }
