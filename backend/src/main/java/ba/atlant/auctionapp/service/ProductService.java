@@ -3,14 +3,8 @@ package ba.atlant.auctionapp.service;
 import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.dto.ProductPictureDTO;
 import ba.atlant.auctionapp.error.Error;
-import ba.atlant.auctionapp.model.Category;
-import ba.atlant.auctionapp.model.Product;
-import ba.atlant.auctionapp.model.ProductPicture;
-import ba.atlant.auctionapp.model.User;
-import ba.atlant.auctionapp.repository.CategoryRepository;
-import ba.atlant.auctionapp.repository.ProductPictureRepository;
-import ba.atlant.auctionapp.repository.ProductRepository;
-import ba.atlant.auctionapp.repository.UserRepository;
+import ba.atlant.auctionapp.model.*;
+import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.*;
@@ -20,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,13 +26,14 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
+    private final BidRepository bidRepository;
 
-
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
+        this.bidRepository = bidRepository;
     }
 
     @Transactional
@@ -65,6 +61,11 @@ public class ProductService {
                 PageRequest.of(page, size, Sort.by("createdAt").descending()));
         return getProductDTOs(productPage);
     }
+
+    /*public ResponseEntity getNewArrivals(int page, int size) {
+        Page<ProductDTO> productDTOPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOPage);
+    }*/
 
     public ResponseEntity getLastChance(int page, int size) {
         Page<Product> productPage = productRepository.findAll(
@@ -102,14 +103,24 @@ public class ProductService {
         Product product = optionalProduct.get();
         ProductDTO productDTO = new ProductDTO(product);
         productDTO.setProductPictureList(productPictureRepository.getProductPicturesByProduct(product));
-        if (product.getMaxBid().isEmpty()) {
+        List<Bid> bidList = bidRepository.findBidsByProduct(product);
+        if (bidList.isEmpty()) {
             productDTO.setLargestBid(BigDecimal.valueOf(0));
             productDTO.setNumberOfBids(0);
         } else {
-            productDTO.setLargestBid(product.getMaxBid().get().getAmount());
-            productDTO.setNumberOfBids(product.getBidList().size());
+            productDTO.setLargestBid(bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount());
+            productDTO.setNumberOfBids(bidList.size());
         }
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+    }
+
+    public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
+        if (categoryRepository.findById(categoryId).isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
+        Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
+        Page<Product> productPage = productRepository.getProductsByCategoryId(categoryId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productPage);
     }
 
     public ResponseEntity addPictureToPictureList(ProductPictureDTO productPictureDTO) {
