@@ -119,8 +119,7 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
         Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
         Page<Product> productPage = productRepository.getProductsByCategoryId(categoryId, pageable);
-
-        return ResponseEntity.status(HttpStatus.OK).body(productPage);
+        return getProductDTOs(productPage);
     }
 
     public ResponseEntity addPictureToPictureList(ProductPictureDTO productPictureDTO) {
