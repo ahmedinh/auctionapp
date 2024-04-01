@@ -8,13 +8,14 @@ import AuctionCountdown from "./AuctionCountdown";
 import ProductDetails from "./Details";
 
 export default function Product() {
-    let { id } = useParams();
+    let { productId } = useParams();
     const [activeComponent, setActiveComponent] = useState();
+    const [ counter, setCounter ] = useState(0)
     const {
         status, data, error
     } = useQuery({
-        queryKey: ['product', id],
-        queryFn: () => getProduct({ id }),
+        queryKey: ['product', productId],
+        queryFn: () => getProduct({ productId }),
     })
     const [mainImage, setMainImage] = useState(() => {
         if (data && data.productPictureList.length > 0) {
@@ -38,6 +39,8 @@ export default function Product() {
     const detailsPath = `/shop/product/${data?.id}/details`;
     const sellerPath = `/shop/product/${data?.id}/seller-information`;
     const reviewPath = `/shop/product/${data?.id}/reviews`;
+
+    console.log(data?.productPictureList[0])
 
     return (
         <div className="product-page">
@@ -74,20 +77,20 @@ export default function Product() {
                     <div className="information">
                         <div className="tabs">
                             <div className="inner">
-                                <NavLink to={detailsPath} className="link" activeClassName="active" onClick={() => setActiveComponent(detailsPath)}>
+                                <NavLink to={detailsPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(detailsPath); setCounter(1); }}>
                                     Details
                                 </NavLink>
-                                <NavLink to={sellerPath} className="link" activeClassName="active" onClick={() => setActiveComponent(sellerPath)}>
+                                <NavLink to={sellerPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(sellerPath); setCounter(1); }}>
                                     Seller information
                                 </NavLink>
-                                <NavLink to={reviewPath} className="link" activeClassName="active">
+                                <NavLink to={reviewPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(reviewPath); setCounter(1); }}>
                                     Customer reviews
                                 </NavLink>
                             </div>
                             <hr />
                         </div>
                         <div className="tab-content">
-                            {activeComponent === detailsPath ? (<ProductDetails description={data.description} />) : null}
+                            {activeComponent === detailsPath || counter === 0 ? (<ProductDetails description={data.description} />) : null}
                         </div>
                     </div>
                 </div>

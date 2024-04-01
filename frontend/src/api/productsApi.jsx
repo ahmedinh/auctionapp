@@ -23,8 +23,14 @@ export async function getLastChance({ page, size = 8 }) {
     });
 }
 
-export async function getProduct({ id }) {
+export async function getProduct({ productId }) {
     return axios.get(`${apiUrl}/api/product`, {
-        params: { id }
+        params: { id: productId }
+    }).then(res => res.data);
+}
+
+export async function getProductsForCategory({ page, size = 9, categoryId}) {
+    return axios.get(`${apiUrl}/api/product/all/category`, {
+        params:{ page, size, categoryId }
     }).then(res => res.data);
 }

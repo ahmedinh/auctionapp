@@ -10,6 +10,8 @@ import ProductDetails from '../pages/ProductOverview/Details';
 import SellerInformation from '../pages/ProductOverview/SellerInformation';
 import CustomerReviews from '../pages/ProductOverview/CustomerReviews';
 import Product from '../pages/ProductOverview/Product';
+import Search from '../pages/BasicSearch/Search';
+import { RedirectWrapper } from './RedirectWrapper';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -20,12 +22,14 @@ const Router = createBrowserRouter(
                 <Route path="last-chance" element={<LastChance />} />
             </Route>
             <Route path="home">
+                <Route path="categories/:categoryId" element={<Search />} />
                 <Route path="about-us" element={<AboutUs />} />
                 <Route path="terms-and-conditions" element={<Terms />} />
                 <Route path="privacy-and-policy" element={<Privacy />} />
             </Route>
             <Route path="shop">
-                <Route path="product/:id" element={<Product />}>
+                <Route path="product/:productId" element={<Product />}>
+                    <Route index element={<RedirectWrapper />} />
                     <Route path="details" element={<ProductDetails />} />
                     <Route path="seller-information" element={<SellerInformation />} />
                     <Route path="reviews" element={<CustomerReviews />} />
