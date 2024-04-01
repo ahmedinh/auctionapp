@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -66,9 +65,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Bid> bidList;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductPicture> productPictureList;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -88,7 +84,6 @@ public class Product {
                    Size size,
                    List<WishList> wishList,
                    List<Bid> bidList,
-                   List<ProductPicture> productPictureList,
                    Category category,
                    User user) {
         this.name = name;
@@ -99,7 +94,6 @@ public class Product {
         this.size = size;
         this.wishList = wishList;
         this.bidList = bidList;
-        this.productPictureList = productPictureList;
         this.category = category;
         this.user = user;
     }
@@ -176,20 +170,8 @@ public class Product {
         return wishList;
     }
 
-    public void setWishList(List<WishList> wishList) {
-        this.wishList = wishList;
-    }
-
     public List<Bid> getBidList() {
         return bidList;
-    }
-
-    public void setBidList(List<Bid> bidList) {
-        this.bidList = bidList;
-    }
-
-    public List<ProductPicture> getProductPictureList() {
-        return productPictureList;
     }
 
     public Category getCategory() {
