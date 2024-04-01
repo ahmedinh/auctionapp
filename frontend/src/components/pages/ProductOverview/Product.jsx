@@ -1,13 +1,15 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./Product.scss"
 import { getProduct } from "../../../api/productsApi";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
 import AuctionCountdown from "./AuctionCountdown";
+import ProductDetails from "./Details";
 
 export default function Product() {
     let { id } = useParams();
+    const [activeComponent, setActiveComponent] = useState();
     const {
         status, data, error
     } = useQuery({
@@ -46,7 +48,7 @@ export default function Product() {
                         <img src={mainImage === null ? data?.productPictureList[0].url : mainImage?.url} alt="" className="main-picture" />
                     </div>
                     <div className="preview-pictures">
-                        {data?.productPictureList.filter(img => img.id !== (mainImage === null ? data?.productPictureList[0].id : mainImage.id)).map((img) => (
+                        {data?.productPictureList.map((img) => (
                             <img
                                 key={img.id}
                                 src={img.url}
@@ -72,10 +74,10 @@ export default function Product() {
                     <div className="information">
                         <div className="tabs">
                             <div className="inner">
-                                <NavLink to={detailsPath} className="link" activeClassName="active">
+                                <NavLink to={detailsPath} className="link" activeClassName="active" onClick={() => setActiveComponent(detailsPath)}>
                                     Details
                                 </NavLink>
-                                <NavLink to={sellerPath} className="link" activeClassName="active">
+                                <NavLink to={sellerPath} className="link" activeClassName="active" onClick={() => setActiveComponent(sellerPath)}>
                                     Seller information
                                 </NavLink>
                                 <NavLink to={reviewPath} className="link" activeClassName="active">
@@ -85,7 +87,7 @@ export default function Product() {
                             <hr />
                         </div>
                         <div className="tab-content">
-                            <p className="description">{data.description}</p>
+                            {activeComponent === detailsPath ? (<ProductDetails description={data.description} />) : null}
                         </div>
                     </div>
                 </div>
