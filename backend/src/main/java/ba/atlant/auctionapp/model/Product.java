@@ -154,7 +154,6 @@ public class Product {
         this.color = color;
     }
 
-
     public Category getCategory() {
         return category;
     }

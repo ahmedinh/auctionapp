@@ -4,6 +4,7 @@ import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.dto.ProductPictureDTO;
 import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.*;
+import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
 import org.springframework.dao.DataAccessException;
@@ -17,7 +18,6 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -57,33 +57,13 @@ public class ProductService {
     }
 
     public ResponseEntity getNewArrivals(int page, int size) {
-        Page<Product> productPage = productRepository.findAll(
-                PageRequest.of(page, size, Sort.by("createdAt").descending()));
-        return getProductDTOs(productPage);
+        Page<ProductProjection> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
+        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
-
-    /*public ResponseEntity getNewArrivals(int page, int size) {
-        Page<ProductDTO> productDTOPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productDTOPage);
-    }*/
 
     public ResponseEntity getLastChance(int page, int size) {
-        Page<Product> productPage = productRepository.findAll(
-                PageRequest.of(page, size, Sort.by("auctionEnd").ascending()));
-        return getProductDTOs(productPage);
-    }
-
-    private ResponseEntity getProductDTOs(Page<Product> productPage) {
-        List<ProductDTO> productDTOList = productPage.getContent().stream()
-                .map(product -> {
-                    ProductDTO productDTO = new ProductDTO(product);
-                    List<ProductPicture> productPictureList = productPictureRepository.getProductPicturesByProduct(product);
-                    productDTO.setProductPictureList(productPictureList);
-                    return productDTO;
-                })
-                .collect(Collectors.toList());
-        Page<ProductDTO> productDTOPage = new PageImpl<>(productDTOList, productPage.getPageable(), productPage.getTotalElements());
-        return ResponseEntity.status(HttpStatus.OK).body(productDTOPage);
+        Page<ProductProjection> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size));
+        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
 
     public ResponseEntity getHighlighted() {
@@ -115,11 +95,8 @@ public class ProductService {
     }
 
     public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
-        if (categoryRepository.findById(categoryId).isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
-        Pageable pageable = PageRequest.of(page,size,Sort.by("name"));
-        Page<Product> productPage = productRepository.getProductsByCategoryId(categoryId, pageable);
-        return getProductDTOs(productPage);
+        Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
+        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
 
     public ResponseEntity addPictureToPictureList(ProductPictureDTO productPictureDTO) {
