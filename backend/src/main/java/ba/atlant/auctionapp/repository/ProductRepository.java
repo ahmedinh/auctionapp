@@ -26,6 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
+            WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             ORDER BY p.createdAt DESC
             """)
     Page<ProductProjection> getNewArrivalsProducts(Pageable pageable);
@@ -44,6 +45,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
+            WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             ORDER BY p.auctionEnd ASC
             """)
     Page<ProductProjection> getLastChanceProducts(Pageable pageable);
@@ -62,7 +64,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
-            WHERE p.category.id = :categoryId
+            WHERE p.category.id = :categoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             ORDER BY p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForCategory(@Param("categoryId") Long categoryId, Pageable pageable);

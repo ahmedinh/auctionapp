@@ -29,7 +29,13 @@ public class ProductDTO {
     private BigDecimal largestBid;
     private Integer numberOfBids;
 
-    public ProductDTO(Product product) {
+    public ProductDTO(Product product, List<ProductPicture> productPictureList, BigDecimal largestBid, Integer numberOfBids) {
+        this(product,productPictureList);
+        this.largestBid = largestBid;
+        this.numberOfBids = numberOfBids;
+    }
+
+    public ProductDTO(Product product, List<ProductPicture> productPictureList) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
@@ -41,5 +47,6 @@ public class ProductDTO {
         this.color = product.getColor().toString();
         this.category = product.getCategory();
         this.user = product.getUser();
+        this.productPictureList = productPictureList;
     }
 }

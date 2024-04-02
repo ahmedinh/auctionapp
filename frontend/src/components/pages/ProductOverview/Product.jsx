@@ -39,6 +39,7 @@ export default function Product() {
     const detailsPath = `/shop/product/${data?.id}/details`;
     const sellerPath = `/shop/product/${data?.id}/seller-information`;
     const reviewPath = `/shop/product/${data?.id}/reviews`;
+    const productImage = mainImage === null ? data?.productPictureList[0].url : mainImage?.url
 
     return (
         <div className="product-page">
@@ -46,7 +47,7 @@ export default function Product() {
             <div className="product">
                 <div className="product-pictures">
                     <div className="main-image">
-                        <img src={mainImage === null ? data?.productPictureList[0].url : mainImage?.url} alt="" className="main-picture" />
+                        <img src={productImage} alt="" className="main-picture" />
                     </div>
                     <div className="preview-pictures">
                         {data?.productPictureList.map((img) => (

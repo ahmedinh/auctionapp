@@ -51,9 +51,4 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "1") Long categoryId) {
         return productService.getProductsForCategory(page, size, categoryId);
     }
-
-    @PostMapping("/add-picture")
-    public ResponseEntity addPictureForProduct(@Valid @RequestBody ProductPictureDTO productPictureDTO) {
-        return productService.addPictureToPictureList(productPictureDTO);
-    }
 }

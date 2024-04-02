@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortingRepository<Bid, Long> {
     List<Bid> findBidsByProduct(Product product);
+    List<Bid> findAllByProductId(Long id);
 }

@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ProductPictureRepository extends JpaRepository<ProductPicture, Long>, PagingAndSortingRepository<ProductPicture, Long> {
     List<ProductPicture> getProductPicturesByProduct(Product product);
+    List<ProductPicture> findAllByProductId(Long id);
 }

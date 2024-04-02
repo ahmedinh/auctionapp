@@ -71,44 +71,23 @@ public class ProductService {
         if (optionalProduct.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
         Product product = optionalProduct.get();
-        ProductDTO productDTO = new ProductDTO(product);
-        productDTO.setProductPictureList(productPictureRepository.getProductPicturesByProduct(product));
-        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
     public ResponseEntity getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
-        Product product = optionalProduct.get();
-        ProductDTO productDTO = new ProductDTO(product);
-        productDTO.setProductPictureList(productPictureRepository.getProductPicturesByProduct(product));
-        List<Bid> bidList = bidRepository.findBidsByProduct(product);
-        if (bidList.isEmpty()) {
-            productDTO.setLargestBid(BigDecimal.valueOf(0));
-            productDTO.setNumberOfBids(0);
-        } else {
-            productDTO.setLargestBid(bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount());
-            productDTO.setNumberOfBids(bidList.size());
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+        List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
+        List<Bid> bidList = bidRepository.findAllByProductId(id);
+        if (bidList.isEmpty())
+            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
+        else
+            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
     public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
-    }
-
-    public ResponseEntity addPictureToPictureList(ProductPictureDTO productPictureDTO) {
-        Optional<Product> optionalProduct = productRepository.findById(productPictureDTO.getProductId());
-        if (optionalProduct.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
-        Product product = optionalProduct.get();
-        ProductPicture productPicture = new ProductPicture();
-        productPicture.setName(productPictureDTO.getName());
-        productPicture.setUrl(productPictureDTO.getUrl());
-        productPicture.setProduct(product);
-        productPictureRepository.save(productPicture);
-        return ResponseEntity.status(HttpStatus.OK).body(productPicture);
     }
 }
