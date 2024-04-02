@@ -1,6 +1,9 @@
-@import "../utilities/Style.scss";
+@import "../../utilities/Style.scss";
 
 .full-page {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
     .page-content {
         display: flex;
         flex-direction: column;

@@ -1,11 +1,15 @@
 import React from "react";
 import "./Terms.scss";
-import ScrollToTop from "../utilities/ScrollToTop";
+import ScrollToTop from "../../utilities/ScrollToTop";
+import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 
 const Terms = () => {
     ScrollToTop();
     return (
-        <div className="page">
+        <div className="terms-page">
+            <div>
+                <BreadCrumbsMenu title="Terms and conditions" rightLink="home/terms-and-conditions" />
+            </div>
             <div className="content">
                 <div className="chapter">
                     <h6>Introduction</h6>

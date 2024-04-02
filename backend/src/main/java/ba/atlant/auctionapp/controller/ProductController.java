@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.dto.ProductPictureDTO;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,5 +38,17 @@ public class ProductController {
     @GetMapping("/highlight")
     public ResponseEntity getHighlighted() {
         return productService.getHighlighted();
+    }
+
+    @GetMapping()
+    public ResponseEntity getProduct(@RequestParam Long id) {
+        return productService.getProduct(id);
+    }
+
+    @GetMapping("/all/category")
+    public ResponseEntity getProductsForCategory(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "9") int size,
+                                                 @RequestParam(defaultValue = "1") Long categoryId) {
+        return productService.getProductsForCategory(page, size, categoryId);
     }
 }
