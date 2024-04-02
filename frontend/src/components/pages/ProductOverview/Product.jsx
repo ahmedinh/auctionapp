@@ -40,8 +40,6 @@ export default function Product() {
     const sellerPath = `/shop/product/${data?.id}/seller-information`;
     const reviewPath = `/shop/product/${data?.id}/reviews`;
 
-    console.log(data?.productPictureList[0])
-
     return (
         <div className="product-page">
             <BreadCrumbsMenu title={data.name} rightLink="shop/single-product" fontWeight={700} />

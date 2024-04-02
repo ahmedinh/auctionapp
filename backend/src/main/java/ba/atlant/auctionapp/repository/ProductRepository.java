@@ -19,7 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     Page<Product> getProductsByCategoryId(Long categoryId, Pageable pageable);
 
     @Query("""
-            SELECT p.name as name,
+            SELECT p.id as id,
+            p.name as name,
             p.description as description,
             p.startPrice as startPrice,
             p.createdAt as createdAt,
@@ -36,7 +37,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     Page<ProductProjection> getNewArrivalsProducts(Pageable pageable);
 
     @Query("""
-            SELECT p.name as name,
+            SELECT p.id as id,
+            p.name as name,
             p.description as description,
             p.startPrice as startPrice,
             p.createdAt as createdAt,
@@ -53,7 +55,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     Page<ProductProjection> getLastChanceProducts(Pageable pageable);
 
     @Query("""
-            SELECT p.name as name,
+            SELECT p.id as id,
+            p.name as name,
             p.description as description,
             p.startPrice as startPrice,
             p.createdAt as createdAt,

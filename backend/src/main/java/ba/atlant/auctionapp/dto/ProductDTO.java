@@ -44,23 +44,4 @@ public class ProductDTO {
         this.category = product.getCategory();
         this.user = product.getUser();
     }
-
-    public ProductDTO(Long id, String name, String description, BigDecimal startPrice,
-                      Timestamp createdAt, Timestamp auctionStart, Timestamp auctionEnd,
-                      String size, String color, String pictureName, String url) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.startPrice = startPrice;
-        this.createdAt = createdAt.toLocalDateTime();
-        this.auctionStart = auctionStart.toLocalDateTime();
-        this.auctionEnd = auctionEnd.toLocalDateTime();
-        this.size = size;
-        this.color = color;
-        this.productPictureList = new ArrayList<>();
-        ProductPicture productPicture = new ProductPicture();
-        productPicture.setUrl(url);
-        productPicture.setName(pictureName);
-        this.productPictureList.add(productPicture);
-    }
 }
