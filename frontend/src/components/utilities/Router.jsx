@@ -6,12 +6,8 @@ import Layout from './Layout';
 import NewArrivals from '../pages/HomePage/Products/NewArrivals';
 import LastChance from '../pages/HomePage/Products/LastChance';
 import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
-import ProductDetails from '../pages/ProductOverview/Details';
-import SellerInformation from '../pages/ProductOverview/SellerInformation';
-import CustomerReviews from '../pages/ProductOverview/CustomerReviews';
 import Product from '../pages/ProductOverview/Product';
 import Search from '../pages/BasicSearch/Search';
-import { RedirectWrapper } from './RedirectWrapper';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -29,12 +25,7 @@ const Router = createBrowserRouter(
                 <Route path="privacy-and-policy" element={<Privacy />} />
             </Route>
             <Route path="shop">
-                <Route path="product/:productId" element={<Product />}>
-                    <Route index element={<RedirectWrapper />} />
-                    <Route path="details" element={<ProductDetails />} />
-                    <Route path="seller-information" element={<SellerInformation />} />
-                    <Route path="reviews" element={<CustomerReviews />} />
-                </Route>
+                <Route path="product/:productId" element={<Product />}/>
             </Route>
         </Route>
     )

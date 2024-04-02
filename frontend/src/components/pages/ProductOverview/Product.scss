@@ -87,20 +87,11 @@
 
                     .inner {
                         display: flex;
-                        justify-content: center;
-                        gap: 107px;
-
-                        .link {
-                            text-decoration: none;
-                            color: $color-black;
-                            font-size: 14px;
-                        }
-
-                        .active {
-                            font-weight: $font-weight-bold;
-                            color: $color-purple;
-                            font-size: $font-size-normal;
-                        }
+                        text-align: left;
+                        margin-left: 20px;
+                        font-weight: $font-weight-bold;
+                        color: $color-purple;
+                        font-size: $font-size-normal;
                     }
 
                     hr {

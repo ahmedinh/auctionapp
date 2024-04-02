@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./Product.scss"
 import { getProduct } from "../../../api/productsApi";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
 import AuctionCountdown from "./AuctionCountdown";
-import ProductDetails from "./Details";
 
 export default function Product() {
     let { productId } = useParams();
-    const [activeComponent, setActiveComponent] = useState();
-    const [ counter, setCounter ] = useState(0)
     const {
         status, data, error
     } = useQuery({
@@ -36,9 +33,6 @@ export default function Product() {
         setMainImage(selectedImage);
     };
 
-    const detailsPath = `/shop/product/${data?.id}/details`;
-    const sellerPath = `/shop/product/${data?.id}/seller-information`;
-    const reviewPath = `/shop/product/${data?.id}/reviews`;
     const productImage = mainImage === null ? data?.productPictureList[0].url : mainImage?.url
 
     return (
@@ -76,20 +70,14 @@ export default function Product() {
                     <div className="information">
                         <div className="tabs">
                             <div className="inner">
-                                <NavLink to={detailsPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(detailsPath); setCounter(1); }}>
+                                <div className="active">
                                     Details
-                                </NavLink>
-                                <NavLink to={sellerPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(sellerPath); setCounter(1); }}>
-                                    Seller information
-                                </NavLink>
-                                <NavLink to={reviewPath} className="link" activeClassName="active" onClick={() => { setActiveComponent(reviewPath); setCounter(1); }}>
-                                    Customer reviews
-                                </NavLink>
+                                </div>
                             </div>
                             <hr />
                         </div>
                         <div className="tab-content">
-                            {activeComponent === detailsPath || counter === 0 ? (<ProductDetails description={data.description} />) : null}
+                            <p className="description">{data.description}</p>
                         </div>
                     </div>
                 </div>
