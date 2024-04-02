@@ -10,14 +10,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
-    Optional<Product> getProductByName(String name);
-
-    Page<Product> getProductsByCategoryId(Long categoryId, Pageable pageable);
-
     @Query("""
             SELECT p.id as id,
             p.name as name,
