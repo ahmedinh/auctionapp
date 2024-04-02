@@ -1,6 +1,5 @@
 package ba.atlant.auctionapp.repository;
 
-import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.ProductPicture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
