@@ -28,11 +28,6 @@ public class ProductPicture {
     public ProductPicture() {
     }
 
-    public ProductPicture(String url, Product product) {
-        this.url = url;
-        this.product = product;
-    }
-
     public Long getId() {
         return id;
     }
