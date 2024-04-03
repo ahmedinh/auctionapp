@@ -21,4 +21,9 @@ public class CategoryController {
     public ResponseEntity getAllCategories() {
         return categoryService.getAllCategories();
     }
+
+    @GetMapping("/subcategories")
+    public ResponseEntity getCategoriesWithSubCategories() {
+        return categoryService.getCategoriesWithSubCategories();
+    }
 }
