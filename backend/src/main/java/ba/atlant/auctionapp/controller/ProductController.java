@@ -51,4 +51,11 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "1") Long categoryId) {
         return productService.getProductsForCategory(page, size, categoryId);
     }
+
+    @GetMapping("/all/sub-category")
+    public ResponseEntity getProductsForSubCategory(@RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "9") int size,
+                                                 @RequestParam(defaultValue = "1") Long subCategoryId) {
+        return productService.getProductsForSubCategory(page, size, subCategoryId);
+    }
 }

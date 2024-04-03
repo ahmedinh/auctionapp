@@ -6,13 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * Entity representing a category for products in the auction system.
- * Each category is defined by a unique name and can be associated with multiple subcategories.
+ * Entity representing a subcategory for products in the auction system.
+ * Each subcategory is defined by a name and can be associated with multiple products.
  */
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class Category {
+public class SubCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,11 +21,16 @@ public class Category {
     @Size(min = 2, max = 30, message = "Category name must be between 2 and 30 characters long")
     private String name;
 
-    public Category() {
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    public SubCategory() {
     }
 
-    public Category(String name) {
+    public SubCategory(String name, Category category) {
         this.name = name;
+        this.category = category;
     }
 
     public Long getId() {
@@ -39,5 +43,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -39,7 +39,7 @@ public class ProductService {
     @Transactional
     public ResponseEntity addProduct(Product product) {
         try {
-            Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+            Optional<Category> optionalCategory = categoryRepository.findById(product.getSubCategory().getId());
             if (optionalCategory.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
 
@@ -88,6 +88,11 @@ public class ProductService {
 
     public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
+        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+    }
+
+    public ResponseEntity getProductsForSubCategory(int page, int size, Long subCategoryId) {
+        Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
 }

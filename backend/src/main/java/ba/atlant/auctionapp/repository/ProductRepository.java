@@ -64,8 +64,27 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
-            WHERE p.category.id = :categoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
+            WHERE p.subCategory.category.id = :categoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             ORDER BY p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    @Query("""
+            SELECT p.id as id,
+            p.name as name,
+            p.description as description,
+            p.startPrice as startPrice,
+            p.createdAt as createdAt,
+            p.auctionStart as auctionStart,
+            p.auctionEnd as auctionEnd,
+            p.size as size,
+            p.color as color,
+            i.url as url
+            FROM Product p
+            INNER JOIN ProductPicture i
+            ON p.id = i.product.id
+            WHERE p.subCategory.id = :subCategoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
+            ORDER BY p.auctionEnd ASC
+            """)
+    Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
 }
