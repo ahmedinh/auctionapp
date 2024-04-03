@@ -6,3 +6,9 @@ export async function fetchCategories () {
         return res.data;
     });
 }
+
+export async function fetchCategoriesWithSubCategories() {
+    return axios.get(`${apiUrl}/api/category/subcategories`).then(res => {
+        return res.data;
+    });
+}
