@@ -95,4 +95,11 @@ public class ProductService {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
+
+    public ResponseEntity searchProducts(String query) {
+        List<ProductProjection> productProjectionList = productRepository.searchProducts(query);
+        if (productProjectionList.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No products found for given name or description."));
+        return ResponseEntity.status(HttpStatus.OK).body(productProjectionList);
+    }
 }

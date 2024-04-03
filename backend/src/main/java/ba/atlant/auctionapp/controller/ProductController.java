@@ -58,4 +58,9 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "1") Long subCategoryId) {
         return productService.getProductsForSubCategory(page, size, subCategoryId);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity searchProducts(@RequestParam("query") String query){
+        return productService.searchProducts(query);
+    }
 }
