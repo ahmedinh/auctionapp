@@ -87,4 +87,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ORDER BY p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
+
+    @Query("""
+            SELECT COUNT(p)
+            FROM Product p
+            WHERE p.subCategory.id=:subCategoryId
+            """)
+    Integer getNumberOfProducts(@Param("subCategoryId") Long subCategoryId);
 }
