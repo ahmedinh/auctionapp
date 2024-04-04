@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.CategoryDTO;
 import ba.atlant.auctionapp.dto.SubCategoryDTO;
+import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.Category;
 import ba.atlant.auctionapp.repository.CategoryRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
@@ -34,5 +35,12 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryDTO> categoryDTOList = categoryList.stream().map(category -> new CategoryDTO(category, subCategoryRepository.findSubCategoriesByCategory(category).stream().map(subCategory -> new SubCategoryDTO(subCategory, productRepository.getNumberOfProducts(subCategory.getId()))).toList())).toList();
         return ResponseEntity.status(HttpStatus.OK).body(categoryDTOList);
+    }
+
+    public ResponseEntity searchCategories(String query) {
+        List<Category> categoryList = categoryRepository.searchCategories(query);
+        if (categoryList.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No categories found for given name."));
+        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 }

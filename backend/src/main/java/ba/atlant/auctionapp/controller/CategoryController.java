@@ -26,4 +26,9 @@ public class CategoryController {
     public ResponseEntity getCategoriesWithSubCategories() {
         return categoryService.getCategoriesWithSubCategories();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity searchCategories(@RequestParam("query") String query) {
+        return categoryService.searchCategories(query);
+    }
 }
