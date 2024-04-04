@@ -1,10 +1,11 @@
 package ba.atlant.auctionapp.controller;
 
-import ba.atlant.auctionapp.dto.ProductPictureDTO;
 import ba.atlant.auctionapp.model.Product;
+import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +27,12 @@ public class ProductController {
     }
 
     @GetMapping("/all/new-arrivals")
-    public ResponseEntity getNewArrivals(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+    public ResponseEntity<Page<ProductProjection>> getNewArrivals(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
         return productService.getNewArrivals(page, size);
     }
 
     @GetMapping("/all/last-chance")
-    public ResponseEntity getLastChance(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+    public ResponseEntity<Page<ProductProjection>> getLastChance(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
         return productService.getLastChance(page, size);
     }
 
@@ -46,14 +47,14 @@ public class ProductController {
     }
 
     @GetMapping("/all/category")
-    public ResponseEntity getProductsForCategory(@RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "9") int size,
-                                                 @RequestParam(defaultValue = "1") Long categoryId) {
+    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(@RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "9") int size,
+                                                                          @RequestParam(defaultValue = "1") Long categoryId) {
         return productService.getProductsForCategory(page, size, categoryId);
     }
 
     @GetMapping("/all/sub-category")
-    public ResponseEntity getProductsForSubCategory(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "9") int size,
                                                  @RequestParam(defaultValue = "1") Long subCategoryId) {
         return productService.getProductsForSubCategory(page, size, subCategoryId);

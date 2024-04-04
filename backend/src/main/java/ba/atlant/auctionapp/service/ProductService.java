@@ -1,7 +1,6 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.ProductDTO;
-import ba.atlant.auctionapp.dto.ProductPictureDTO;
 import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
@@ -23,14 +22,14 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
         this.bidRepository = bidRepository;
@@ -39,9 +38,9 @@ public class ProductService {
     @Transactional
     public ResponseEntity addProduct(Product product) {
         try {
-            Optional<Category> optionalCategory = categoryRepository.findById(product.getSubCategory().getId());
-            if (optionalCategory.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
+            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
+            if (optionalSubCategory.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("SubCategory"));
 
             Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
@@ -56,12 +55,12 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity getNewArrivals(int page, int size) {
+    public ResponseEntity<Page<ProductProjection>> getNewArrivals(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
 
-    public ResponseEntity getLastChance(int page, int size) {
+    public ResponseEntity<Page<ProductProjection>> getLastChance(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
@@ -74,7 +73,7 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
-    public ResponseEntity getProduct(Long id) {
+    public ResponseEntity<?> getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
@@ -86,12 +85,12 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
-    public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
+    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(int page, int size, Long categoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
 
-    public ResponseEntity getProductsForSubCategory(int page, int size, Long subCategoryId) {
+    public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
         return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
     }
