@@ -1,22 +1,21 @@
 import React from "react";
-import "./SearchPage.scss";
-import { useSearchParams } from "react-router-dom";
-import { useSearchProducts } from "../../../hooks/useSearchProducts";
+import "./CategoryProducts.scss";
+import { getProductsForCategory } from "../../../api/productsApi";
+import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
+import { useParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
 
-
-export default function SearchPage() {
-    const [searchParams] = useSearchParams();
-    const query = searchParams.get("query");
+export default function CategoryProducts() {
+    const { categoryId } = useParams();
 
     const {
-        status,
-        error,
         data,
+        error,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useSearchProducts(query, 9);
+        status,
+    } = useCategoryProducts(getProductsForCategory, "categoryProducts", 9, categoryId);
 
     return (
         <MainSearchPage

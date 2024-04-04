@@ -35,21 +35,8 @@ export async function getProductsForCategory({ page, size = 9, categoryId }) {
     }).then(res => res.data);
 }
 
-/* export async function searchProducts({ query = "probni" }) {
-    console.log("Query je: " + query);
-    return axios.get(`${apiUrl}/api/product/search`, {
-        params: { query }
-    }).then(res => res.data);
-} */
-
 export async function searchProducts({ page, size, query }) {
-    console.log("Query is: " + query);
     return axios.get(`${apiUrl}/api/product/search`, {
         params: { page, size, query }
-    }).then(res => res.data)
-        .catch(error => {
-            // Handle or throw the error as needed
-            console.error("Error fetching products:", error);
-            throw error;
-        });
+    }).then(res => res.data);
 };

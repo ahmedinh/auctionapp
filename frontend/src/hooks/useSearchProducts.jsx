@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchProducts } from '../api/productsApi';
 
 export function useSearchProducts(query, size) {
@@ -8,6 +8,6 @@ export function useSearchProducts(query, size) {
         getNextPageParam: (lastPage, allPages) => {
             return lastPage.last ? undefined : allPages.length;
         },
-        enabled: !!query, // Only run the query if the query string exists
+        enabled: !!query,
     });
 };

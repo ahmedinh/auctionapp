@@ -18,7 +18,6 @@ const NavbarWhite = () => {
         e.preventDefault();
         navigate(`/home/search?query=${encodeURIComponent(input)}`);
     };
-    
 
     return (
         <div className="navbar-white">

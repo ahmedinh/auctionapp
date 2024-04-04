@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from "react";
-import "./CategoriesSearch.scss";
-import { getProductsForCategory } from "../../../api/productsApi";
-import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
+import "./MainSearchPage.scss";
 import { useParams } from "react-router-dom";
 import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
 
-export default function CategoriesSearch() {
+
+export default function MainSearchPage({productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage}) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
-    const size = 9;
-
-    const {
-        data,
-        error,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-        status,
-    } = useCategoryProducts(getProductsForCategory, "categoryProducts", size, categoryId);
 
     const {
         status: categoriesStatus,
@@ -39,7 +28,6 @@ export default function CategoriesSearch() {
         if (selected === i) {
             return setSelected(null);
         }
-
         setSelected(i);
     }
 
@@ -68,10 +56,10 @@ export default function CategoriesSearch() {
                 </div>
             </div>
             <div className="products-part">
-                {status === 'loading' && <p>Loading...</p>}
-                {status === 'error' && <p>Error: {error.message}</p>}
+                {productsStatus === 'loading' && <p>Loading...</p>}
+                {productsStatus === 'error' && <p>Error: {productsError.message}</p>}
                 <div className="products-gridview">
-                    {data?.pages.map((page, i) => (
+                    {productsData?.pages.map((page, i) => (
                         <React.Fragment key={i}>
                             {page.content.map(product => (
                                 <ProductCard key={product.id} product={product} />
