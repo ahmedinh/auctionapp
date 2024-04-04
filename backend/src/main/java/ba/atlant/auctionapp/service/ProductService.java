@@ -95,10 +95,10 @@ public class ProductService {
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<?> searchProducts(String query) {
-        List<ProductProjection> productProjectionList = productRepository.searchProducts(query);
-        if (productProjectionList.isEmpty())
+    public ResponseEntity<?> searchProducts(int page, int size, String query) {
+        Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size));
+        if (productProjectionPage.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No products found for given name or description."));
-        return ResponseEntity.ok(productProjectionList);
+        return ResponseEntity.ok(productProjectionPage);
     }
 }

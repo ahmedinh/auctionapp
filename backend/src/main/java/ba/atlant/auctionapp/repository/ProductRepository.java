@@ -112,7 +112,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%') OR LOWER(p.description) LIKE CONCAT('%', LOWER(:query), '%'))
+            AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%'))
             """)
-    List<ProductProjection> searchProducts(String query);
+    Page<ProductProjection> searchProducts(String query, Pageable pageable);
 }

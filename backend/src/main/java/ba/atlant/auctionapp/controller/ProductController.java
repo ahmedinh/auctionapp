@@ -61,7 +61,9 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProducts(@RequestParam("query") String query){
-        return productService.searchProducts(query);
+    public ResponseEntity<?> searchProducts(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "9") int size,
+                                            @RequestParam("query") String query){
+        return productService.searchProducts(page, size, query);
     }
 }
