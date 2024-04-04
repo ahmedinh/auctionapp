@@ -1,10 +1,10 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.Role;
 import ba.atlant.auctionapp.model.User;
 import ba.atlant.auctionapp.repository.RoleRepository;
 import ba.atlant.auctionapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,10 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public ResponseEntity addUser(User user) {
+    public ResponseEntity<?> addUser(User user) {
         Optional<Role> optionalRole = roleRepository.findByName(user.getRole().getName());
+        if (optionalRole.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Role"));
         Role role = optionalRole.get();
         role.addUser(user);
         user.setRole(role);
@@ -33,8 +35,8 @@ public class UserService {
         return ResponseEntity.ok("User successfully added.");
     }
 
-    public ResponseEntity getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(userList);
+        return ResponseEntity.ok(userList);
     }
 }

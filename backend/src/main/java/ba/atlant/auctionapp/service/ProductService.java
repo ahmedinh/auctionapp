@@ -36,7 +36,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity addProduct(Product product) {
+    public ResponseEntity<?> addProduct(Product product) {
         try {
             Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
             if (optionalSubCategory.isEmpty())
@@ -47,7 +47,7 @@ public class ProductService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
 
             productRepository.save(product);
-            return ResponseEntity.status(HttpStatus.OK).body("{\"id\":" + product.getId() + "}");
+            return ResponseEntity.ok("{\"id\":" + product.getId() + "}");
         } catch (DataAccessException e) {
             throw new ServiceException("Database access error occurred", e);
         } catch (Exception e) {
@@ -57,20 +57,20 @@ public class ProductService {
 
     public ResponseEntity<Page<ProductProjection>> getNewArrivals(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
     public ResponseEntity<Page<ProductProjection>> getLastChance(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity getHighlighted() {
+    public ResponseEntity<?> getHighlighted() {
         Optional<Product> optionalProduct = productRepository.findById(9L);
         if (optionalProduct.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
         Product product = optionalProduct.get();
-        return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
+        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
     public ResponseEntity<?> getProduct(Long id) {
@@ -80,25 +80,25 @@ public class ProductService {
         List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
         List<Bid> bidList = bidRepository.findAllByProductId(id);
         if (bidList.isEmpty())
-            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
+            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
         else
-            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
+            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForCategory(int page, int size, Long categoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity searchProducts(String query) {
+    public ResponseEntity<?> searchProducts(String query) {
         List<ProductProjection> productProjectionList = productRepository.searchProducts(query);
         if (productProjectionList.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No products found for given name or description."));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionList);
+        return ResponseEntity.ok(productProjectionList);
     }
 }

@@ -17,7 +17,7 @@ public class SubCategoryController {
     }
 
     @GetMapping("/all/category")
-    public ResponseEntity getAllForCategory(@RequestParam(defaultValue = "1") Long categoryId) {
+    public ResponseEntity<?> getAllForCategory(@RequestParam(defaultValue = "1") Long categoryId) {
         return subCategoryService.getAllForCategory(categoryId);
     }
 }

@@ -4,9 +4,10 @@ import ba.atlant.auctionapp.model.User;
 import ba.atlant.auctionapp.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,12 +21,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity addUser(@Valid @RequestBody User user) {
+    public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
     @GetMapping
-    public ResponseEntity getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return userService.getAllUsers();
     }
 }

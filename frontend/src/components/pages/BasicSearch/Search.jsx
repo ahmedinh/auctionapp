@@ -57,10 +57,10 @@ export default function Search() {
                             </div>
                             <div
                                 className={selected === i ? 'subcategories-show' : 'subcategories'}>
-                                {item.subCategoryDTOList.map((item2, i) => (
+                                {item.subCategoryProjectionList.map((item2, i) => (
                                     <div className="subitem">
                                         <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                                        <p className="subcategory">{item2.name} ({item2.numberOfProducts})</p>
+                                        <p className="subcategory">{item2.name} ({item2.noOfProducts})</p>
                                     </div>
                                 ))}
                             </div>

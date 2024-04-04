@@ -22,11 +22,11 @@ public class SubCategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity getAllForCategory(Long categoryId) {
+    public ResponseEntity<?> getAllForCategory(Long categoryId) {
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
         if (optionalCategory.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
         List<SubCategory> subCategoryList = subCategoryRepository.findSubCategoriesByCategory(optionalCategory.get());
-        return ResponseEntity.status(HttpStatus.OK).body(subCategoryList);
+        return ResponseEntity.ok(subCategoryList);
     }
 }

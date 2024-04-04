@@ -21,17 +21,15 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
-    private final ProductRepository productRepository;
 
     public CategoryService(CategoryRepository categoryRepository, SubCategoryRepository subCategoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
-        this.productRepository = productRepository;
     }
 
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categoryList = categoryRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
+        return ResponseEntity.ok(categoryList);
     }
 
     public ResponseEntity<List<CategoryDTO>> getCategoriesWithSubCategories() {
@@ -43,13 +41,13 @@ public class CategoryService {
             categoryDTOList.add(new CategoryDTO(category, subCategoryProjectionList));
         });
 
-        return ResponseEntity.ok().body(categoryDTOList);
+        return ResponseEntity.ok(categoryDTOList);
     }
 
     public ResponseEntity<?> searchCategories(String query) {
         List<Category> categoryList = categoryRepository.searchCategories(query);
         if (categoryList.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No categories found for given name."));
-        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
+        return ResponseEntity.ok(categoryList);
     }
 }

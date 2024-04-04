@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity addProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<?> addProduct(@Valid @RequestBody Product product) {
         return productService.addProduct(product);
     }
 
@@ -37,12 +37,12 @@ public class ProductController {
     }
 
     @GetMapping("/highlight")
-    public ResponseEntity getHighlighted() {
+    public ResponseEntity<?> getHighlighted() {
         return productService.getHighlighted();
     }
 
     @GetMapping()
-    public ResponseEntity getProduct(@RequestParam Long id) {
+    public ResponseEntity<?> getProduct(@RequestParam Long id) {
         return productService.getProduct(id);
     }
 
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchProducts(@RequestParam("query") String query){
+    public ResponseEntity<?> searchProducts(@RequestParam("query") String query){
         return productService.searchProducts(query);
     }
 }
