@@ -25,7 +25,7 @@ const Router = createBrowserRouter(
                 <Route path="privacy-and-policy" element={<Privacy />} />
             </Route>
             <Route path="shop">
-                <Route path="product/:productId" element={<Product />}/>
+                <Route path="product/:productId" element={<Product />} />
             </Route>
         </Route>
     )

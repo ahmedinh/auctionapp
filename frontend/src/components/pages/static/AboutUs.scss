@@ -1,96 +1,97 @@
  @import "../../utilities/Style.scss";
 
-.about-us-page {
-    display: flex;
-    flex-direction: column;
-    gap: 64px;
-    .about-us {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        margin-bottom: 100px;
+ .about-us-page {
+     display: flex;
+     flex-direction: column;
+     gap: 64px;
 
-        .left-side,
-        .images {
-            flex: 1;
-            max-width: calc(50% - 100px);
-        }
+     .about-us {
+         display: flex;
+         justify-content: center;
+         align-items: flex-start;
+         flex-wrap: wrap;
+         margin-bottom: 100px;
 
-        .left-side {
-            .text {
-                display: flex;
-                flex-direction: column;
-                gap: 32px;
-                padding-left: 15%;
-                margin-left: 17%;
+         .left-side,
+         .images {
+             flex: 1;
+             max-width: calc(50% - 100px);
+         }
 
-                .chapter2,
-                .chapter3,
-                .chapter4 {
-                    margin: 0;
-                }
+         .left-side {
+             .text {
+                 display: flex;
+                 flex-direction: column;
+                 gap: 32px;
+                 padding-left: 15%;
+                 margin-left: 17%;
 
-                .headline {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 32px;
-                }
+                 .chapter2,
+                 .chapter3,
+                 .chapter4 {
+                     margin: 0;
+                 }
 
-                h5 {
-                    font-weight: 600;
-                    font-size: $font-size-large;
-                    color: #252525;
-                    margin-top: 0;
-                }
+                 .headline {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 32px;
+                 }
 
-                p {
-                    font-weight: $font-weight-normal;
-                    font-size: $font-size-normal;
-                    color: $color-grey;
-                    width: 543px;
-                    margin: 0;
-                }
-            }
-        }
+                 h5 {
+                     font-weight: 600;
+                     font-size: $font-size-large;
+                     color: #252525;
+                     margin-top: 0;
+                 }
 
-        .images {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            gap: 24px;
-            padding-top: 5%;
-            margin-top: 3%;
+                 p {
+                     font-weight: $font-weight-normal;
+                     font-size: $font-size-normal;
+                     color: $color-grey;
+                     width: 543px;
+                     margin: 0;
+                 }
+             }
+         }
 
-            .bottom-images {
-                display: flex;
-                gap: 24px;
-            }
+         .images {
+             display: flex;
+             flex-direction: column;
+             text-align: left;
+             gap: 24px;
+             padding-top: 5%;
+             margin-top: 3%;
 
-            .picture-top {
-                width: 548px;
-                height: 381px;
-                object-fit: cover;
-            }
+             .bottom-images {
+                 display: flex;
+                 gap: 24px;
+             }
 
-            .picture-left,
-            .picture-right {
-                width: 262px;
-                height: 199px;
-            }
-        }
-    }
-}
+             .picture-top {
+                 width: 548px;
+                 height: 381px;
+                 object-fit: cover;
+             }
 
-@media (max-width: 1600px) {
-    .page {
-        .about-us {
-            .left-side {
-                .text p {
-                    width: fit-content;
-                    margin-right: 50px;
-                }
-            }
-        }
-    }
-}
+             .picture-left,
+             .picture-right {
+                 width: 262px;
+                 height: 199px;
+             }
+         }
+     }
+ }
+
+ @media (max-width: 1600px) {
+     .page {
+         .about-us {
+             .left-side {
+                 .text p {
+                     width: fit-content;
+                     margin-right: 50px;
+                 }
+             }
+         }
+     }
+ }

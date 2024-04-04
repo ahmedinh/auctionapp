@@ -8,7 +8,7 @@ import { Icon } from '@iconify/react';
 const Home = () => {
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    if (categoriesStatus === 'pending' || highlightStatus==='pending') {
+    if (categoriesStatus === 'pending' || highlightStatus === 'pending') {
         return <span>Loading...</span>;
     }
     if (categoriesStatus === 'error') {
