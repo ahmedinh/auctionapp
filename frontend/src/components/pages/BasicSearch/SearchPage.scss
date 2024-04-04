@@ -1,0 +1,96 @@
+@import "../../utilities/Style.scss";
+
+.search-page {
+    display: flex;
+    margin: 1rem 0 2rem 22rem;
+    gap: 24px;
+
+    .all-filters {
+        .product-categories {
+            display: flex;
+            flex-direction: column;
+            width: 262px;
+            padding: 24px;
+            border: 1px solid $color-grey;
+            margin-top: 3rem;
+
+            &.headline {
+                color: $color-purple;
+                white-space: nowrap;
+                padding: 0;
+                margin: 0;
+                margin-bottom: 24px;
+                border: none;
+            }
+
+            .item {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+
+                .title {
+                    display: flex;
+                    justify-content: space-between;
+                    cursor: pointer;
+
+                    p {
+                        padding: 0;
+                        margin: 0;
+                    }
+                }
+
+                .subcategories,
+                .subcategories-show {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+                }
+
+                .subcategories {
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+
+                    &.show {
+                        height: auto;
+                        max-height: 9999;
+                        transition: all 0.5s cubic-bezier(1, 0, 1, 0);
+                    }
+
+                }
+
+                .subitem {
+                    display: flex;
+                    gap: 8px;
+                }
+
+                .subcategories-show {
+                    margin: 0px 0px 24px 0px;
+                }
+
+                p.subcategory {
+                    margin: 0;
+                    color: $color-grey;
+                }
+
+            }
+
+            ul,
+            li {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    }
+
+    .products-part {
+        margin: 5% 20% 5% 0%;
+
+        .products-gridview {
+            display: grid;
+            grid-template-columns: repeat(3, 267.45px);
+            gap: 24px;
+        }
+    }
+}

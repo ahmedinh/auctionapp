@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
-import "./Search.scss";
+import "./SearchPage.scss";
 import { getProductsForCategory } from "../../../api/productsApi";
 import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams, useLocation } from "react-router-dom";
 import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
+import { useSearchProducts } from "../../../hooks/useSearchProducts";
 
 
-export default function Search() {
-    const { categoryId } = useParams();
+export default function SearchPage() {
     const [selected, setSelected] = useState();
     const size = 9;
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("query");
 
     const {
-        data,
-        error,
+        status: productsStatus,
+        error: productsError,
+        data: productsData,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-        status,
-    } = useCategoryProducts(getProductsForCategory, "categoryProducts", size, categoryId);
+    } = useSearchProducts(query, size);
 
     const {
         status: categoriesStatus,
@@ -27,20 +29,10 @@ export default function Search() {
         error: categoriesError,
     } = useCategoriesWithSubCategories();
 
-    useEffect(() => {
-        if (categoriesData) {
-            const index = categoriesData.findIndex(item => item.id.toString() === categoryId);
-            if (index !== -1) {
-                setSelected(index);
-            }
-        }
-    }, [categoriesData, categoryId]);
-
     const toggle = (i) => {
         if (selected === i) {
             return setSelected(null);
         }
-
         setSelected(i);
     }
 
@@ -69,10 +61,10 @@ export default function Search() {
                 </div>
             </div>
             <div className="products-part">
-                {status === 'loading' && <p>Loading...</p>}
-                {status === 'error' && <p>Error: {error.message}</p>}
+                {productsStatus === 'loading' && <p>Loading...</p>}
+                {productsStatus === 'error' && <p>Error: {productsError.message}</p>}
                 <div className="products-gridview">
-                    {data?.pages.map((page, i) => (
+                    {productsData?.pages.map((page, i) => (
                         <React.Fragment key={i}>
                             {page.content.map(product => (
                                 <ProductCard key={product.id} product={product} />
