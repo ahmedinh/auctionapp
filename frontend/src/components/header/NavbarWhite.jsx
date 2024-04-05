@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
@@ -8,6 +8,20 @@ const NavbarWhite = () => {
     const [input, setInput] = useState("");
     const [isSearchFocused, setSearchFocused] = useState(false);
     const navigate = useNavigate();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get('query');
+        const isSearchPage = location.pathname === '/home/search';
+
+        if (isSearchPage && query) {
+            setInput(decodeURIComponent(query));
+        } else {
+            setInput("");
+        }
+    }, [location]);
 
     const handleChange = (value) => {
         setInput(value);
@@ -29,6 +43,7 @@ const NavbarWhite = () => {
                         type="text"
                         placeholder="Try enter: Shoes"
                         className="search-bar"
+                        value={input}
                         onChange={(e) => handleChange(e.target.value)}
                     />
                     <button type="submit" className="search-icon">
