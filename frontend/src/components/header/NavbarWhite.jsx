@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
-import { useSearchProducts } from "../../hooks/useSearchProducts";
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
     const [isSearchFocused, setSearchFocused] = useState(false);
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     const handleChange = (value) => {
         setInput(value);
@@ -25,14 +24,14 @@ const NavbarWhite = () => {
                 <img src={Logo} alt="Logo" className="logo" />
             </div>
             <div className="search">
-                <form onSubmit={handleSearch} className="search-container"> {/* Wrap with form and add onSubmit */}
+                <form onSubmit={handleSearch} className="search-container">
                     <input
                         type="text"
                         placeholder="Try enter: Shoes"
                         className="search-bar"
                         onChange={(e) => handleChange(e.target.value)}
                     />
-                    <button type="submit" className="search-icon"> {/* Type submit to trigger form submission */}
+                    <button type="submit" className="search-icon">
                         <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
                     </button>
                 </form>
