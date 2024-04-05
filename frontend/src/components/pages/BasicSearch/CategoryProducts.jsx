@@ -1,5 +1,4 @@
 import React from "react";
-import "./CategoryProducts.scss";
 import { getProductsForCategory } from "../../../api/productsApi";
 import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
 import { useParams } from "react-router-dom";

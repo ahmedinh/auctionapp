@@ -1,5 +1,4 @@
 import React from "react";
-import "./SearchPage.scss";
 import { useSearchParams } from "react-router-dom";
 import { useSearchProducts } from "../../../hooks/useSearchProducts";
 import MainSearchPage from "./MainSearchPage";
