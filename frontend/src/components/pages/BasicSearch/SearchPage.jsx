@@ -23,7 +23,7 @@ export default function SearchPage() {
     return (
         <>
             <div className="menu-a" style={{ height: "30px", marginTop: "1rem"}}>
-                <div className="left-part-a">
+                <div className="left-part-a" style={{ marginLeft: "22.5rem"}}>
                     <p className="left-part-text" style={{ margin: "0" }}>
                         <Breadcrumbs locationLink={currentPageTitle} />
                     </p>
