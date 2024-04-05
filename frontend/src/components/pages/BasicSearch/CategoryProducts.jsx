@@ -14,7 +14,7 @@ export default function CategoryProducts() {
         hasNextPage,
         isFetchingNextPage,
         status,
-    } = useCategoryProducts(getProductsForCategory, "categoryProducts", 9, categoryId);
+    } = useCategoryProducts(getProductsForCategory, 9, categoryId);
 
     return (
         <MainSearchPage

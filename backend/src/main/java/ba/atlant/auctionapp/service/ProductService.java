@@ -1,14 +1,12 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.ProductDTO;
-import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,18 +34,18 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<?> addProduct(Product product) {
+    public ResponseEntity<Long> addProduct(Product product) {
         try {
             Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
             if (optionalSubCategory.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("SubCategory"));
+                throw new IllegalArgumentException("SubCategory not found for given ID.");
 
             Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
+                throw new IllegalArgumentException("SubCategory not found for given ID.");
 
             productRepository.save(product);
-            return ResponseEntity.ok("{\"id\":" + product.getId() + "}");
+            return ResponseEntity.ok(product.getId());
         } catch (DataAccessException e) {
             throw new ServiceException("Database access error occurred", e);
         } catch (Exception e) {
@@ -65,18 +63,18 @@ public class ProductService {
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<?> getHighlighted() {
+    public ResponseEntity<ProductDTO> getHighlighted() {
         Optional<Product> optionalProduct = productRepository.findById(9L);
         if (optionalProduct.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
+            throw new IllegalArgumentException("Product not found for given ID.");
         Product product = optionalProduct.get();
         return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
-    public ResponseEntity<?> getProduct(Long id) {
+    public ResponseEntity<ProductDTO> getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
+            throw new IllegalArgumentException("Product not found for given ID.");
         List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
         List<Bid> bidList = bidRepository.findAllByProductId(id);
         if (bidList.isEmpty())
@@ -95,10 +93,10 @@ public class ProductService {
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<?> searchProducts(int page, int size, String query) {
+    public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
         Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size));
         if (productProjectionPage.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No products found for given name or description."));
+            throw new IllegalArgumentException("No products found for given name or description.");
         return ResponseEntity.ok(productProjectionPage);
     }
 }

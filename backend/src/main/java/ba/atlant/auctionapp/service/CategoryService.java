@@ -42,10 +42,10 @@ public class CategoryService {
         return ResponseEntity.ok(categoryDTOList);
     }
 
-    public ResponseEntity<?> searchCategories(String query) {
+    public ResponseEntity<List<Category>> searchCategories(String query) {
         List<Category> categoryList = categoryRepository.searchCategories(query);
         if (categoryList.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.errorMessage("No categories found for given name."));
+            throw new IllegalArgumentException("No categories found for given name.");
         return ResponseEntity.ok(categoryList);
     }
 }

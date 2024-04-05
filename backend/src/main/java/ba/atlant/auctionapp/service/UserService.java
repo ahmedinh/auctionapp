@@ -23,10 +23,10 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public ResponseEntity<?> addUser(User user) {
+    public ResponseEntity<String> addUser(User user) {
         Optional<Role> optionalRole = roleRepository.findByName(user.getRole().getName());
         if (optionalRole.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Role"));
+            throw new IllegalArgumentException("Role not found for given ID.");
         Role role = optionalRole.get();
         role.addUser(user);
         user.setRole(role);

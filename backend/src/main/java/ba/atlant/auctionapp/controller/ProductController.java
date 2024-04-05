@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.service.ProductService;
@@ -22,7 +23,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<Long> addProduct(@Valid @RequestBody Product product) {
         return productService.addProduct(product);
     }
 
@@ -37,12 +38,12 @@ public class ProductController {
     }
 
     @GetMapping("/highlight")
-    public ResponseEntity<?> getHighlighted() {
+    public ResponseEntity<ProductDTO> getHighlighted() {
         return productService.getHighlighted();
     }
 
     @GetMapping()
-    public ResponseEntity<?> getProduct(@RequestParam Long id) {
+    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long id) {
         return productService.getProduct(id);
     }
 
@@ -61,7 +62,7 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProducts(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "9") int size,
                                             @RequestParam("query") String query){
         return productService.searchProducts(page, size, query);

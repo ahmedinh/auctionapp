@@ -1,9 +1,12 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.model.SubCategory;
 import ba.atlant.auctionapp.service.SubCategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/sub-category")
@@ -17,7 +20,7 @@ public class SubCategoryController {
     }
 
     @GetMapping("/all/category")
-    public ResponseEntity<?> getAllForCategory(@RequestParam(defaultValue = "1") Long categoryId) {
+    public ResponseEntity<List<SubCategory>> getAllForCategory(@RequestParam(defaultValue = "1") Long categoryId) {
         return subCategoryService.getAllForCategory(categoryId);
     }
 }

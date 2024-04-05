@@ -32,7 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchCategories(@RequestParam("query") String query) {
+    public ResponseEntity<List<Category>> searchCategories(@RequestParam("query") String query) {
         return categoryService.searchCategories(query);
     }
 }

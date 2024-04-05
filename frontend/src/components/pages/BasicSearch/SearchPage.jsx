@@ -16,7 +16,7 @@ export default function SearchPage() {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useSearchProducts(query, 9);
+    } = useSearchProducts(query);
 
     const currentPageTitle = "/home/search-results-for-" + query;
 
