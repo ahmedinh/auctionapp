@@ -2,6 +2,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSearchProducts } from "../../../hooks/useSearchProducts";
 import MainSearchPage from "./MainSearchPage";
+import Breadcrumbs from "../../utilities/Breadcrumbs";
 
 
 export default function SearchPage() {
@@ -17,14 +18,25 @@ export default function SearchPage() {
         isFetchingNextPage,
     } = useSearchProducts(query, 9);
 
+    const currentPageTitle = "/home/search-results-for-" + query;
+
     return (
-        <MainSearchPage
-            productsData={data}
-            productsStatus={status}
-            productsError={error}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-        />
+        <>
+            <div className="menu-a" style={{ height: "30px", marginTop: "1rem"}}>
+                <div className="left-part-a">
+                    <p className="left-part-text" style={{ margin: "0" }}>
+                        <Breadcrumbs locationLink={currentPageTitle} />
+                    </p>
+                </div>
+            </div>
+            <MainSearchPage
+                productsData={data}
+                productsStatus={status}
+                productsError={error}
+                hasNextPage={hasNextPage}
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+            />
+        </>
     );
 }
