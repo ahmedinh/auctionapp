@@ -4,7 +4,7 @@ import { common } from "../../messages/Text";
 import "./BreadCrumbsMenu.scss";
 import { Outlet } from "react-router";
 
-const BreadCrumbsMenu = ({title, rightLink, fontWeight = 400}) => {
+const BreadCrumbsMenu = ({ title, rightLink, fontWeight = 400 }) => {
     const formatTitle = (path) => {
         const paths = path.split('/').filter(Boolean);
         const lastPart = paths[paths.length - 1];
@@ -22,7 +22,7 @@ const BreadCrumbsMenu = ({title, rightLink, fontWeight = 400}) => {
                     </p>
                 </div>
                 <div className="right-part">
-                    <Breadcrumbs locationLink={rightLink}/>
+                    <Breadcrumbs locationLink={rightLink} />
                 </div>
             </div>
             <main><Outlet /></main>

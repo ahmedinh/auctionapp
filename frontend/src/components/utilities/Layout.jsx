@@ -9,7 +9,7 @@ const Layout = () => {
         <>
             <NavbarBlack />
             <NavbarWhite />
-            <main><Outlet/></main>
+            <main><Outlet /></main>
             <Footer />
         </>
     );

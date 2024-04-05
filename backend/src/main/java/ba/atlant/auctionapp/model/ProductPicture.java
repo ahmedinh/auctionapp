@@ -28,6 +28,12 @@ public class ProductPicture {
     public ProductPicture() {
     }
 
+    public ProductPicture(String name, String url, Product product) {
+        this.name = name;
+        this.url = url;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }

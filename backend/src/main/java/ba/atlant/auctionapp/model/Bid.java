@@ -35,12 +35,6 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(BigDecimal amount, User user, Product product) {
-        this.amount = amount;
-        this.user = user;
-        this.product = product;
-    }
-
     public Long getId() {
         return id;
     }

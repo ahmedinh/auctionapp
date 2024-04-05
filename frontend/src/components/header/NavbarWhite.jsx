@@ -1,20 +1,60 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
 
 const NavbarWhite = () => {
+    const [input, setInput] = useState("");
+    const [isSearchFocused, setSearchFocused] = useState(false);
+    const navigate = useNavigate();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get('query');
+        const isSearchPage = location.pathname === '/home/search';
+
+        if (isSearchPage && query) {
+            setInput(decodeURIComponent(query));
+        } else {
+            setInput("");
+        }
+    }, [location]);
+
+    const handleChange = (value) => {
+        setInput(value);
+    }
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        navigate(`/home/search?query=${encodeURIComponent(input)}`);
+    };
+
     return (
         <div className="navbar-white">
             <div className="left-container">
                 <img src={Logo} alt="Logo" className="logo" />
             </div>
-            <div className="search-container">
-                <input type="text" placeholder="Try enter: Shoes" className="search-bar" />
-                <button className="search-icon">
-                    <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
-                </button>
+            <div className="search">
+                <form onSubmit={handleSearch} className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Try enter: Shoes"
+                        className="search-bar"
+                        value={input}
+                        onChange={(e) => handleChange(e.target.value)}
+                    />
+                    <button type="submit" className="search-icon">
+                        <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
+                    </button>
+                </form>
+                {isSearchFocused && (
+                    <div className="search-results">
+
+                    </div>
+                )}
             </div>
             <div className="buttons">
                 <NavLink to="/home" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>

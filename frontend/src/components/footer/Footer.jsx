@@ -35,7 +35,7 @@ const Footer = () => {
                         <p className="email">
                             support@auction.com
                         </p>
-                        <SocialIcons/>
+                        <SocialIcons />
                     </div>
                 </div>
             </div>

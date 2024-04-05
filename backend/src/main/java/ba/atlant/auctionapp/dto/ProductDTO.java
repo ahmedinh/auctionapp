@@ -1,9 +1,6 @@
 package ba.atlant.auctionapp.dto;
 
-import ba.atlant.auctionapp.model.Category;
-import ba.atlant.auctionapp.model.Product;
-import ba.atlant.auctionapp.model.ProductPicture;
-import ba.atlant.auctionapp.model.User;
+import ba.atlant.auctionapp.model.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +21,7 @@ public class ProductDTO {
     private String size;
     private String color;
     private List<ProductPicture> productPictureList;
-    private Category category;
+    private SubCategory subCategory;
     private User user;
     private BigDecimal largestBid;
     private Integer numberOfBids;
@@ -45,7 +42,7 @@ public class ProductDTO {
         this.auctionEnd = product.getAuctionEnd();
         this.size = product.getSize().toString();
         this.color = product.getColor().toString();
-        this.category = product.getCategory();
+        this.subCategory = product.getSubCategory();
         this.user = product.getUser();
         this.productPictureList = productPictureList;
     }

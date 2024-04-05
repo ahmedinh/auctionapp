@@ -3,16 +3,13 @@ package ba.atlant.auctionapp.model;
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Represents a product that can be auctioned in the system.
@@ -58,8 +55,8 @@ public class Product {
     private Color color;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private SubCategory subCategory;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -71,18 +68,22 @@ public class Product {
     public Product(String name,
                    String description,
                    BigDecimal startPrice,
+                   LocalDateTime createdAt,
                    LocalDateTime auctionStart,
                    LocalDateTime auctionEnd,
                    Size size,
-                   Category category,
+                   Color color,
+                   SubCategory subCategory,
                    User user) {
         this.name = name;
         this.description = description;
         this.startPrice = startPrice;
+        this.createdAt = createdAt;
         this.auctionStart = auctionStart;
         this.auctionEnd = auctionEnd;
         this.size = size;
-        this.category = category;
+        this.color = color;
+        this.subCategory = subCategory;
         this.user = user;
     }
 
@@ -154,12 +155,12 @@ public class Product {
         this.color = color;
     }
 
-    public Category getCategory() {
-        return category;
+    public SubCategory getSubCategory() {
+        return subCategory;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
     }
 
     public User getUser() {

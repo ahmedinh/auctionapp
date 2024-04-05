@@ -1,15 +1,12 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.ProductDTO;
-import ba.atlant.auctionapp.dto.ProductPictureDTO;
-import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,32 +20,32 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final ProductPictureRepository productPictureRepository;
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
         this.userRepository = userRepository;
         this.bidRepository = bidRepository;
     }
 
     @Transactional
-    public ResponseEntity addProduct(Product product) {
+    public ResponseEntity<Long> addProduct(Product product) {
         try {
-            Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
-            if (optionalCategory.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Category"));
+            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
+            if (optionalSubCategory.isEmpty())
+                throw new IllegalArgumentException("SubCategory not found for given ID.");
 
             Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("User"));
+                throw new IllegalArgumentException("SubCategory not found for given ID.");
 
             productRepository.save(product);
-            return ResponseEntity.status(HttpStatus.OK).body("{\"id\":" + product.getId() + "}");
+            return ResponseEntity.ok(product.getId());
         } catch (DataAccessException e) {
             throw new ServiceException("Database access error occurred", e);
         } catch (Exception e) {
@@ -56,38 +53,50 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity getNewArrivals(int page, int size) {
+    public ResponseEntity<Page<ProductProjection>> getNewArrivals(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity getLastChance(int page, int size) {
+    public ResponseEntity<Page<ProductProjection>> getLastChance(int page, int size) {
         Page<ProductProjection> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity getHighlighted() {
+    public ResponseEntity<ProductDTO> getHighlighted() {
         Optional<Product> optionalProduct = productRepository.findById(9L);
         if (optionalProduct.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
+            throw new IllegalArgumentException("Product not found for given ID.");
         Product product = optionalProduct.get();
-        return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
+        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
-    public ResponseEntity getProduct(Long id) {
+    public ResponseEntity<ProductDTO> getProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error.objectNotFoundID("Product"));
+            throw new IllegalArgumentException("Product not found for given ID.");
         List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
         List<Bid> bidList = bidRepository.findAllByProductId(id);
         if (bidList.isEmpty())
-            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
+            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
         else
-            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
+            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
-    public ResponseEntity getProductsForCategory(int page, int size, Long categoryId) {
+    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(int page, int size, Long categoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
-        return ResponseEntity.status(HttpStatus.OK).body(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage);
+    }
+
+    public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
+        Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
+        return ResponseEntity.ok(productProjectionPage);
+    }
+
+    public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
+        Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size));
+        if (productProjectionPage.isEmpty())
+            throw new IllegalArgumentException("No products found for given name or description.");
+        return ResponseEntity.ok(productProjectionPage);
     }
 }
