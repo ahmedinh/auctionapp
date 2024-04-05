@@ -15,7 +15,7 @@ public class CategoryDTO {
     private List<SubCategoryProjection> subCategoryProjectionList;
 
     public CategoryDTO(Category category, List<SubCategoryProjection> subCategoryProjectionList) {
-        this.id = category.getId();;
+        this.id = category.getId();
         this.name = category.getName();
         this.subCategoryProjectionList = subCategoryProjectionList;
     }

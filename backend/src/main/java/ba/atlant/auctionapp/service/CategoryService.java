@@ -1,10 +1,8 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.CategoryDTO;
-import ba.atlant.auctionapp.dto.SubCategoryDTO;
 import ba.atlant.auctionapp.error.Error;
 import ba.atlant.auctionapp.model.Category;
-import ba.atlant.auctionapp.model.SubCategory;
 import ba.atlant.auctionapp.projection.SubCategoryProjection;
 import ba.atlant.auctionapp.repository.CategoryRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;

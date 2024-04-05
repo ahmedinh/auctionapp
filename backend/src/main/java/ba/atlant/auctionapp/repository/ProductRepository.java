@@ -10,8 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
     @Query("""
@@ -89,13 +87,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ORDER BY p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
-
-    @Query("""
-            SELECT COUNT(p)
-            FROM Product p
-            WHERE p.subCategory.id=:subCategoryId
-            """)
-    Integer getNumberOfProducts(@Param("subCategoryId") Long subCategoryId);
 
     @Query("""
             SELECT p.id as id,
