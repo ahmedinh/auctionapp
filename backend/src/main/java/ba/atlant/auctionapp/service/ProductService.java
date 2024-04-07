@@ -93,8 +93,8 @@ public class ProductService {
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
-        Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size));
+    public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query, Integer threshold) {
+        Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size), threshold);
         if (productProjectionPage.isEmpty())
             throw new IllegalArgumentException("No products found for given name or description.");
         return ResponseEntity.ok(productProjectionPage);
