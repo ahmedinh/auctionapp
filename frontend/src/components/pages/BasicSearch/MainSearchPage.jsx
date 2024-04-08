@@ -57,7 +57,6 @@ export default function MainSearchPage({productsData, productsStatus, productsEr
             </div>
             <div className="products-part">
                 {productsStatus === 'loading' && <p>Loading...</p>}
-                {productsStatus === 'error' && <p>Error: {productsError.message}</p>}
                 <div className="products-gridview">
                     {productsData?.pages.map((page, i) => (
                         <React.Fragment key={i}>

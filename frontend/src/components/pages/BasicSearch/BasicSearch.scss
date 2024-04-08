@@ -1,0 +1,15 @@
+@import "../../utilities/Style.scss";
+
+.did-you-mean {
+    margin-left: 45rem;
+    color: $color-grey;
+
+    .navlink {
+        text-decoration: none;
+        color: $color-purple;
+
+    }
+}
+p {
+    margin-top: 2.5rem;
+}

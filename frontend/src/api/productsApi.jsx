@@ -35,8 +35,14 @@ export async function getProductsForCategory({ page, size = 9, categoryId }) {
     }).then(res => res.data);
 }
 
-export async function searchProducts({ page, size, query }) {
-    return axios.get(`${apiUrl}/api/product/search`, {
+export async function searchProductsBasic({ page, size, query }) {
+    return axios.get(`${apiUrl}/api/product/search-basic`, {
+        params: { page, size, query }
+    }).then(res => res.data);
+};
+
+export async function searchProductsThreshold({ page, size, query }) {
+    return axios.get(`${apiUrl}/api/product/search-threshold`, {
         params: { page, size, query }
     }).then(res => res.data);
 };

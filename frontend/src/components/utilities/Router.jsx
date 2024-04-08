@@ -8,7 +8,8 @@ import LastChance from '../pages/HomePage/Products/LastChance';
 import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
 import Product from '../pages/ProductOverview/Product';
 import CategoryProducts from '../pages/BasicSearch/CategoryProducts';
-import SearchPage from '../pages/BasicSearch/SearchPage';
+import BasicSearch from '../pages/BasicSearch/BasicSearch';
+import ThresholdSearch from '../pages/BasicSearch/ThresholdSearch';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,7 +25,8 @@ const Router = createBrowserRouter(
                 <Route path="about-us" element={<AboutUs />} />
                 <Route path="terms-and-conditions" element={<Terms />} />
                 <Route path="privacy-and-policy" element={<Privacy />} />
-                <Route path="search" element={<SearchPage />} />
+                <Route path="search" element={<BasicSearch />} />
+                <Route path="search-threshold" element={<ThresholdSearch />} />
             </Route>
             <Route path="shop">
                 <Route path="product/:productId" element={<Product />} />
