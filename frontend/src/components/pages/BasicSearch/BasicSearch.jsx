@@ -24,13 +24,12 @@ export default function BasicSearch() {
         e.preventDefault();
         const name = thresholdSearchResults.data?.pages[0].content[0].name;
         setSearchParams({ query: name });
-        navigate(thresholdLink + `?query=${name}`);
     };
 
     return (
         <>
             <div className="did-you-mean">
-                {thresholdSearchResults.data ? (
+                {thresholdSearchResults.data && thresholdSearchResults.data?.pages[0].content[0].name !== query ? (
                     <p>Did you mean?&nbsp;
                         <a href={thresholdLink} onClick={handleClick} className="navlink">
                             {thresholdSearchResults.data?.pages[0].content[0].name}
