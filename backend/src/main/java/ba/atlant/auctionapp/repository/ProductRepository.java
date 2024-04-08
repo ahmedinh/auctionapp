@@ -10,8 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
     @Query("""
@@ -105,9 +103,26 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND calculate_levenshtein(:query, p.name) <= :threshold ORDER BY calculate_levenshtein(:query, p.name) ASC
+            AND calculate_levenshtein(LOWER(:query), LOWER(p.name)) <= :threshold ORDER BY calculate_levenshtein(LOWER(:query), LOWER(p.name)) ASC
             """)
-    Page<ProductProjection> searchProducts(@Param("query") String query, Pageable pageable, @Param("threshold") Integer threshold);
+    Page<ProductProjection> searchProductsThreshold(@Param("query") String query, Pageable pageable, @Param("threshold") Integer threshold);
 
-
+    @Query("""
+            SELECT p.id as id,
+            p.name as name,
+            p.description as description,
+            p.startPrice as startPrice,
+            p.createdAt as createdAt,
+            p.auctionStart as auctionStart,
+            p.auctionEnd as auctionEnd,
+            p.size as size,
+            p.color as color,
+            i.url as url
+            FROM Product p
+            INNER JOIN ProductPicture i
+            ON p.id = i.product.id
+            WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
+            AND LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
+            """)
+    Page<ProductProjection> searchBasic(@Param("query") String query, Pageable pageable);
 }

@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/product")
 @Tag(name = "Product Controller")
@@ -63,11 +61,18 @@ public class ProductController {
         return productService.getProductsForSubCategory(page, size, subCategoryId);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
+    @GetMapping("/search-threshold")
+    public ResponseEntity<Page<ProductProjection>> searchProductsThreshold(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query,
-                                                                  @RequestParam(value = "threshold", defaultValue = "5") Integer threshold){
-        return productService.searchProducts(page, size, query, threshold);
+                                                                  @RequestParam(value = "threshold", defaultValue = "10") Integer threshold){
+        return productService.searchProductsThreshold(page, size, query, threshold);
+    }
+
+    @GetMapping("/search-basic")
+    public ResponseEntity<Page<ProductProjection>> searchBasic(@RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "9") int size,
+                                                                  @RequestParam("query") String query){
+        return productService.searchBasic(page, size, query);
     }
 }
