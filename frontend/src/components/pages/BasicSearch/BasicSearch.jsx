@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useBasicSearch } from "../../../hooks/useBasicSearch";
 import MainSearchPage from "./MainSearchPage";
@@ -10,7 +10,7 @@ import "./BasicSearch.scss";
 export default function BasicSearch() {
     let [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query");
-    const [ fetchSuggestionEnabled, setFetchSuggestionEnabled] = useState(true);
+    const [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
 
     const {
         data: basicSearchResults,
@@ -22,15 +22,12 @@ export default function BasicSearch() {
     } = useBasicSearch(query);
     const {
         data: thresholdSearchResults
-    } = useThresholdSearch(query, fetchSuggestionEnabled);
-
-    let [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
+    } = useThresholdSearch(query);
 
     const handleClick = (e) => {
         e.preventDefault();
         const name = thresholdSearchResults?.name;
         setSearchParams({ query: name });
-        setFetchSuggestionEnabled(false);
     };
 
     return (
