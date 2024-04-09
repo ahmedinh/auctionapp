@@ -35,13 +35,13 @@ export async function getProductsForCategory({ page, size = 9, categoryId }) {
     }).then(res => res.data);
 }
 
-export async function searchProductsBasic({ page, size, query }) {
+export async function searchProducts({ page, size, query }) {
     return axios.get(`${apiUrl}/api/product/search-basic`, {
         params: { page, size, query }
     }).then(res => res.data);
 };
 
-export async function searchProductsThreshold({ query }) {
+export async function searchSuggestion({ query }) {
     return axios.get(`${apiUrl}/api/product/search-threshold`, {
         params: { query }
     }).then(res => res.data);
