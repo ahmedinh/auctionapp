@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useBasicSearch } from "../../../hooks/useBasicSearch";
 import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
@@ -8,31 +8,29 @@ import "./BasicSearch.scss";
 
 
 export default function BasicSearch() {
-    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("query");
 
     const basicSearchResults = useBasicSearch(query);
     const thresholdSearchResults = useThresholdSearch(query);
 
-    console.log(basicSearchResults.data);
-
-    let [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
+    let [currentPageTitle] = useState(`/home/search-results-for-${query}`)
     const thresholdLink = `/home/search-threshold`;
+    const suggestedTerm = thresholdSearchResults.data?.pages[0].content[0].name;
 
     const handleClick = (e) => {
         e.preventDefault();
-        const name = thresholdSearchResults.data?.pages[0].content[0].name;
-        setSearchParams({ query: name });
+        navigate(`/home/search-advanced?query=${suggestedTerm}`)
     };
 
     return (
-        <>
+        <div className="search-page-full">
             <div className="did-you-mean">
-                {thresholdSearchResults.data && thresholdSearchResults.data?.pages[0].content[0].name !== query ? (
+                {!basicSearchResults.data && suggestedTerm !== query ? (
                     <p>Did you mean?&nbsp;
                         <a href={thresholdLink} onClick={handleClick} className="navlink">
-                            {thresholdSearchResults.data?.pages[0].content[0].name}
+                            {suggestedTerm}
                         </a>
                     </p>
                 ) : ""}
@@ -44,15 +42,14 @@ export default function BasicSearch() {
                     </p>
                 </div>
             </div>
-            {basicSearchResults ? <MainSearchPage
+            <MainSearchPage
                 productsData={basicSearchResults.data}
                 productsStatus={basicSearchResults.status}
                 productsError={basicSearchResults.error}
                 hasNextPage={basicSearchResults.hasNextPage}
                 fetchNextPage={basicSearchResults.fetchNextPage}
                 isFetchingNextPage={basicSearchResults.isFetchingNextPage}
-            /> : ""}
-
-        </>
+            />
+        </div>
     );
 }

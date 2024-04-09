@@ -9,5 +9,6 @@ export function useThresholdSearch(query, size = 9) {
             return lastPage.last ? undefined : allPages.length;
         },
         enabled: !!query,
+        retry: 1,
     });
 }; 

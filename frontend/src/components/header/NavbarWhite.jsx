@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
-    const [isSearchFocused, setSearchFocused] = useState(false);
+    const [isSearchFocused ] = useState(false);
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -14,7 +14,7 @@ const NavbarWhite = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const query = params.get('query');
-        const isSearchPage = location.pathname === '/home/search';
+        const isSearchPage = location.pathname === '/home/search' || location.pathname === '/home/search-advanced';
 
         if (isSearchPage && query) {
             setInput(decodeURIComponent(query));

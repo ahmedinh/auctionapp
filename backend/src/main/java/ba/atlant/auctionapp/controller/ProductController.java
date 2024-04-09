@@ -62,17 +62,17 @@ public class ProductController {
     }
 
     @GetMapping("/search-threshold")
-    public ResponseEntity<Page<ProductProjection>> searchProductsThreshold(@RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "9") int size,
-                                                                  @RequestParam("query") String query,
-                                                                  @RequestParam(value = "threshold", defaultValue = "10") Integer threshold){
-        return productService.searchProductsThreshold(page, size, query, threshold);
+    public ResponseEntity<Page<ProductProjection>> searchSuggestedProducts(@RequestParam(defaultValue = "0") int page,
+                                                                           @RequestParam(defaultValue = "9") int size,
+                                                                           @RequestParam("query") String query,
+                                                                           @RequestParam(value = "threshold", defaultValue = "10") Integer threshold){
+        return productService.searchSuggestedProducts(page, size, query, threshold);
     }
 
     @GetMapping("/search-basic")
-    public ResponseEntity<Page<ProductProjection>> searchBasic(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query){
-        return productService.searchBasic(page, size, query);
+        return productService.searchProducts(page, size, query);
     }
 }

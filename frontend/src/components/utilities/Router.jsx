@@ -9,6 +9,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "
 import Product from '../pages/ProductOverview/Product';
 import CategoryProducts from '../pages/BasicSearch/CategoryProducts';
 import BasicSearch from '../pages/BasicSearch/BasicSearch';
+import Thresholdsearch from '../pages/BasicSearch/ThresholdSearch';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,6 +26,7 @@ const Router = createBrowserRouter(
                 <Route path="terms-and-conditions" element={<Terms />} />
                 <Route path="privacy-and-policy" element={<Privacy />} />
                 <Route path="search" element={<BasicSearch />} />
+                <Route path="search-advanced" element={<Thresholdsearch/>}/>
             </Route>
             <Route path="shop">
                 <Route path="product/:productId" element={<Product />} />
