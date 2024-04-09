@@ -1,14 +1,11 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { searchProductsThreshold } from '../api/productsApi';
 
-export function useThresholdSearch(query, size = 9) {
-    return useInfiniteQuery({
+export function useThresholdSearch(query, isEnabled = true) {
+    return useQuery({
         queryKey: ['products-threshold', query],
-        queryFn: ({ pageParam = 0 }) => searchProductsThreshold({ page: pageParam, size, query }),
-        getNextPageParam: (lastPage, allPages) => {
-            return lastPage.last ? undefined : allPages.length;
-        },
-        enabled: !!query,
+        queryFn: () => searchProductsThreshold({ query }),
+        enabled: !!query && isEnabled,
         retry: 1,
     });
 }; 

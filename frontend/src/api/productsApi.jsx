@@ -41,8 +41,8 @@ export async function searchProductsBasic({ page, size, query }) {
     }).then(res => res.data);
 };
 
-export async function searchProductsThreshold({ page, size, query }) {
+export async function searchProductsThreshold({ query }) {
     return axios.get(`${apiUrl}/api/product/search-threshold`, {
-        params: { page, size, query }
+        params: { query }
     }).then(res => res.data);
 };

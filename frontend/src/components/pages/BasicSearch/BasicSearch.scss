@@ -9,11 +9,11 @@
         .navlink {
             text-decoration: none;
             color: $color-purple;
-    
+            cursor: pointer;
         }
     }
     
-    p {
+    .paragraph {
         margin-top: 2.5rem;
     }
 }

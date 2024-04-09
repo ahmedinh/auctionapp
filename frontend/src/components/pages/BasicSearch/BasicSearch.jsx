@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useBasicSearch } from "../../../hooks/useBasicSearch";
 import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
@@ -8,29 +8,38 @@ import "./BasicSearch.scss";
 
 
 export default function BasicSearch() {
-    let [searchParams] = useSearchParams();
-    const navigate = useNavigate();
+    let [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query");
+    const [ fetchSuggestionEnabled, setFetchSuggestionEnabled] = useState(true);
 
-    const basicSearchResults = useBasicSearch(query);
-    const thresholdSearchResults = useThresholdSearch(query);
+    const {
+        data: basicSearchResults,
+        status,
+        error,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useBasicSearch(query);
+    const {
+        data: thresholdSearchResults
+    } = useThresholdSearch(query, fetchSuggestionEnabled);
 
-    let [currentPageTitle] = useState(`/home/search-results-for-${query}`)
-    const thresholdLink = `/home/search-threshold`;
-    const suggestedTerm = thresholdSearchResults.data?.pages[0].content[0].name;
+    let [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
 
     const handleClick = (e) => {
         e.preventDefault();
-        navigate(`/home/search-advanced?query=${suggestedTerm}`)
+        const name = thresholdSearchResults?.name;
+        setSearchParams({ query: name });
+        setFetchSuggestionEnabled(false);
     };
 
     return (
         <div className="search-page-full">
             <div className="did-you-mean">
-                {!basicSearchResults.data && suggestedTerm !== query ? (
-                    <p>Did you mean?&nbsp;
-                        <a href={thresholdLink} onClick={handleClick} className="navlink">
-                            {suggestedTerm}
+                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name ? (
+                    <p className="paragraph">Did you mean?&nbsp;
+                        <a onClick={handleClick} className="navlink">
+                            {thresholdSearchResults?.name}
                         </a>
                     </p>
                 ) : ""}
@@ -43,13 +52,14 @@ export default function BasicSearch() {
                 </div>
             </div>
             <MainSearchPage
-                productsData={basicSearchResults.data}
-                productsStatus={basicSearchResults.status}
-                productsError={basicSearchResults.error}
-                hasNextPage={basicSearchResults.hasNextPage}
-                fetchNextPage={basicSearchResults.fetchNextPage}
-                isFetchingNextPage={basicSearchResults.isFetchingNextPage}
+                productsData={basicSearchResults}
+                productsStatus={status}
+                productsError={error}
+                hasNextPage={hasNextPage}
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
             />
+
         </div>
     );
 }
