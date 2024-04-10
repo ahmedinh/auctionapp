@@ -7,7 +7,7 @@ This application provides a platform for users to participate in auctions, allow
 - **Maven** [3.8.1]
 - **Spring Boot** [3.2.3]
 - **React** [18.2.0]
-- **PostgreSQL** with database named **auction** [16.2]
+- **PostgreSQL** [16.2] with database named **auction**
 # Installation
 ## Backend Setup
 1. Navigate to the backend directory: `cd backend`
