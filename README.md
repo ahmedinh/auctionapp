@@ -11,7 +11,7 @@ This application provides a platform for users to participate in auctions, allow
 # Installation
 ## Backend Setup
 1. Navigate to the backend directory: `cd backend`
-2. Install maven dependencies: `mvn clean install`
+2. Install maven dependencies: `mvn -U clean install`
 3. Run the Spring Boot application `mvn spring-boot:run`
 ## Frontend Setup
 1. Navigate to the frontend directory: `cd frontend`
