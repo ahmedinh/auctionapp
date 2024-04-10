@@ -63,13 +63,13 @@ public class ProductController {
         return productService.getProductsForSubCategory(page, size, subCategoryId);
     }
 
-    @GetMapping("/search-threshold")
+    @GetMapping("/search-suggestion")
     public ResponseEntity<Map<String, String>> searchSuggestedProducts(@RequestParam("query") String query,
                                                                        @RequestParam(value = "threshold", defaultValue = "10") Integer threshold){
         return productService.getSuggestion(query, threshold);
     }
 
-    @GetMapping("/search-basic")
+    @GetMapping("/search-products")
     public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query){
