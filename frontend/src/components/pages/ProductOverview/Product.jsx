@@ -77,7 +77,7 @@ export default function Product() {
                             <hr />
                         </div>
                         <div className="tab-content">
-                            <p className="description">{data.description.replace(/\\n/g, '\n')}</p>
+                            <p className="description">{data.description}</p>
                         </div>
                     </div>
                 </div>

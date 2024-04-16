@@ -5,7 +5,6 @@ import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -92,13 +93,10 @@ public class ProductService {
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<Map<String, String>> getSuggestion(String query, Integer threshold) {
-        String suggestion = productRepository.getSuggestion(query, threshold, 0);
-        Map<String, String> response = Collections.singletonMap("name", suggestion);
-        return ResponseEntity.ok(response);
-    }
-
     public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
-        return ResponseEntity.ok(productRepository.searchProducts(query, PageRequest.of(page,size)));
+        Page<ProductProjection> productProjectionPage = productRepository.searchProducts(query, PageRequest.of(page,size));
+        if (productProjectionPage.isEmpty())
+            throw new IllegalArgumentException("No products found for given name or description.");
+        return ResponseEntity.ok(productProjectionPage);
     }
 }

@@ -7,11 +7,11 @@ This application provides a platform for users to participate in auctions, allow
 - **Maven** [3.8.1]
 - **Spring Boot** [3.2.3]
 - **React** [18.2.0]
-- **PostgreSQL** [16.2] with database named **auction**
+- **PostgreSQL** with database named **auction** [16.2]
 # Installation
 ## Backend Setup
 1. Navigate to the backend directory: `cd backend`
-2. Install maven dependencies: `mvn -U clean install`
+2. Install maven dependencies: `mvn clean install`
 3. Run the Spring Boot application `mvn spring-boot:run`
 ## Frontend Setup
 1. Navigate to the frontend directory: `cd frontend`

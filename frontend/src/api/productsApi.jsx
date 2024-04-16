@@ -36,13 +36,7 @@ export async function getProductsForCategory({ page, size = 9, categoryId }) {
 }
 
 export async function searchProducts({ page, size, query }) {
-    return axios.get(`${apiUrl}/api/product/search-products`, {
+    return axios.get(`${apiUrl}/api/product/search`, {
         params: { page, size, query }
-    }).then(res => res.data);
-};
-
-export async function searchSuggestion({ query }) {
-    return axios.get(`${apiUrl}/api/product/search-suggestion`, {
-        params: { query }
     }).then(res => res.data);
 };
