@@ -87,10 +87,27 @@
     .products-part {
         margin: 5% 20% 5% 0%;
 
-        .products-gridview {
-            display: grid;
-            grid-template-columns: repeat(3, 267.45px);
-            gap: 24px;
+        .products-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 81px;
+
+            .products-gridview {
+                display: grid;
+                grid-template-columns: repeat(3, 267.45px);
+                gap: 24px;
+            }
+
+            .explore-more-button {
+                width: 207px;
+                height: 56px;
+                font-weight: $font-weight-bold;
+                color: #fff;
+                border: none;
+                background-color: $color-purple;
+                cursor: pointer;
+            }
         }
     }
 }

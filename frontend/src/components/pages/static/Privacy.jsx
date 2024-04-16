@@ -8,7 +8,7 @@ const Privacy = () => {
     ScrollToTop();
     return (
         <div className="full-page">
-            <BreadCrumbsMenu title="Privacy and policy" rightLink="home/privacy-and-policy" />
+            <BreadCrumbsMenu title={common.privacy_and_policy} rightLink="home/privacy-and-policy" />
             <div className="page-content">
                 <div className="page-chapter">
                     <h2>Auction Website {common.privacy_and_policy}</h2>
