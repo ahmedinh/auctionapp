@@ -40,7 +40,7 @@ const Home = () => {
                         <div className="product-about">
                             <p className="product-name">{highlightData?.name}</p>
                             <p className="product-price">Start from ${highlightData?.startPrice.toFixed(2)}</p>
-                            <p className="product-description">{highlightData?.description}</p>
+                            <p className="product-description">{highlightData?.description.replace(/\\n/g, ' ')}</p>
                         </div>
                         <div className="bid-now">
                             <button type="button">BID NOW <Icon icon="akar-icons:chevron-right" /></button>

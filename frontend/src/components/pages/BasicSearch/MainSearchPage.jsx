@@ -5,7 +5,7 @@ import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
 
 
-export default function MainSearchPage({productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage}) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
 
@@ -57,21 +57,22 @@ export default function MainSearchPage({productsData, productsStatus, productsEr
             </div>
             <div className="products-part">
                 {productsStatus === 'loading' && <p>Loading...</p>}
-                {productsStatus === 'error' && <p>Error: {productsError.message}</p>}
-                <div className="products-gridview">
-                    {productsData?.pages.map((page, i) => (
-                        <React.Fragment key={i}>
-                            {page.content.map(product => (
-                                <ProductCard key={product.id} product={product} />
-                            ))}
-                        </React.Fragment>
-                    ))}
+                <div className="products-content">
+                    <div className="products-gridview">
+                        {productsData?.pages.map((page, i) => (
+                            <React.Fragment key={i}>
+                                {page.content.map(product => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                    {hasNextPage && (
+                        <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                            {isFetchingNextPage ? 'Loading...' : 'Explore More'}
+                        </button>
+                    )}
                 </div>
-                {hasNextPage && (
-                    <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-                        {isFetchingNextPage ? 'Loading...' : 'Explore More'}
-                    </button>
-                )}
             </div>
         </div>
     );
