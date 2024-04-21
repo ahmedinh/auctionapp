@@ -34,7 +34,6 @@ public class ProductService {
     private final JwtUtils jwtUtils;
 
     public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, CategoryRepository categoryRepository, BidRepository bidRepository, JwtUtils jwtUtils, S3Service s3Service) {
-
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
