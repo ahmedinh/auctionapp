@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 /**
- * Represents a credit card information associated with a user in the auction system.
+ * Represents a credit card information associated with a person in the auction system.
  * Stores details necessary for processing transactions.
  */
 
@@ -45,18 +45,18 @@ public class CreditCard {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Person person;
 
     public CreditCard() {
     }
 
-    public CreditCard(String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, User user) {
+    public CreditCard(String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, Person person) {
         this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expirationMonth = expirationMonth;
         this.expiration_year = expiration_year;
         this.CVV = CVV;
-        this.user = user;
+        this.person = person;
     }
 
     public Long getId() {
@@ -103,11 +103,11 @@ public class CreditCard {
         this.CVV = CVV;
     }
 
-    public User getUser() {
-        return user;
+    public Person getUser() {
+        return person;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Person person) {
+        this.person = person;
     }
 }

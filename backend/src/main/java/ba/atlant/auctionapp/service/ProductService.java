@@ -5,7 +5,6 @@ import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
 import ba.atlant.auctionapp.service.exception.ServiceException;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,14 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final ProductPictureRepository productPictureRepository;
-    private final UserRepository userRepository;
+    private final PersonRepository personRepository;
     private final BidRepository bidRepository;
 
-    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, BidRepository bidRepository) {
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
-        this.userRepository = userRepository;
+        this.personRepository = personRepository;
         this.bidRepository = bidRepository;
     }
 
@@ -39,7 +38,7 @@ public class ProductService {
             if (optionalSubCategory.isEmpty())
                 throw new IllegalArgumentException("SubCategory not found for given ID.");
 
-            Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
+            Optional<Person> optionalUser = personRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
                 throw new IllegalArgumentException("SubCategory not found for given ID.");
 

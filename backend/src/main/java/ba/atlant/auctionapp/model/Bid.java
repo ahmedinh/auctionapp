@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 
 /**
  * Represents a bid in an auction system.
- * Each bid is associated with a user and a product,
- * indicating the amount offered by the user for the product.
+ * Each bid is associated with a person and a product,
+ * indicating the amount offered by the person for the product.
  */
 
 @Entity
@@ -25,7 +25,7 @@ public class Bid {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Person person;
 
     @JsonIgnore
     @ManyToOne
@@ -47,12 +47,12 @@ public class Bid {
         this.amount = amount;
     }
 
-    public User getUser() {
-        return user;
+    public Person getUser() {
+        return person;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Person person) {
+        this.person = person;
     }
 
     public Product getProduct() {
