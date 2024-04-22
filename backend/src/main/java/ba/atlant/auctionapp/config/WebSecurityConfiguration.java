@@ -78,6 +78,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers(GET,"/api/category/search").hasAuthority(ROLE_USER.name())
                 .requestMatchers(POST, "/api/user/login").permitAll()
                 .requestMatchers(POST, "/api/user/register").permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v2/api-docs/**").permitAll()
                 .requestMatchers("/**").denyAll()
                 .anyRequest().permitAll().and().authenticationManager(authenticationManager);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
