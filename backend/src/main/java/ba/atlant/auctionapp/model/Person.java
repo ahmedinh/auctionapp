@@ -31,9 +31,9 @@ public class Person {
     @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank(message = "Email cannot be blank.")
+    @NotBlank(message = "Email cannot be empty.")
     @NotNull(message = "Email cannot be null.")
-    @Email
+    @Email(message = "Email format is not valid.")
     @Column(nullable = false, unique = true)
     private String email;
 

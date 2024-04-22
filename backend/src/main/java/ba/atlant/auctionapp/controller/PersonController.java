@@ -34,13 +34,13 @@ public class PersonController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity logIn(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<AuthResponse> logIn(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
         AuthResponse authResponse = personService.login(loginRequest);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/register")
-    public ResponseEntity createAccount(@Valid @RequestBody RegisterRequest signUpRequest) throws Exception {
+    public ResponseEntity<AuthResponse> createAccount(@Valid @RequestBody RegisterRequest signUpRequest) throws Exception {
         AuthResponse authResponse = personService.register(signUpRequest);
         return ResponseEntity.ok(authResponse);
     }

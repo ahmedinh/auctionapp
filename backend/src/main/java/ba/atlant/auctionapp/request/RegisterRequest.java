@@ -12,12 +12,12 @@ public class RegisterRequest {
 
     @NotBlank(message = "First name can't be empty")
     @Size(min = 2, message = "First name must have at least 2 characters")
-    @Size(max = 50, message = "First name can't be longer than 50 characters")
+    @Size(max = 30, message = "First name can't be longer than 50 characters")
     private String firstName;
 
     @NotBlank(message = "Last name can't be empty")
     @Size(min = 2, message = "First name must have at least 2 characters")
-    @Size(max = 50, message = "First name can't be longer than 50 characters")
+    @Size(max = 30, message = "First name can't be longer than 50 characters")
     private String lastName;
 
     @NotBlank(message = "Email can't be empty")

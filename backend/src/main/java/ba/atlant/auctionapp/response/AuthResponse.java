@@ -7,9 +7,6 @@ public class AuthResponse {
     private Person person;
     private String token;
 
-    public AuthResponse() {
-    }
-
     public AuthResponse(Person person, String token) {
         this.person = person;
         this.token = token;
@@ -31,4 +28,3 @@ public class AuthResponse {
         this.token = token;
     }
 }
-

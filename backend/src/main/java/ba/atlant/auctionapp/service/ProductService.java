@@ -36,11 +36,11 @@ public class ProductService {
         try {
             Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
             if (optionalSubCategory.isEmpty())
-                throw new IllegalArgumentException("SubCategory not found for given ID.");
+                throw new Exception("SubCategory not found for given ID.");
 
             Optional<Person> optionalUser = personRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
-                throw new IllegalArgumentException("SubCategory not found for given ID.");
+                throw new Exception("SubCategory not found for given ID.");
 
             productRepository.save(product);
             return ResponseEntity.ok(product.getId());

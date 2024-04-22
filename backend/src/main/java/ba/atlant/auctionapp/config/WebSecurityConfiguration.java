@@ -31,10 +31,13 @@ import static ba.atlant.auctionapp.enumeration.Role.*;
 @EnableWebSecurity
 public class WebSecurityConfiguration {
     AuthenticationManager authenticationManager;
-    @Autowired
-    private PersonDetailsService personDetailsService;
-    @Autowired
-    private JwtEntryPoint authEntryPointJwt;
+    private final PersonDetailsService personDetailsService;
+    private final JwtEntryPoint authEntryPointJwt;
+
+    public WebSecurityConfiguration(PersonDetailsService personDetailsService, JwtEntryPoint authEntryPointJwt) {
+        this.personDetailsService = personDetailsService;
+        this.authEntryPointJwt = authEntryPointJwt;
+    }
 
     @Bean
     public JwtTokenFilter authenticationJwtTokenFilter() {
@@ -62,6 +65,17 @@ public class WebSecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
                 .requestMatchers(GET,"/api/product/highlight").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/new-arrivals").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/last-chance").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/category").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/sub-category").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/search-suggestion").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/product/all/search-products").hasAuthority(ROLE_USER.name())
+                .requestMatchers(POST,"/api/product").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/sub-category/all/category").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/category").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/category/subcategories").hasAuthority(ROLE_USER.name())
+                .requestMatchers(GET,"/api/category/search").hasAuthority(ROLE_USER.name())
                 .requestMatchers(POST, "/api/user/login").permitAll()
                 .requestMatchers(POST, "/api/user/register").permitAll()
                 .requestMatchers("/**").denyAll()
@@ -94,5 +108,4 @@ public class WebSecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
