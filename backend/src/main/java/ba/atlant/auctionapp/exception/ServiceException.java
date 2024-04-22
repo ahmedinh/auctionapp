@@ -1,4 +1,4 @@
-package ba.atlant.auctionapp.service.exception;
+package ba.atlant.auctionapp.exception;
 
 public class ServiceException extends RuntimeException {
 

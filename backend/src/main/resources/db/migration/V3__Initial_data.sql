@@ -1,6 +1,6 @@
 -- Insertion of person
 INSERT INTO person (first_name, last_name, birth_date, country, email, password, username, role, active)
-VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', 'DummyPassword123','username1', 'ROLE_USER', true);
+VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe','username1', 'ROLE_USER', true);
 
 -- Insertion of categories
 INSERT INTO category (name) VALUES

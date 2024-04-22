@@ -7,9 +7,11 @@ import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
+import ba.atlant.auctionapp.exception.EmailAlreadyUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,7 +46,7 @@ public class PersonService {
 
     public AuthResponse register(RegisterRequest registerRequest) throws Exception {
         if (personRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new Exception("Email already in use");
+            throw new EmailAlreadyUsedException("Email already in use");
         }
         Person person = personRepository.save(new Person(
                 registerRequest.getFirstName(),
@@ -63,10 +65,10 @@ public class PersonService {
         return new AuthResponse(person, jwt);
     }
 
-    public AuthResponse login(LoginRequest loginRequest) throws Exception {
+    public AuthResponse login(LoginRequest loginRequest) {
         Person person = personRepository.findByEmail(loginRequest.getEmail()).orElse(null);
         if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword())) {
-            throw new Exception("Wrong email or password");
+            throw new BadCredentialsException("Wrong email or password");
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
