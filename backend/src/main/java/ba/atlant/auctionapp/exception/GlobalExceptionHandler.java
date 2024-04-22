@@ -18,8 +18,8 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private Map getReturnMap(String message) {
-        Map map = new HashMap<String, String>();
+    private Map<String, String> getReturnMap(String message) {
+        Map<String, String> map = new HashMap<>();
         map.put("error_message",message);
         return map;
     }
