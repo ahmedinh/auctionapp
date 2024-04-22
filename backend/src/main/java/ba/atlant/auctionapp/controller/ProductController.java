@@ -33,31 +33,31 @@ public class ProductController {
     }
 
     @GetMapping("/all/new-arrivals")
-    @Operation(summary = "Products for new arrivals tab", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Products for new arrivals tab")
     public ResponseEntity<Page<ProductProjection>> getNewArrivals(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
         return productService.getNewArrivals(page, size);
     }
 
     @GetMapping("/all/last-chance")
-    @Operation(summary = "Products for last chance tab", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Products for last chance tab")
     public ResponseEntity<Page<ProductProjection>> getLastChance(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
         return productService.getLastChance(page, size);
     }
 
     @GetMapping("/highlight")
-    @Operation(summary = "Highlighted product", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Highlighted product")
     public ResponseEntity<ProductDTO> getHighlighted() {
         return productService.getHighlighted();
     }
 
     @GetMapping()
-    @Operation(summary = "One product", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "One product")
     public ResponseEntity<ProductDTO> getProduct(@RequestParam Long id) {
         return productService.getProduct(id);
     }
 
     @GetMapping("/all/category")
-    @Operation(summary = "All products for category", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "All products for category")
     public ResponseEntity<Page<ProductProjection>> getProductsForCategory(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "9") int size,
                                                                           @RequestParam(defaultValue = "1") Long categoryId) {
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     @GetMapping("/all/sub-category")
-    @Operation(summary = "All products for subcategory", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "All products for subcategory")
     public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "9") int size,
                                                  @RequestParam(defaultValue = "1") Long subCategoryId) {
@@ -73,14 +73,14 @@ public class ProductController {
     }
 
     @GetMapping("/search-suggestion")
-    @Operation(summary = "Suggestion of products search", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Suggestion of products search")
     public ResponseEntity<Map<String, String>> searchSuggestedProducts(@RequestParam("query") String query,
                                                                        @RequestParam(value = "threshold", defaultValue = "10") Integer threshold){
         return productService.getSuggestion(query, threshold);
     }
 
     @GetMapping("/search-products")
-    @Operation(summary = "Products search", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Products search")
     public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query){

@@ -3,7 +3,6 @@ package ba.atlant.auctionapp.controller;
 import ba.atlant.auctionapp.model.SubCategory;
 import ba.atlant.auctionapp.service.SubCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class SubCategoryController {
     }
 
     @GetMapping("/all/category")
-    @Operation(summary = "All subcategores in single category", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "All subcategores in single category")
     public ResponseEntity<List<SubCategory>> getAllForCategory(@RequestParam(defaultValue = "1") Long categoryId) {
         return subCategoryService.getAllForCategory(categoryId);
     }
