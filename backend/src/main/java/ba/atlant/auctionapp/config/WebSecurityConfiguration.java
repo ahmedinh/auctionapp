@@ -34,6 +34,15 @@ public class WebSecurityConfiguration {
     private final PersonDetailsService personDetailsService;
     private final JwtEntryPoint authEntryPointJwt;
 
+    private static final String[] PROTECTED_GET = new String[] {
+            "/api/user"
+    };
+
+    private static final String[] PROTECTED_POST = new String[] {
+            "/api/product"
+    };
+
+
     public WebSecurityConfiguration(PersonDetailsService personDetailsService, JwtEntryPoint authEntryPointJwt) {
         this.personDetailsService = personDetailsService;
         this.authEntryPointJwt = authEntryPointJwt;
@@ -64,24 +73,9 @@ public class WebSecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
-                .requestMatchers(GET,"/api/product").permitAll()
-                .requestMatchers(GET,"/api/product/highlight").permitAll()
-                .requestMatchers(GET,"/api/product/all/new-arrivals").permitAll()
-                .requestMatchers(GET,"/api/product/all/last-chance").permitAll()
-                .requestMatchers(GET,"/api/product/all/category").permitAll()
-                .requestMatchers(GET,"/api/product/all/sub-category").permitAll()
-                .requestMatchers(GET,"/api/product/all/search-suggestion").permitAll()
-                .requestMatchers(GET,"/api/product/all/search-products").permitAll()
-                .requestMatchers(POST,"/api/product").hasAuthority(ROLE_USER.name())
-                .requestMatchers(GET,"/api/sub-category/all/category").permitAll()
-                .requestMatchers(GET,"/api/category").permitAll()
-                .requestMatchers(GET,"/api/category/subcategories").permitAll()
-                .requestMatchers(GET,"/api/category/search").permitAll()
-                .requestMatchers(POST, "/api/user/login").permitAll()
-                .requestMatchers(POST, "/api/user/register").permitAll()
-                .requestMatchers(GET, "/api/user").hasAuthority(ROLE_USER.name())
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v2/api-docs/**").permitAll()
-                .requestMatchers("/**").denyAll()
+                .requestMatchers(GET, PROTECTED_GET).hasAuthority(ROLE_USER.name())
+                .requestMatchers(POST, PROTECTED_POST).hasAuthority(ROLE_USER.name())
+                .requestMatchers("/**").permitAll()
                 .anyRequest().permitAll().and().authenticationManager(authenticationManager);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

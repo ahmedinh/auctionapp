@@ -20,7 +20,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
             throws IOException {
         logger.error("Unauthorized error: {}", authException.getMessage());
         final ObjectMapper mapper = new ObjectMapper();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         mapper.writeValue(response.getOutputStream(), authException.getMessage());
     }
 }
