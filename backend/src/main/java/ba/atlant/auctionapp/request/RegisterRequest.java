@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public class RegisterRequest {
+public class RegisterRequest extends AuthRequest {
 
     @NotBlank(message = "First name can't be empty")
     @Size(min = 2, message = "First name must have at least 2 characters")
@@ -72,6 +72,7 @@ public class RegisterRequest {
         this.lastName = lastName;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -80,6 +81,7 @@ public class RegisterRequest {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }

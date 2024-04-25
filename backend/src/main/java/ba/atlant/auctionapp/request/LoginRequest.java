@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class LoginRequest {
+public class LoginRequest extends AuthRequest {
     @NotBlank(message = "Email can't be empty")
     @Email(message = "Email format is not valid")
     private String email;
@@ -23,6 +23,7 @@ public class LoginRequest {
         this.password = password;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -31,6 +32,7 @@ public class LoginRequest {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
