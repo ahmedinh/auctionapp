@@ -64,6 +64,7 @@ public class WebSecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
+                .requestMatchers(GET,"/api/product").permitAll()
                 .requestMatchers(GET,"/api/product/highlight").permitAll()
                 .requestMatchers(GET,"/api/product/all/new-arrivals").permitAll()
                 .requestMatchers(GET,"/api/product/all/last-chance").permitAll()
