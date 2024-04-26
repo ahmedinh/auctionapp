@@ -4,7 +4,6 @@ import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.PersonDetails;
 import ba.atlant.auctionapp.service.PersonService;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -16,8 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
