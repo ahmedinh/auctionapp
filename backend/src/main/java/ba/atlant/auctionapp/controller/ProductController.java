@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.controller;
 
 import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.model.Product;
+import ba.atlant.auctionapp.model.ProductPicture;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,9 +10,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -85,5 +90,12 @@ public class ProductController {
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query){
         return productService.searchProducts(page, size, query);
+    }
+
+    @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Add pictures to product")
+    public ResponseEntity<List<ProductPicture>> addProductPictures (@RequestParam("files") MultipartFile[] files,
+                                                                    @RequestParam("productId") Long productId) throws IOException {
+        return productService.addProductPictures(files, productId);
     }
 }
