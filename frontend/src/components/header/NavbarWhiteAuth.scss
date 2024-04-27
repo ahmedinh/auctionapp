@@ -1,0 +1,19 @@
+@import '../utilities/Style.scss';
+.white-bar {
+    .logo-space {
+        display: flex;
+        justify-content: center;
+        img {
+            width: 163px;
+            height: 56px;
+            margin: 18px 0px 18px 0px;
+        }
+    }
+    hr {
+        height: 0px;
+        border: none;
+        border-bottom: 1px solid;
+        color: $color-white;
+        margin: 0;
+    }
+}
