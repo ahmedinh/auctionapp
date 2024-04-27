@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./NavbarBlackLogged.scss";
 import SocialIcons from "../../assets/icons/SocialIcons";
-import { removeSession } from "../utilities/Common";
+import { removeSession, getUser } from "../utilities/Common";
 import { useNavigate } from "react-router-dom";
 
 export default function NavbarBlackLogged() {
@@ -10,12 +10,12 @@ export default function NavbarBlackLogged() {
     const [lastName, setLastName] = useState("");
 
     useEffect(() => {
-        if (localStorage.getItem('user') !== null) {
-            const user = JSON.parse(localStorage.getItem('user'));
+        const user = getUser();
+        if (user !== null) {
             setFirstName(user.firstName);
             setLastName(user.lastName);
         }
-    })
+    }, [])
 
     const handleLogout = (event) => {
         event.preventDefault();
