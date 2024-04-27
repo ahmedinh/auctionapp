@@ -1,19 +1,16 @@
 import React from "react";
 import "./NavbarBlack.scss";
 import SocialIcons from "../../assets/icons/SocialIcons";
+import { NavLink } from "react-router-dom";
 
 const NavbarBlack = () => {
     return (
         <nav className="navbar-black">
             <SocialIcons />
             <div className="chunk sign-in">
-                <a href="https://www.facebook.com">
-                    Login
-                </a>
+                <NavLink to="/login">Login</NavLink>
                 or
-                <a href="https://www.facebook.com">
-                    Create an account
-                </a>
+                <NavLink to="/register">Create an account</NavLink>
             </div>
         </nav>
     );
