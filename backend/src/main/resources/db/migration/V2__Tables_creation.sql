@@ -58,8 +58,7 @@ CREATE TABLE IF NOT EXISTS person
     last_name        VARCHAR(30)                             NOT NULL,
     email            VARCHAR(255)                            NOT NULL,
     password         VARCHAR(255)                            NOT NULL,
-    username         VARCHAR(255)                            NOT NULL,
-    birth_date       date                                    NOT NULL,
+    birth_date       date,
     phone_number     VARCHAR(255),
     shipping_address VARCHAR(255),
     shipping_city    VARCHAR(255),
@@ -98,9 +97,6 @@ ALTER TABLE IF EXISTS role
 
 ALTER TABLE IF EXISTS person
     ADD CONSTRAINT uc_person_email UNIQUE (email);
-
-ALTER TABLE IF EXISTS person
-    ADD CONSTRAINT uc_person_username UNIQUE (username);
 
 ALTER TABLE IF EXISTS bid
     ADD CONSTRAINT FK_BID_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES product (id);
