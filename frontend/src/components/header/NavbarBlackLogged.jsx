@@ -3,6 +3,7 @@ import "./NavbarBlackLogged.scss";
 import SocialIcons from "../../assets/icons/SocialIcons";
 import { removeSession, getUser } from "../utilities/Common";
 import { useNavigate } from "react-router-dom";
+import { getToken, validToken } from "../utilities/Common";
 
 export default function NavbarBlackLogged() {
     const navigate = useNavigate();
@@ -14,6 +15,12 @@ export default function NavbarBlackLogged() {
         if (user !== null) {
             setFirstName(user.firstName);
             setLastName(user.lastName);
+        }
+        if (getToken() && !validToken()) {
+            removeSession();
+            alert('Your session has expired! Please login again.');
+            window.location.reload();
+            navigate('/home/new-arrivals');
         }
     }, [])
 
