@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.repository;
 
 import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
+import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.BidProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
