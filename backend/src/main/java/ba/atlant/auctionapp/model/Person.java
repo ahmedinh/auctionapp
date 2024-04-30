@@ -2,10 +2,8 @@ package ba.atlant.auctionapp.model;
 
 import ba.atlant.auctionapp.enumeration.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 
 /**
@@ -62,6 +60,29 @@ public class Person {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    @Column(name = "picture_url")
+    private String pictureUrl;
+
+    @Column(name = "card_name")
+    private String cardName;
+
+    @Pattern(regexp = "^[0-9]*$", message = "Card number must contain only digits.")
+    @Size(min = 13, max = 19, message = "Card number must contain between 13 and 19 digits.")
+    @Column(name = "card_number")
+    private String cardNumber;
+
+    @Column(name = "expiration_month")
+    @Positive(message = "Expiration month must be a positive integer.")
+    private Integer expirationMonth;
+
+    @Positive(message = "Expiration year must be a positive integer.")
+    @Column(name = "expiration_year")
+    private Integer expirationYear;
+
+    @Min(value = 100, message = "CVV must be at least 100")
+    @Max(value = 9999, message = "CVV must be no more than 9999")
+    private Integer CVV;
 
     public Person() {
     }
@@ -204,5 +225,53 @@ public class Person {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public Integer getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    public void setExpirationMonth(Integer expirationMonth) {
+        this.expirationMonth = expirationMonth;
+    }
+
+    public Integer getExpirationYear() {
+        return expirationYear;
+    }
+
+    public void setExpirationYear(Integer expirationYear) {
+        this.expirationYear = expirationYear;
+    }
+
+    public Integer getCVV() {
+        return CVV;
+    }
+
+    public void setCVV(Integer CVV) {
+        this.CVV = CVV;
     }
 }
