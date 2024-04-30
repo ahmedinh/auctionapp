@@ -52,8 +52,10 @@ public class S3Service {
     }
 
     public void deleteObject(String filePath) {
-        String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-        final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucketName, fileName);
-        s3client.deleteObject(deleteObjectRequest);
+        if (filePath != null) {
+            String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucketName, fileName);
+            s3client.deleteObject(deleteObjectRequest);
+        }
     }
 }
