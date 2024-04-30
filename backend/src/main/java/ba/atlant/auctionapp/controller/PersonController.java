@@ -1,6 +1,8 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.dto.PersonDTO;
 import ba.atlant.auctionapp.model.Person;
+import ba.atlant.auctionapp.projection.PersonProjection;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
@@ -9,14 +11,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
 @Tag(name = "Person Controller")
+@CrossOrigin("*")
 public class PersonController {
 
     private final PersonService personService;
@@ -49,5 +56,31 @@ public class PersonController {
     public ResponseEntity<AuthResponse> createAccount(@Valid @RequestBody RegisterRequest signUpRequest) throws Exception {
         AuthResponse authResponse = personService.register(signUpRequest);
         return ResponseEntity.ok(authResponse);
+    }
+
+    @GetMapping(value = "/current")
+    @Operation(summary = "Get info for currently logged user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<PersonProjection> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+        return personService.getCurrentUser(authHeader);
+    }
+
+    @PutMapping(value = "/current")
+    @Operation(summary = "Change info for currently logged user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<PersonDTO> modifyCurrentUser(@RequestHeader("Authorization") String authHeader,
+                                                       @Valid @RequestBody PersonDTO personDTO) {
+        return personService.modifyCurrentUser(authHeader, personDTO);
+    }
+
+    @PutMapping(value = "/picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Insert picture link for user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<Person> addPictureToUser(@RequestHeader("Authorization") String authHeader,
+                                                   @RequestBody MultipartFile file) throws IOException {
+        return personService.addPictureToUser(authHeader,file);
+    }
+
+    @GetMapping(value = "/picture")
+    @Operation(summary = "Get picture link for user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<Map<String,String>> getUserPicture(@RequestHeader("Authorization") String authHeader) {
+        return personService.getUserPicture(authHeader);
     }
 }
