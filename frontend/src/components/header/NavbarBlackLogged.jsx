@@ -20,8 +20,8 @@ export default function NavbarBlackLogged() {
     const handleLogout = (event) => {
         event.preventDefault();
         removeSession();
+        navigate(`/home/new-arrivals`);
         window.location.reload();
-        navigate(`/home/new-arrivals`)
     }
     return(
         <nav className="navbar-black-logged">
