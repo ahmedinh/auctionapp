@@ -24,7 +24,19 @@ export const validToken = () => {
     if (token === null) {
         return false;
     }
-//  const exp = decode(token, { complete: true }).payload.exp;
     const exp = jwtDecode(token).exp;
     return Date.now() < exp * 1000;
 }
+
+export const isUserAuthorized = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+        const decoded = jwtDecode(token);
+        return decoded.role && decoded.role === "ROLE_USER";
+    } catch (error) {
+        console.error("Failed to decode JWT", error);
+        return false;
+    }
+};
