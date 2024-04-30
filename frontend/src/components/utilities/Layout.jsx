@@ -18,7 +18,7 @@ const Layout = () => {
         <>
             {isLoggedIn ? <NavbarBlackLogged /> : <NavbarBlack />}
             <NavbarWhite />
-            <main><Outlet /></main>
+            <main><Outlet/></main>
             <Footer />
         </>
     );
