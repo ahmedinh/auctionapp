@@ -25,7 +25,6 @@ const BreadCrumbsMenu = ({ title, rightLink, fontWeight = 400 }) => {
                     <Breadcrumbs locationLink={rightLink} />
                 </div>
             </div>
-            <main><Outlet /></main>
         </>
     );
 };
