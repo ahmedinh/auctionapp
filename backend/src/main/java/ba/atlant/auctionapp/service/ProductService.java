@@ -4,8 +4,8 @@ import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
+import ba.atlant.auctionapp.projection.ProductUserProjection;
 import ba.atlant.auctionapp.repository.*;
-import com.amazonaws.HttpMethod;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -124,5 +124,17 @@ public class ProductService {
         }
         productPictureRepository.saveAll(productPictureList);
         return ResponseEntity.ok(productPictureList);
+    }
+
+    public ResponseEntity<List<ProductUserProjection>> activeUserProducts(Long userId) {
+        if (personRepository.findById(userId).isEmpty())
+            throw new IllegalArgumentException("No user found with provided ID.");
+        return ResponseEntity.ok().body(productRepository.getActiveUserProducts(userId));
+    }
+
+    public ResponseEntity<List<ProductUserProjection>> soldUserProducts(Long userId) {
+        if (personRepository.findById(userId).isEmpty())
+            throw new IllegalArgumentException("No user found with provided ID.");
+        return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
     }
 }
