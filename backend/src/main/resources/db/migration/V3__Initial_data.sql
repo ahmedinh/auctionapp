@@ -1,6 +1,7 @@
 -- Insertion of person
 INSERT INTO person (first_name, last_name, birth_date, country, email, password, role, active)
-VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true);
+VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true),
+       ('Niko', 'Nikic', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic2@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true);
 
 -- Insertion of categories
 INSERT INTO category (name) VALUES
@@ -76,3 +77,10 @@ INSERT INTO product_picture (name, url, product_id) VALUES
                                                         ('BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic4.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic4.png' , (SELECT p.id FROM product p WHERE p.name='BIYLACLESEN Womens 3-in-1 Snowboard Jacket Winter Coats')),
                                                         ('BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic5.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic5.png' , (SELECT p.id FROM product p WHERE p.name='BIYLACLESEN Womens 3-in-1 Snowboard Jacket Winter Coats')),
                                                         ('BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic6.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/BIYLACLESEN-Womens-3-in-1-Snowboard-Jacket-Winter-Coats-pic6.png' , (SELECT p.id FROM product p WHERE p.name='BIYLACLESEN Womens 3-in-1 Snowboard Jacket Winter Coats'));
+
+insert into bid (amount, user_id, product_id)
+values (71.00, 2, 2),
+       (72.00, 2, 3),
+       (73.00, 2, 4),
+       (74.00, 2, 5),
+       (75.00, 2, 6);
