@@ -22,12 +22,10 @@ public class Bid {
     @NotNull(message = "Bid amount cannot be null.")
     private BigDecimal amount;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Person person;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
