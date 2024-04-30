@@ -63,7 +63,7 @@ public class Person {
 
     @Column(name = "picture_url")
     private String pictureUrl;
-    
+
     public Person() {
     }
 
