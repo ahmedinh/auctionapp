@@ -5,13 +5,20 @@ import Home from '../pages/HomePage/Home';
 import Layout from './Layout';
 import NewArrivals from '../pages/HomePage/Products/NewArrivals';
 import LastChance from '../pages/HomePage/Products/LastChance';
-import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
 import Product from '../pages/ProductOverview/Product';
 import CategoryProducts from '../pages/BasicSearch/CategoryProducts';
 import BasicSearch from '../pages/BasicSearch/BasicSearch';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import AuthLayout from './AuthLayout';
+import MyProfile from '../pages/my-account/profile/MyProfile';
+import AccordionExpandIcon from '../pages/my-account/profile/Accordion';
+import Seller from '../pages/my-account/seller/Seller';
+import ProtectedRoute from './ProtectedRoute';
+import SellerActive from '../pages/my-account/seller/SellerActive';
+import SellerSold from '../pages/my-account/seller/SellerSold';
+import Bids from '../pages/my-account/bids/Bids';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -32,6 +39,18 @@ const Router = createBrowserRouter(
                 </Route>
                 <Route path="shop">
                     <Route path="product/:productId" element={<Product />} />
+                </Route>
+
+            </Route>
+            <Route element={<ProtectedRoute />}>
+                <Route path="my-account" element={<MyProfile />}>
+                    <Route path="profile" element={<AccordionExpandIcon />} />
+                    <Route path="seller" element={<Seller />}>
+                        <Route index element={<Navigate replace to="/my-account/seller/active" />} />
+                        <Route path="active" element={<SellerActive />} />
+                        <Route path="sold" element={<SellerSold />} />
+                    </Route>
+                    <Route path="bids" element={<Bids/>} />
                 </Route>
             </Route>
             <Route element={<AuthLayout />}>
