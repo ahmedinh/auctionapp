@@ -35,12 +35,22 @@ public class WebSecurityConfiguration {
     private final JwtEntryPoint authEntryPointJwt;
 
     private static final String[] PROTECTED_GET = new String[] {
-            "/api/user"
+            "/api/user",
+            "/api/product/user/active",
+            "/api/product/user/sold",
+            "/api/bid/user/all",
+            "/api/user/current"
     };
 
     private static final String[] PROTECTED_POST = new String[] {
-            "/api/product"
+            "/api/product",
     };
+
+    private static final String[] PROTECTED_PUT = new String[] {
+            "/api/user/current"
+    };
+
+
 
 
     public WebSecurityConfiguration(PersonDetailsService personDetailsService, JwtEntryPoint authEntryPointJwt) {
@@ -75,6 +85,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(GET, PROTECTED_GET).hasAuthority(ROLE_USER.name())
                 .requestMatchers(POST, PROTECTED_POST).hasAuthority(ROLE_USER.name())
+                .requestMatchers(PUT, PROTECTED_PUT).hasAuthority(ROLE_USER.name())
                 .requestMatchers("/**").permitAll()
                 .anyRequest().permitAll().and().authenticationManager(authenticationManager);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
