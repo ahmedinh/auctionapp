@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "../components/utilities/Common";
 const apiUrl = process.env.REACT_APP_API_URL
 
 export async function fetchHighlight() {
@@ -46,3 +47,23 @@ export async function searchSuggestion({ query }) {
         params: { query }
     }).then(res => res.data);
 };
+
+export async function getActiveUserProducts({ userId }) {
+    const userToken = getToken();
+    return axios.get(`${apiUrl}/api/product/user/active`, {
+        params: { userId },
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    }).then(res => res.data);
+}
+
+export async function getSoldUserProducts({ userId }) {
+    const userToken = getToken();
+    return axios.get(`${apiUrl}/api/product/user/sold`, {
+        params: { userId },
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    }).then(res => res.data);
+}
