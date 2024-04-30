@@ -119,4 +119,16 @@ public class ProductController {
     public void deleteProduct(@RequestParam("productName") String productName) {
         productService.deleteProduct(productName);
     }
+
+    @GetMapping(value = "/user/active")
+    @Operation(summary = "Products created by user currently active", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<List<ProductUserProjection>> activeUserProducts(@RequestParam("userId") Long userId) {
+        return productService.activeUserProducts(userId);
+    }
+
+    @GetMapping(value = "/user/sold")
+    @Operation(summary = "Products created by user sold on auctions", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<List<ProductUserProjection>> soldUserProducts(@RequestParam("userId") Long userId) {
+        return productService.soldUserProducts(userId);
+    }
 }
