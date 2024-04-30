@@ -31,11 +31,11 @@ public interface PersonRepository extends JpaRepository<Person, Long>, PagingAnd
             p.zipCode as shippingZipCode,
             p.state as shippingState,
             p.country as shippingCountry,
-            (SELECT cc.cardName FROM CreditCard cc WHERE cc.person.id = :userId) as cardName,
-            (SELECT cc.cardNumber FROM CreditCard cc WHERE cc.person.id = :userId) as cardNumber,
-            (SELECT cc.expirationMonth FROM CreditCard cc WHERE cc.person.id = :userId) as expirationMonth,
-            (SELECT cc.expirationYear FROM CreditCard cc WHERE cc.person.id = :userId) as expirationYear,
-            (SELECT cc.CVV FROM CreditCard cc WHERE cc.person.id = :userId) as CVC
+            p.cardName as cardName,
+            p.cardNumber as cardNumber,
+            p.expirationMonth as expirationMonth,
+            p.expirationYear as expirationYear,
+            p.CVV as CVC
             FROM Person p
             WHERE p.id = :userId
             """)

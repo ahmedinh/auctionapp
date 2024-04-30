@@ -1,6 +1,5 @@
 package ba.atlant.auctionapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -45,11 +44,11 @@ public class Bid {
         this.amount = amount;
     }
 
-    public Person getUser() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setUser(Person person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 
@@ -60,4 +59,6 @@ public class Bid {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+
 }

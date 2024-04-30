@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.repository;
 
 import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
+import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.BidProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,9 +10,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortingRepository<Bid, Long> {
     List<Bid> findAllByProductId(Long id);
+
+    Optional<Bid> findByPersonIdAndProductId(Long personId, Long productId);
 
     List<Bid> findAllByPerson(Person person);
 

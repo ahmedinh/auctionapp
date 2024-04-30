@@ -3,7 +3,6 @@ package ba.atlant.auctionapp.config;
 import ba.atlant.auctionapp.config.jwt.JwtEntryPoint;
 import ba.atlant.auctionapp.config.jwt.JwtTokenFilter;
 import ba.atlant.auctionapp.service.PersonDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +20,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.util.Arrays;
-
+import static ba.atlant.auctionapp.enumeration.Role.ROLE_USER;
 import static org.springframework.http.HttpMethod.*;
-import static ba.atlant.auctionapp.enumeration.Role.*;
 
 @Configuration
 @EnableWebSecurity
@@ -47,11 +44,9 @@ public class WebSecurityConfiguration {
     };
 
     private static final String[] PROTECTED_PUT = new String[] {
-            "/api/user/current"
+            "/api/user/current",
+            "/api/bid/user/place-bid"
     };
-
-
-
 
     public WebSecurityConfiguration(PersonDetailsService personDetailsService, JwtEntryPoint authEntryPointJwt) {
         this.personDetailsService = personDetailsService;

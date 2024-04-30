@@ -11,7 +11,6 @@ import ba.atlant.auctionapp.request.AuthRequest;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
