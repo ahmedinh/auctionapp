@@ -2,6 +2,7 @@ package ba.atlant.auctionapp.repository;
 
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.ProductProjection;
+import ba.atlant.auctionapp.projection.ProductUserProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
@@ -114,4 +117,31 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             AND LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
             """)
     Page<ProductProjection> searchProducts(@Param("query") String query, Pageable pageable);
+
+    @Query("""
+            SELECT p.id as id,
+            p.name as name,
+            p.auctionEnd as auctionEnd,
+            p.startPrice as startPrice,
+            (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
+            COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
+            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids
+            FROM Product p
+            WHERE p.person.id = :userId AND p.auctionEnd > CURRENT_TIMESTAMP
+            """)
+    List<ProductUserProjection> getActiveUserProducts(@Param("userId") Long userId);
+
+    @Query("""
+            SELECT p.id as id,
+            p.name as name,
+            p.auctionEnd as auctionEnd,
+            p.startPrice as startPrice,
+            (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
+            COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
+            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids
+            FROM Product p
+            WHERE p.person.id = :userId AND p.auctionEnd < CURRENT_TIMESTAMP 
+            AND COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) > 0
+            """)
+    List<ProductUserProjection> getSoldUserProducts(@Param("userId") Long userId);
 }
