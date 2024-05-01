@@ -43,10 +43,10 @@ const MyProfile = () => {
                             Settings
                         </NavLink>
                     </div>
-                    <button className="add-item-button">
+                    <NavLink to='/my-account/add-item/product-info' className="add-item-button">
                         <Icon icon="akar-icons:plus" height={height} width={height} />
                         ADD ITEM
-                    </button>
+                    </NavLink>
                 </div>
                 <main className="outlet-class"><Outlet /></main>
             </div>
