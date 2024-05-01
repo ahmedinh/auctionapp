@@ -30,6 +30,11 @@ export const getUserId = () => {
     return user ? user.id : null;
 };
 
+export const getUserId = () => {
+    const user = getUser();
+    return user ? user.id : null;
+}
+
 export const validToken = () => {
     const token = getToken();
     if (token === null) {
