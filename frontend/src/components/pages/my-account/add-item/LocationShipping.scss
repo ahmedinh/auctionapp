@@ -1,0 +1,127 @@
+@import '../../../utilities/Style.scss';
+
+.location-shipping-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    width: 545px;
+    height: auto;
+    border: 1px solid $color-white;
+    padding: 0px 95px 4rem 95px;
+
+    h5 {
+        margin-bottom: 23px;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        width: 100%;
+
+        .fields {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 2rem;
+
+            input[type="text"] {
+                height: 60px;
+                padding: 0px 0px 0px 24px;
+                border: 1px solid $color-white;
+            }
+
+            .address,
+            .email,
+            .country,
+            .phone-number {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .city-zip {
+                display: flex;
+                justify-content: space-between;
+                gap: 24px;
+
+                .city,
+                .zip-code {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    flex: 1;
+                }
+            }
+
+            .phone-number {
+                .input-number {
+                    display: flex;
+                    align-items: center;
+                    justify-content: right;
+
+                    input {
+                        flex: 1;
+                    }
+
+                    button {
+                        border: none;
+                        height: 4rem;
+                        width: 185px;
+                        color: red;
+                        font-weight: $font-weight-semibold;
+                        font-size: $font-size-normal;
+                    }
+                }
+            }
+        }
+
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            height: 51px;
+
+            .cancel-button {
+                width: 131px;
+                background-color: transparent;
+                border: 3px solid $color-white;
+                font-weight: $font-weight-bold;
+                font-size: $font-size-normal;
+            }
+
+            .back-next-right {
+                display: flex;
+
+                .back-button,
+                .next-button {
+                    height: 51px;
+                }
+
+                .back-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 107px;
+                    font-size: $font-size-normal;
+                    font-weight: $font-weight-bold;
+                    background-color: transparent;
+                    border: none;
+                }
+
+                .next-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 107px;
+                    background-color: $color-purple;
+                    border: none;
+                    color: #fff;
+                    font-size: $font-size-normal;
+                    font-weight: $font-weight-bold;
+                }
+            }
+        }
+    }
+}
