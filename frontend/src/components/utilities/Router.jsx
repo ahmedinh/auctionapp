@@ -19,6 +19,10 @@ import ProtectedRoute from './ProtectedRoute';
 import SellerActive from '../pages/my-account/seller/SellerActive';
 import SellerSold from '../pages/my-account/seller/SellerSold';
 import Bids from '../pages/my-account/bids/Bids';
+import AddItemLayout from '../pages/my-account/add-item/AddItemLayout';
+import ProductInfo from '../pages/my-account/add-item/ProductInfo';
+import ProductPrice from '../pages/my-account/add-item/ProductPrice';
+import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -43,14 +47,23 @@ const Router = createBrowserRouter(
 
             </Route>
             <Route element={<ProtectedRoute />}>
-                <Route path="my-account" element={<MyProfile />}>
-                    <Route path="profile" element={<AccordionExpandIcon />} />
-                    <Route path="seller" element={<Seller />}>
-                        <Route index element={<Navigate replace to="/my-account/seller/active" />} />
-                        <Route path="active" element={<SellerActive />} />
-                        <Route path="sold" element={<SellerSold />} />
+                <Route path="my-account">
+                    <Route index element={<Navigate replace to="/my-account/profile" />} />
+                    <Route element={<MyProfile />}>
+                        <Route path="profile" element={<AccordionExpandIcon />} />
+                        <Route path="seller" element={<Seller />}>
+                            <Route index element={<Navigate replace to="/my-account/seller/active" />} />
+                            <Route path="active" element={<SellerActive />} />
+                            <Route path="sold" element={<SellerSold />} />
+                        </Route>
+                        <Route path="bids" element={<Bids />} />
                     </Route>
-                    <Route path="bids" element={<Bids/>} />
+                    <Route path="add-item" element={<AddItemLayout />}>
+                        <Route index element={<Navigate replace to="/my-account/add-item/product-info" />} />
+                        <Route path="product-info" element={<ProductInfo />} />
+                        <Route path="product-price" element={<ProductPrice />} />
+                        <Route path="location-shipping" element={<LocationShipping />} />
+                    </Route>
                 </Route>
             </Route>
             <Route element={<AuthLayout />}>
