@@ -37,7 +37,6 @@ export default function Product() {
         client.connect({}, () => {
             client.subscribe('/topic/bids', (message) => {
                 const receivedMessage = JSON.parse(message.body);
-                console.log(receivedMessage);
                 if (receivedMessage.accepted === true) {
                     setNotification('Congrats! You are the highest bidder!');
                     setAcceptedBid(1);
