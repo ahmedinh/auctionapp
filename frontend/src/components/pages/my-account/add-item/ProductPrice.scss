@@ -1,0 +1,122 @@
+@import '../../../utilities/Style.scss';
+
+.product-price-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 545px;
+    height: auto;
+    border: 1px solid $color-white;
+    padding: 0px 95px 4rem 95px;
+    button {
+        cursor: pointer;
+    }
+    .content {
+        margin-top: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+
+        .fields {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            .start-price {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                .input {
+                    display: flex;
+                    .currency {
+                        width: 4rem;
+                        height: 4rem;
+                        border: 1px solid $color-white;
+                        background-color: transparent;
+                        font-weight: $font-weight-semibold;
+                        font-size: $font-size-normal;
+                        border-right: none;
+                    }
+                    input {
+                        height: 62px;
+                        padding: 0;
+                        border: 1px solid $color-white;
+                        width: calc(100% - 4rem);
+
+                    }
+                }
+            }
+            .dates-and-text {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+                .dates {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 1.5rem;
+                    .start-date, .end-date {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                        flex: 1;
+                        input[type="date"] {
+                            border: 1px solid $color-white;
+                            height: 4rem;
+                            padding: 0px 20px 0px 24px;
+                            font-size: $font-size-normal;
+                            &::placeholder {
+                                color: $color-white;
+                            }
+                        }
+                    }
+                }
+                .long-text {
+                    margin: 0;
+                    color: $color-grey;
+                }
+                
+
+            }
+        }
+
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            height: 51px;
+            .cancel-button {
+                width: 131px;
+                background-color: transparent;
+                border: 3px solid $color-white;
+                font-weight: $font-weight-bold;
+                font-size: $font-size-normal;
+            }
+            .back-next-right {
+                display: flex;
+                .back-button, .next-button {
+                    height: 51px;
+                }
+                .back-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 107px;
+                    font-size: $font-size-normal;
+                    font-weight: $font-weight-bold;
+                    background-color: transparent;
+                    border: none;
+                }
+                .next-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 107px;
+                    background-color: $color-purple;
+                    border: none;
+                    color: #fff;
+                    font-size: $font-size-normal;
+                    font-weight: $font-weight-bold;
+                }
+            }
+        }
+    }
+}
