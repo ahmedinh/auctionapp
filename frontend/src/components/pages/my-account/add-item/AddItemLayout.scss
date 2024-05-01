@@ -1,0 +1,76 @@
+@import '../../../utilities/Style.scss';
+
+.full-page {
+    min-height: 100vh;
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .upper-track {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-bottom: 2rem;
+            .dots {
+                display: flex;
+                gap: 64px;
+                position: relative;
+                .white-dots {
+                    display: flex;
+                    gap: 4rem;
+                    position: relative;
+                    z-index: 1;
+
+                    .white-dot {
+                        height: 32px;
+                        width: 32px;
+                        background-color: #fff;
+                        border-radius: 50%;
+                        display: inline-block;
+                        z-index: 1;
+                        position: relative;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    }
+                }
+
+                .purple-dots {
+                    margin: 0.5rem 0px 0px 0.5rem;
+                    display: flex;
+                    gap: calc(5rem - 1px);
+                    position: absolute;
+                    z-index: 2;
+                    .purple-dot {
+                        height: 15px;
+                        width: 15px;
+                        background-color: transparent;
+                        border-radius: 50%;
+                        display: inline-block;
+                        border: 1px solid $color-purple;
+                        z-index: 2;
+                        position: relative;
+                        &.filled {
+                            background-color: $color-purple;
+                        }
+                    }
+                }
+            }
+
+            .lines {
+                position: absolute;
+                display: flex;
+
+                hr {
+                    margin: 0;
+                    border: none;
+                    height: 1px;
+                    width: 95px;
+                    z-index: 0;
+                    background-color: $color-white;
+                    &.purple {
+                        background-color: $color-purple; // Color when purple class applied
+                    }
+                }
+            }
+        }
+    }
+}
