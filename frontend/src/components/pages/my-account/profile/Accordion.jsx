@@ -33,7 +33,7 @@ const AccordionExpandIcon = () => {
 
     
     const { status, error, data } = useQuery({ queryKey: ['get-user-info'], queryFn: () => getUserInfo() })
-    const { status: pictureStatus, error: pictreError, data: pictureData } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
+    const { status: pictureStatus, error: pictreError, data: pictureData, refetch } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
     
     const mutation = useMutation({ mutationKey: ['change-user-info'], mutationFn: (payload) => changeUserInfo({ payload: payload }) });
     const mutationPicture = useMutation({ mutationKey: ['change-user-picture'], mutationFn: (file) => changeUserPicture({ file: file }) });
@@ -46,6 +46,7 @@ const AccordionExpandIcon = () => {
             mutationPicture.mutate(file, {
                 onSuccess: (data) => {
                     alert('You successfuly changed picture!')
+                    refetch();
                     console.log('Mutation successful', data);
                 },
                 onError: (error) => {
