@@ -64,4 +64,28 @@ public class BidService {
         }
         return false;
     }
+
+    public boolean placeBid(Long userId, Long productId, BigDecimal amount) {
+        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+        if (optionalPerson.isEmpty())
+            throw new IllegalArgumentException("No user found with provided ID.");
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new IllegalArgumentException("No product found with provided ID.");
+        Product product = optionalProduct.get();
+        if (product.getAuctionEnd().isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Auction has ended for this product");
+
+        Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(userId,productId);
+        Bid bid = optionalBid.orElseGet(Bid::new);
+        if (bid.getAmount() != null && bid.getAmount().compareTo(amount) != -1) {
+            System.out.println("You tried to place a lower bid.");
+            return false;
+        }
+        bid.setAmount(amount);
+        bid.setProduct(product);
+        bid.setPerson(optionalPerson.get());
+        bidRepository.save(bid);
+        return true;
+    }
 }
