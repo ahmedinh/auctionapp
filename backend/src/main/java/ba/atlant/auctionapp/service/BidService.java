@@ -66,7 +66,7 @@ public class BidService {
     }
 
     public boolean placeBid(Long userId, Long productId, BigDecimal amount) {
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+        Optional<Person> optionalPerson = personRepository.findById(userId);
         if (optionalPerson.isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
         Optional<Product> optionalProduct = productRepository.findById(productId);
