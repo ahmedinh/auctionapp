@@ -78,7 +78,8 @@ public class BidService {
 
         Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(userId,productId);
         Bid bid = optionalBid.orElseGet(Bid::new);
-        if (bid.getAmount() != null && bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(amount) > 0) {
+        if (bid.getAmount() != null && (bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(amount) > 0 ||
+                amount.add(BigDecimal.valueOf(1)).compareTo(product.getStartPrice()) < 1)) {
             System.out.println("You tried to place a lower bid.");
             return false;
         }
