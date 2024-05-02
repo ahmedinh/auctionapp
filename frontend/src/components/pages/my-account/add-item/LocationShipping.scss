@@ -13,6 +13,9 @@
     h5 {
         margin-bottom: 23px;
     }
+    button {
+        cursor: pointer;
+    }
 
     .content {
         display: flex;
@@ -30,6 +33,7 @@
                 height: 60px;
                 padding: 0px 0px 0px 24px;
                 border: 1px solid $color-white;
+                font-size: $font-size-normal;
             }
 
             .address,

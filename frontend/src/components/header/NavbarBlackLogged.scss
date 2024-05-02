@@ -3,10 +3,10 @@
 .navbar-black-logged {
     height: 40px;
     background-color: $color-black;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     display: flex;
-    gap: 820px;
+    padding: 0 22.5rem 0 22.5rem;
     .welcome-part {
         display: flex;
         gap: 50px;
