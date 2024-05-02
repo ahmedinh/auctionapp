@@ -9,6 +9,7 @@ const NavbarBlack = () => {
     useEffect(() => {
         if (getToken() && !validToken()) {
             removeSession();
+            sessionStorage.clear();
             alert('Your session has expired! Please login again.')
             navigate('/home/new-arrivals')
         }

@@ -4,7 +4,7 @@ import Router from './components/utilities/Router';
 import { useEffect } from 'react';
 
 function App() {
-    useEffect(() => {
+    /* useEffect(() => {
         const handleUnload = () => {
             localStorage.clear();
         };
@@ -14,7 +14,7 @@ function App() {
         return () => {
             window.removeEventListener('unload', handleUnload);
         };
-    }, []);
+    }, []); */
     return <RouterProvider router={Router} />;
 };
 export default App;
