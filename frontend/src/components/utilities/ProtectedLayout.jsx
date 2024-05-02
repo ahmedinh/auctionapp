@@ -11,8 +11,8 @@ const ProtectedLayout = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
+        const user = sessionStorage.getItem('user');
+        const token = sessionStorage.getItem('token');
         setIsLoggedIn(!!user && !!token);
     }, []);
     return (
