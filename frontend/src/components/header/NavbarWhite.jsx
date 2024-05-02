@@ -35,7 +35,7 @@ const NavbarWhite = () => {
     return (
         <div className="navbar-white">
             <div className="left-container">
-                <img src={Logo} alt="Logo" className="logo" />
+                <img src={Logo} alt="Logo" className="logo" onClick={() => navigate('/home/new-arrivals')}/>
             </div>
             <div className="search">
                 <form onSubmit={handleSearch} className="search-container">

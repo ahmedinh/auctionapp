@@ -2,19 +2,24 @@ import React from "react";
 import './LocationShipping.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
+import { clearSessionStorageProduct } from "../../../utilities/Common";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
+
     const handleCancel = () => {
-        sessionStorage.clear();
+        clearSessionStorageProduct();
         navigate('/my-account/profile');
     }
+
     const handleBack = () => {
         navigate('/my-account/add-item/product-price');
     }
+
     const handleNext = () => {
         navigate('/my-account/add-item/location-shipping');
     }
+    
     return (
         <div className="location-shipping-form">
             <h5 className="product-add-h5">

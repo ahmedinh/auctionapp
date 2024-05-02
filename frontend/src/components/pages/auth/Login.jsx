@@ -19,7 +19,6 @@ export default function Login() {
             setSession(data.person, data.token);
             navigate(`/home/new-arrivals`)
         }
-
     });
 
     const handleSubmit = (event) => {

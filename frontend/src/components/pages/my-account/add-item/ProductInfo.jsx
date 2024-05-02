@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../../../utilities/Style.scss';
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategoriesWithSubCategories } from "../../../../api/categoriesApi";
+import { clearSessionStorageProduct } from "../../../utilities/Common";
 
 export default function ProductInfo() {
     const navigate = useNavigate();
@@ -35,9 +36,9 @@ export default function ProductInfo() {
     })
 
     const handleCancelClick = () => {
-        sessionStorage.clear();
+        clearSessionStorageProduct();
         navigate('/my-account/profile');
-    };
+    }
 
     const handleNextClick = () => {
         const productData = {
@@ -72,7 +73,7 @@ export default function ProductInfo() {
     };
 
     const handleFilesUpload = (files) => {
-        const newFiles = Array.from(files).slice(0, minImages - uploadedImages.length);
+        const newFiles = Array.from(files);
         setUploadedImages([...uploadedImages, ...newFiles]);
     };
 

@@ -11,6 +11,9 @@
     padding: 0px 95px 4rem 95px;
     margin-bottom: 5rem;
     gap: 71px;
+    button {
+        cursor: pointer;
+    }
 
     .upper-part {
         display: flex;
@@ -75,7 +78,9 @@
 
                 textarea {
                     height: 160px;
+                    font-family: 'Lato', 'sans-serif';
                     resize: none;
+                    font-size: $font-size-normal;
                     border: 1px solid $color-white;
                 }
 
