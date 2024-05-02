@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './ProductPrice.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
+import { clearSessionStorageProduct } from "../../../utilities/Common";
 
 export default function ProductPrice() {
     const navigate = useNavigate();
@@ -21,9 +22,9 @@ export default function ProductPrice() {
     }, []);
 
     const handleCancel = () => {
-        sessionStorage.clear();
+        clearSessionStorageProduct();
         navigate('/my-account/profile');
-    };
+    }
 
     const handleBack = () => {
         navigate('/my-account/add-item/product-info');

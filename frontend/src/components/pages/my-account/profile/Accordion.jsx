@@ -114,7 +114,7 @@ const AccordionExpandIcon = () => {
 
     return (
         <div className='accordion-section'>
-            <Accordion className='user-accordion'>
+            <Accordion className='user-accordion' defaultExpanded>
                 <AccordionSummary
                     expandIcon={<ArrowDownwardIcon />}
                     aria-controls="panel1-content"
@@ -183,7 +183,7 @@ const AccordionExpandIcon = () => {
                     <Typography className='headline-text'>Card information (Optional)</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div className="full-page">
+                    <div className="full-content">
                         <div className="all-fields">
                             <div className="name-on-card">
                                 <p>
