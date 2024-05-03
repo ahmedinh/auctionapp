@@ -2,6 +2,15 @@
 
 .search-page-full {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .menu-a {
+        display: flex;
+        margin-left: 23rem;
+        margin-top: 1rem;
+        align-items: center;
+    }
 
     .did-you-mean {
         margin-left: 45rem;
