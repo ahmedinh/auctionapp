@@ -28,7 +28,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
                         <img src={CartPicture} alt="" />
                         <p className="message">You do not have any scheduled items for sale.</p>
                     </div>
-                    <button>
+                    <button onClick={() => navigate('/my-account/add-item/product-info')}>
                         START SELLING
                     </button>
                 </div>
