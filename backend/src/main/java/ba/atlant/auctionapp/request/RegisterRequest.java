@@ -1,9 +1,12 @@
 package ba.atlant.auctionapp.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 public class RegisterRequest extends AuthRequest {
 
     @NotBlank(message = "First name can't be empty")

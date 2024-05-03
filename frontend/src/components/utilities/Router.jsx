@@ -23,6 +23,7 @@ import AddItemLayout from '../pages/my-account/add-item/AddItemLayout';
 import ProductInfo from '../pages/my-account/add-item/ProductInfo';
 import ProductPrice from '../pages/my-account/add-item/ProductPrice';
 import LocationShipping from '../pages/my-account/add-item/LocationShipping';
+import Settings from '../pages/my-account/settings/Settings';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -57,6 +58,7 @@ const Router = createBrowserRouter(
                             <Route path="sold" element={<SellerSold />} />
                         </Route>
                         <Route path="bids" element={<Bids />} />
+                        <Route path="settings" element={<Settings />} />
                     </Route>
                     <Route path="add-item" element={<AddItemLayout />}>
                         <Route index element={<Navigate replace to="/my-account/add-item/product-info" />} />
@@ -64,7 +66,6 @@ const Router = createBrowserRouter(
                         <Route path="product-price" element={<ProductPrice />} />
                         <Route path="location-shipping" element={<LocationShipping />} />
                     </Route>
-                </Route>
             </Route>
             <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />
