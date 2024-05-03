@@ -43,7 +43,6 @@ export default function LocationShipping() {
         navigate('/my-account/add-item/product-price');
     }
 
-
     const handleDone = () => {
         const savedData = sessionStorage.getItem('productInfo');
         const savedPriceData = sessionStorage.getItem('productPriceData');
