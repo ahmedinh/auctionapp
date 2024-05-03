@@ -45,7 +45,6 @@ const Router = createBrowserRouter(
                 <Route path="shop">
                     <Route path="product/:productId" element={<Product />} />
                 </Route>
-
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account">
@@ -66,6 +65,7 @@ const Router = createBrowserRouter(
                         <Route path="product-price" element={<ProductPrice />} />
                         <Route path="location-shipping" element={<LocationShipping />} />
                     </Route>
+                </Route>
             </Route>
             <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />
