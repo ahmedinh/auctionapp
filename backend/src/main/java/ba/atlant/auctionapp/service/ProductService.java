@@ -6,7 +6,7 @@ import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
 import ba.atlant.auctionapp.repository.*;
-import ba.atlant.auctionapp.service.exception.ServiceException;
+import ba.atlant.auctionapp.exception.ServiceException;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
