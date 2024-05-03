@@ -67,3 +67,12 @@ export async function getSoldUserProducts({ userId }) {
         }
     }).then(res => res.data);
 }
+
+export async function createProduct({ productData }) {
+    const userToken = getToken();
+    return axios.post(`${apiUrl}/api/product`, productData, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    });
+}
