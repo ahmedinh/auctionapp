@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useBasicSearch } from "../../../hooks/useBasicSearch";
 import MainSearchPage from "./MainSearchPage";
@@ -10,7 +10,7 @@ import "./BasicSearch.scss";
 export default function BasicSearch() {
     let [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query");
-    const [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
+    const currentPageTitle = `/home/search-results-for-${query}`;
 
     const {
         data: basicSearchResults,
