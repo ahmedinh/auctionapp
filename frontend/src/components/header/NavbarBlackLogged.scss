@@ -6,16 +6,23 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    gap: 820px;
-    .welcome-part {
+
+    .nav-logged-content {
         display: flex;
-        gap: 50px;
-        p {
-            color: #fff;
-            margin: 0;
-        }
-        .logout-button {
-            cursor: pointer;
+        justify-content: space-between;
+        width: 1100px;
+        .welcome-part {
+            display: flex;
+            gap: 50px;
+
+            p {
+                color: #fff;
+                margin: 0;
+            }
+
+            .logout-button {
+                cursor: pointer;
+            }
         }
     }
 }
