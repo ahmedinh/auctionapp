@@ -9,6 +9,7 @@ import jakarta.persistence.*;
  */
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class ProductPicture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

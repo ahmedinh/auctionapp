@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 /**
  * Represents a wish list entry in the auction system, linking users to products they are interested in.
- * This entity facilitates tracking of products that a user wishes to monitor or purchase later.
+ * This entity facilitates tracking of products that a person wishes to monitor or purchase later.
  */
 
 @Entity
@@ -15,7 +15,7 @@ public class WishList {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -24,8 +24,8 @@ public class WishList {
     public WishList() {
     }
 
-    public WishList(User user, Product product) {
-        this.user = user;
+    public WishList(Person person, Product product) {
+        this.person = person;
         this.product = product;
     }
 
@@ -33,12 +33,12 @@ public class WishList {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public Person getUser() {
+        return person;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Person person) {
+        this.person = person;
     }
 
     public Product getProduct() {

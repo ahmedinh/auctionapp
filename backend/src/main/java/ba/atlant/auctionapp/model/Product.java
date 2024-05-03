@@ -60,7 +60,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Person person;
 
     public Product() {
     }
@@ -74,7 +74,7 @@ public class Product {
                    Size size,
                    Color color,
                    SubCategory subCategory,
-                   User user) {
+                   Person person) {
         this.name = name;
         this.description = description;
         this.startPrice = startPrice;
@@ -84,7 +84,7 @@ public class Product {
         this.size = size;
         this.color = color;
         this.subCategory = subCategory;
-        this.user = user;
+        this.person = person;
     }
 
     public Long getId() {
@@ -163,11 +163,11 @@ public class Product {
         this.subCategory = subCategory;
     }
 
-    public User getUser() {
-        return user;
+    public Person getUser() {
+        return person;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Person person) {
+        this.person = person;
     }
 }

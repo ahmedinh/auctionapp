@@ -1,17 +1,20 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.dto.ProductDTO;
+import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.repository.*;
-import ba.atlant.auctionapp.service.exception.ServiceException;
-import org.apache.tomcat.util.json.JSONParser;
+import com.amazonaws.HttpMethod;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -21,15 +24,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final ProductPictureRepository productPictureRepository;
-    private final UserRepository userRepository;
+    private final PersonRepository personRepository;
     private final BidRepository bidRepository;
+    private final S3Service s3Service;
 
-    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, UserRepository userRepository, BidRepository bidRepository) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, BidRepository bidRepository, S3Service s3Service) {
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
-        this.userRepository = userRepository;
+        this.personRepository = personRepository;
         this.bidRepository = bidRepository;
+        this.s3Service = s3Service;
     }
 
     @Transactional
@@ -37,11 +42,11 @@ public class ProductService {
         try {
             Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
             if (optionalSubCategory.isEmpty())
-                throw new IllegalArgumentException("SubCategory not found for given ID.");
+                throw new Exception("SubCategory not found for given ID.");
 
-            Optional<User> optionalUser = userRepository.findById(product.getUser().getId());
+            Optional<Person> optionalUser = personRepository.findById(product.getUser().getId());
             if (optionalUser.isEmpty())
-                throw new IllegalArgumentException("SubCategory not found for given ID.");
+                throw new Exception("SubCategory not found for given ID.");
 
             productRepository.save(product);
             return ResponseEntity.ok(product.getId());
@@ -100,5 +105,24 @@ public class ProductService {
 
     public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
         return ResponseEntity.ok(productRepository.searchProducts(query, PageRequest.of(page,size)));
+    }
+
+    @Transactional
+    public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, Long productId) throws IOException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new IllegalArgumentException("No product found with required ID.");
+        Product product = optionalProduct.get();
+        List<ProductPicture> productPictureList = new ArrayList<>();
+        for (MultipartFile file : files) {
+            s3Service.uploadFile(file.getOriginalFilename(), file);
+            productPictureList.add(new ProductPicture(
+                    file.getOriginalFilename(),
+                    String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename()),
+                    product
+            ));
+        }
+        productPictureRepository.saveAll(productPictureList);
+        return ResponseEntity.ok(productPictureList);
     }
 }

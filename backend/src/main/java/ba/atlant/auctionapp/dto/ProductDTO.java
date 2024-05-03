@@ -22,7 +22,7 @@ public class ProductDTO {
     private String color;
     private List<ProductPicture> productPictureList;
     private SubCategory subCategory;
-    private User user;
+    private Person person;
     private BigDecimal largestBid;
     private Integer numberOfBids;
 
@@ -43,7 +43,7 @@ public class ProductDTO {
         this.size = product.getSize().toString();
         this.color = product.getColor().toString();
         this.subCategory = product.getSubCategory();
-        this.user = product.getUser();
+        this.person = product.getUser();
         this.productPictureList = productPictureList;
     }
 }

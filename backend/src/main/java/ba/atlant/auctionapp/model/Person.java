@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.model;
 
+import ba.atlant.auctionapp.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,8 +14,7 @@ import java.time.LocalDate;
  */
 
 @Entity
-@Table(name = "Profile")
-public class User {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,9 +31,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @NotBlank(message = "Email cannot be blank.")
+    @NotBlank(message = "Email cannot be empty.")
     @NotNull(message = "Email cannot be null.")
-    @Email
+    @Email(message = "Email format is not valid.")
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -47,7 +47,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @NotBlank(message = "Birth date cannot be blank.")
     @NotNull(message = "Birth date cannot be null.")
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -64,25 +63,27 @@ public class User {
 
     private String country;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    public Person() {
     }
 
-    public User(String firstName,
-                String lastName,
-                String email,
-                String username,
-                LocalDate birthDate,
-                String phoneNumber,
-                String shippingAddress,
-                String shippingCity,
-                String zipCode,
-                String state,
-                String country,
-                Role role) {
+    public Person(String firstName,
+                  String lastName,
+                  String email,
+                  String username,
+                  LocalDate birthDate,
+                  String phoneNumber,
+                  String shippingAddress,
+                  String shippingCity,
+                  String zipCode,
+                  String state,
+                  String country,
+                  Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -94,6 +95,16 @@ public class User {
         this.zipCode = zipCode;
         this.state = state;
         this.country = country;
+        this.role = role;
+    }
+
+    public Person(String firstName, String lastName, String email, String password, String username, LocalDate birthDate, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.birthDate = birthDate;
         this.role = role;
     }
 
@@ -203,5 +214,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
