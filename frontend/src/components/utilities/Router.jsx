@@ -19,6 +19,7 @@ import ProtectedRoute from './ProtectedRoute';
 import SellerActive from '../pages/my-account/seller/SellerActive';
 import SellerSold from '../pages/my-account/seller/SellerSold';
 import Bids from '../pages/my-account/bids/Bids';
+import Settings from '../pages/my-account/settings/Settings';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -44,13 +45,15 @@ const Router = createBrowserRouter(
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account" element={<MyProfile />}>
+                    <Route index element={<Navigate replace to="/my-account/profile" />} />
                     <Route path="profile" element={<AccordionExpandIcon />} />
                     <Route path="seller" element={<Seller />}>
                         <Route index element={<Navigate replace to="/my-account/seller/active" />} />
                         <Route path="active" element={<SellerActive />} />
                         <Route path="sold" element={<SellerSold />} />
                     </Route>
-                    <Route path="bids" element={<Bids/>} />
+                    <Route path="bids" element={<Bids />} />
+                    <Route path="settings" element={<Settings />} />
                 </Route>
             </Route>
             <Route element={<AuthLayout />}>

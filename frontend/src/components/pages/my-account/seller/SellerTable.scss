@@ -121,8 +121,10 @@
                         align-items: center;
                         border: none;
                         background-color: #fff;
+                        font-size: $font-size-normal;
                         padding: 16px 32px 16px 32px;
                         font-weight: $font-weight-bold;
+                        cursor: pointer;
                     }
                 }
             }

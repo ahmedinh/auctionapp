@@ -101,6 +101,7 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.username = username;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.shippingAddress = shippingAddress;
@@ -153,6 +154,14 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public LocalDate getBirthDate() {

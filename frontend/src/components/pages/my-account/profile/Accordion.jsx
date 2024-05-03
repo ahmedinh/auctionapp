@@ -113,7 +113,7 @@ const AccordionExpandIcon = () => {
 
     return (
         <div className='accordion-section'>
-            <Accordion className='user-accordion'>
+            <Accordion className='user-accordion' defaultExpanded>
                 <AccordionSummary
                     expandIcon={<ArrowDownwardIcon />}
                     aria-controls="panel1-content"
