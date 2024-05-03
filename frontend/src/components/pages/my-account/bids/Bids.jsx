@@ -28,7 +28,7 @@ export default function Bids() {
                         <img src={HammerPicture} alt="" />
                         <p className="message">You don't have any bids and there are so many cool products available for sale.</p>
                     </div>
-                    <button>
+                    <button onClick={() => navigate('/home/new-arrivals')}>
                         START BIDDING
                     </button>
                 </div>
