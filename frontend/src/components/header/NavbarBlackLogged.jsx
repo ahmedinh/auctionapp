@@ -20,7 +20,7 @@ export default function NavbarBlackLogged() {
     const handleLogout = (event) => {
         event.preventDefault();
         removeSession();
-        sessionStorage.clear();
+        localStorage.clear();
         navigate(`/home/new-arrivals`);
         window.location.reload();
     }
