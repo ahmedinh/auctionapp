@@ -1,0 +1,127 @@
+@import '../../../utilities/Style.scss';
+
+.full-settings-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .upper {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+
+        .policy-community {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid $color-white;
+            width: 548px;
+            padding-bottom: 2rem;
+            padding-left: 2rem;
+
+            p {
+                margin: 16px 107px 16px 0px;
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-normal;
+            }
+
+            .checkbox-list {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+
+                p {
+                    margin: 0;
+                }
+
+                .one-checkbox {
+                    display: flex;
+                    gap: 1.5rem;
+                    align-items: center;
+
+                    .custom-checkbox {
+                        width: 15px;
+                        height: 15px;
+                        border: 1px solid $color-purple;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                        border-radius: 3px;
+                    }
+
+                }
+            }
+        }
+
+        .contact-information {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid $color-white;
+            width: 548px;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+
+            p {
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-normal;
+            }
+
+            .email-phone {
+                display: flex;
+                flex-direction: column;
+                padding-top: 1rem;
+                gap: 1rem;
+                p {
+                    margin: 0;
+                }
+
+                .email {
+                    display: flex;
+                    gap: 2rem;
+                    .user-email {
+                        color: $color-purple;
+                    }
+                }
+
+                .phone {
+                    display: flex;
+                    gap: 1.5rem;
+                    .user-number {
+                        color: $color-purple;
+                    }
+                }
+            }
+        }
+    }
+
+    .bottom {
+        margin-bottom: 95px;
+        .account-settings {
+            display: flex;
+            flex-direction: column;
+            width: 548px;
+            border: 1px solid $color-white;
+            padding-left: 2rem;
+            padding-bottom: 42px;
+            p {
+                font-weight: $font-weight-semibold;
+
+            }
+            .deactivation {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                button {
+                    width: 157px;
+                    height: 51px;
+                    border: 3px solid $color-white;
+                    background-color: transparent;
+                    font-size: $font-size-normal;
+                    font-weight: $font-weight-semibold;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

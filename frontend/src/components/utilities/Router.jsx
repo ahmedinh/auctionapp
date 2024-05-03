@@ -19,6 +19,7 @@ import ProtectedRoute from './ProtectedRoute';
 import SellerActive from '../pages/my-account/seller/SellerActive';
 import SellerSold from '../pages/my-account/seller/SellerSold';
 import Bids from '../pages/my-account/bids/Bids';
+import Settings from '../pages/my-account/settings/Settings';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -51,6 +52,7 @@ const Router = createBrowserRouter(
                         <Route path="sold" element={<SellerSold />} />
                     </Route>
                     <Route path="bids" element={<Bids/>} />
+                    <Route path="settings" element={<Settings/>} />
                 </Route>
             </Route>
             <Route element={<AuthLayout />}>
