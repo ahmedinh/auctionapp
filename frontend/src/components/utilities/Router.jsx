@@ -45,14 +45,15 @@ const Router = createBrowserRouter(
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account" element={<MyProfile />}>
+                    <Route index element={<Navigate replace to="/my-account/profile" />} />
                     <Route path="profile" element={<AccordionExpandIcon />} />
                     <Route path="seller" element={<Seller />}>
                         <Route index element={<Navigate replace to="/my-account/seller/active" />} />
                         <Route path="active" element={<SellerActive />} />
                         <Route path="sold" element={<SellerSold />} />
                     </Route>
-                    <Route path="bids" element={<Bids/>} />
-                    <Route path="settings" element={<Settings/>} />
+                    <Route path="bids" element={<Bids />} />
+                    <Route path="settings" element={<Settings />} />
                 </Route>
             </Route>
             <Route element={<AuthLayout />}>
