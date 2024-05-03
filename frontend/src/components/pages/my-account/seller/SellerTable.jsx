@@ -11,7 +11,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
     const user = getUser();
     const userId = user.id;
 
-    const { data, error, isError, isLoading, status } = useQuery({
+    const { data, error, status } = useQuery({
         queryKey: [queryString],
         queryFn: () => fetchProducts({ userId })
     })
@@ -19,6 +19,9 @@ export default function SellerTable({ fetchProducts, queryString }) {
     const handleProductRedirect = (productId) => {
         navigate(`/shop/product/${productId}`);
     }
+
+    if (status === 'loading') return <h1>Loading...</h1>;
+    if (status === 'error') return <h1>Error: {error.message}</h1>;
 
     const renderNoProducts = () => {
         return (
