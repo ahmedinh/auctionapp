@@ -10,6 +10,7 @@ import { clearSessionStorageProduct } from "../../../utilities/Common";
 export default function ProductInfo() {
     const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [productName, setProductName] = useState('');
     const [selectedSubcategory, setSelectedSubcategory] = useState('');
     const [description, setDescription] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -21,10 +22,22 @@ export default function ProductInfo() {
     useEffect(() => {
         const savedData = sessionStorage.getItem('productInfo');
         if (savedData) {
-            const { selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
+            const { productName, selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
+            setProductName(productName || "");
             setSelectedCategory(selectedCategory || "");
             setSelectedSubcategory(selectedSubcategory || "");
             setDescription(description || "");
+            if (uploadedImages) {
+                setUploadedImages(uploadedImages.map(dataURL => {
+                    const arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1];
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length, u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    return new File([u8arr], 'uploadedImage', { type: mime });
+                }));
+            }
         }
     }, []);
 
@@ -40,11 +53,23 @@ export default function ProductInfo() {
         navigate('/my-account/profile');
     }
 
-    const handleNextClick = () => {
+    const fileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    const handleNextClick = async () => {
+        const base64Images = await Promise.all(uploadedImages.map(file => fileToBase64(file)));
         const productData = {
+            productName,
             selectedCategory,
             selectedSubcategory,
-            description
+            description,
+            uploadedImages: base64Images
         };
         sessionStorage.setItem('productInfo', JSON.stringify(productData));
         navigate('/my-account/add-item/product-price');
@@ -56,6 +81,10 @@ export default function ProductInfo() {
 
     const handleSubcategoryChange = (event) => {
         setSelectedSubcategory(event.target.value);
+    };
+    
+    const handleProductNameChange = (event) => {
+        setProductName(event.target.value);
     };
 
     const handleDescriptionChange = (event) => {
@@ -114,10 +143,10 @@ export default function ProductInfo() {
                 <div className="form-fields">
                     <div className="product-name">
                         <p>What do you sell?</p>
-                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" />
+                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productName} onChange={handleProductNameChange}/>
                     </div>
                     <div className="categories">
-                        <Form.Select className="dropdown-select" onChange={handleCategoryChange}>
+                        <Form.Select className="dropdown-select" onChange={handleCategoryChange} value={selectedCategory}>
                             <option value="" disabled selected hidden>Select Category</option>
                             {data?.map((category, index) => (
                                 <option>{category.name}</option>
