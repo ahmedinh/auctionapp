@@ -50,6 +50,12 @@ public class BidService {
 
         Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(userId,productId);
         Bid bid = optionalBid.orElseGet(Bid::new);
+
+        Optional<Bid> optionalMaxBid = bidRepository.findTopByProductIdOrderByAmountDesc(productId);
+        if (optionalMaxBid.isPresent() && amount.compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1) {
+            System.out.println("You tried to place a lower bid.");
+            return false;
+        }
         if (bid.getAmount() != null && bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(amount) > 0 ||
             amount.add(BigDecimal.valueOf(1)).compareTo(product.getStartPrice()) < 1) {
             System.out.println("You tried to place a lower bid.");

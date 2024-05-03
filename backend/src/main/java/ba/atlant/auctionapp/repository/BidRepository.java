@@ -31,4 +31,6 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
             WHERE b.person.id = :userId
             """)
     List<BidProjection> getUserBids(@Param("userId") Long userId);
+
+    Optional<Bid> findTopByProductIdOrderByAmountDesc(Long productId);
 }
