@@ -45,7 +45,6 @@ const Router = createBrowserRouter(
                 <Route path="shop">
                     <Route path="product/:productId" element={<Product />} />
                 </Route>
-
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account" element={<MyProfile />}>
