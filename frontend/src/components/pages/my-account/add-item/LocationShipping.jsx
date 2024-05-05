@@ -43,11 +43,26 @@ export default function LocationShipping() {
         navigate('/my-account/add-item/product-price');
     }
 
+    const deleteProductMutation = useMutation({
+        mutationKey: ['delete-product-error'],
+        mutationFn: ({ productName }) => deleteProduct({ productName: productName }),
+        onSuccess: () => {
+            alert('Product deleted successfully')
+        },
+        onError: (error) => {
+            console.error('Error deleting product:', error);
+        }
+    })
+
     const addPicturesMutation = useMutation({
         mutationKey: ['adding-product-pictures'],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Pictures added successfully')
+        },
+        onError: (error) => {
+            console.error('Error creating product:', error);
+            deleteProductMutation.mutate({ productName: productName });
         }
     })
 
