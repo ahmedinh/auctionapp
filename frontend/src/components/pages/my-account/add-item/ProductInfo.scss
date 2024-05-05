@@ -11,6 +11,7 @@
     padding: 0px 95px 4rem 95px;
     margin-bottom: 5rem;
     gap: 71px;
+
     button {
         cursor: pointer;
     }
@@ -42,6 +43,7 @@
                     height: 59px;
                     padding: 0px 0px 0px 24px;
                     border: 1px solid $color-white;
+                    font-size: $font-size-normal;
                 }
 
                 ::placeholder {
@@ -144,6 +146,19 @@
                     }
                 }
             }
+        }
+    }
+
+    .error-messages {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+
+        p {
+            margin: 0;
+            font-weight: $font-weight-bold;
+            color: red;
         }
     }
 

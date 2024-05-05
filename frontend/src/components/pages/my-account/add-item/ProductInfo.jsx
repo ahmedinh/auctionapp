@@ -18,6 +18,7 @@ export default function ProductInfo() {
     const maxWords = 100;
     const maxCharacters = 700;
     const minImages = 3;
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const savedData = sessionStorage.getItem('productInfo');
@@ -27,19 +28,21 @@ export default function ProductInfo() {
             setSelectedCategory(selectedCategory || "");
             setSelectedSubcategory(selectedSubcategory || "");
             setDescription(description || "");
+
             if (uploadedImages) {
-                setUploadedImages(uploadedImages.map(dataURL => {
-                    const arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1];
+                setUploadedImages(uploadedImages.map(({ name, base64 }) => {
+                    const arr = base64.split(','), mime = arr[0].match(/:(.*?);/)[1];
                     const bstr = atob(arr[1]);
                     let n = bstr.length, u8arr = new Uint8Array(n);
                     while (n--) {
                         u8arr[n] = bstr.charCodeAt(n);
                     }
-                    return new File([u8arr], 'uploadedImage', { type: mime });
+                    return new File([u8arr], name, { type: mime });
                 }));
             }
         }
     }, []);
+
 
     const {
         data, status, error
@@ -62,18 +65,53 @@ export default function ProductInfo() {
         });
     };
 
+    const validateInputs = () => {
+        let errors = {};
+
+        if (!productName.trim()) {
+            errors.name = 'Product name cannot be empty';
+        }
+
+        if (!selectedCategory.trim()) {
+            errors.selectedCategory = 'Category must be chosen';
+        }
+
+        if (!selectedSubcategory.trim()) {
+            errors.selectedSubcategory = 'Subcategory must be chosen';
+        }
+
+        if (!description.trim()) {
+            errors.description = 'Description cannot be empty';
+        }
+
+        if (uploadedImages.length < 3) {
+            errors.images = 'You must place 3 images of product';
+        }
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    }
+
     const handleNextClick = async () => {
-        const base64Images = await Promise.all(uploadedImages.map(file => fileToBase64(file)));
-        const productData = {
-            productName,
-            selectedCategory,
-            selectedSubcategory,
-            description,
-            uploadedImages: base64Images
-        };
-        sessionStorage.setItem('productInfo', JSON.stringify(productData));
-        navigate('/my-account/add-item/product-price');
+        if (validateInputs()) {
+            const base64ImagesWithNames = await Promise.all(uploadedImages.map(async (file) => {
+                const base64 = await fileToBase64(file);
+                return { name: file.name, base64 };
+            }));
+
+            const productData = {
+                productName,
+                selectedCategory,
+                selectedSubcategory,
+                description,
+                uploadedImages: base64ImagesWithNames
+            };
+
+            sessionStorage.setItem('productInfo', JSON.stringify(productData));
+            navigate('/my-account/add-item/product-price');
+        }
     };
+
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
@@ -82,7 +120,7 @@ export default function ProductInfo() {
     const handleSubcategoryChange = (event) => {
         setSelectedSubcategory(event.target.value);
     };
-    
+
     const handleProductNameChange = (event) => {
         setProductName(event.target.value);
     };
@@ -143,7 +181,7 @@ export default function ProductInfo() {
                 <div className="form-fields">
                     <div className="product-name">
                         <p>What do you sell?</p>
-                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productName} onChange={handleProductNameChange}/>
+                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productName} onChange={handleProductNameChange} />
                     </div>
                     <div className="categories">
                         <Form.Select className="dropdown-select" onChange={handleCategoryChange} value={selectedCategory}>
@@ -204,6 +242,14 @@ export default function ProductInfo() {
                     </div>
                 </div>
             </div>
+            {Object.keys(errors) !== 0 ? (
+                <div className="error-messages">
+                    {errors.name && <p className="error-message">{errors.name}</p>}
+                    {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
+                    {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}
+                    {errors.description && <p className="error-message">{errors.description}</p>}
+                </div>
+            ) : null}
             <div className="buttons">
                 <button onClick={handleCancelClick} className="cancel">CANCEL</button>
                 <button onClick={handleNextClick} className="next">NEXT</button>
