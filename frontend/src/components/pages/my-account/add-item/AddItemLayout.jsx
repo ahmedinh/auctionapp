@@ -38,9 +38,9 @@ export default function AddItemLayout() {
                 <div className="upper-track">
                     <div className="dots">
                         <div className="white-dots">
-                            <span class="white-dot"></span>
-                            <span class="white-dot"></span>
-                            <span class="white-dot"></span>
+                            <span className="white-dot"></span>
+                            <span className="white-dot"></span>
+                            <span className="white-dot"></span>
                         </div>
                         <div className="purple-dots">
                             {[0, 1, 2].map((index) => (

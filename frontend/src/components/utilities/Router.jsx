@@ -5,7 +5,7 @@ import Home from '../pages/HomePage/Home';
 import Layout from './Layout';
 import NewArrivals from '../pages/HomePage/Products/NewArrivals';
 import LastChance from '../pages/HomePage/Products/LastChance';
-import { createBrowserRouter, createRoutesFromElements, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
 import Product from '../pages/ProductOverview/Product';
 import CategoryProducts from '../pages/BasicSearch/CategoryProducts';
 import BasicSearch from '../pages/BasicSearch/BasicSearch';

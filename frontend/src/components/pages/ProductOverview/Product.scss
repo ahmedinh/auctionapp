@@ -33,8 +33,9 @@
                 display: flex;
                 padding: 0;
                 margin: 0;
+                margin-left: 1.5rem;
                 overflow: auto;
-                justify-content: space-around;
+                justify-content: flex-start;
                 gap: 8px;
 
                 img {
