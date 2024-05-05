@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import './LocationShipping.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
-import { clearSessionStorageProduct, getUser } from "../../../utilities/Common";
+import { clearSessionStorageProduct, getToken, getUser } from "../../../utilities/Common";
+import { useMutation } from "@tanstack/react-query";
+import { addPicturesToProduct, createProduct } from "../../../../api/productsApi";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
+    const [productName, setProductName] = useState('');
     const [address, setAddress] = useState('');
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [zipcode, setZipcode] = useState('');
     const [country, setCountry] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [uploadedImages, setUploadedImages] = useState([]);
+    let [sendingData, setSendingData] = useState({});
 
     useEffect(() => {
         const user = getUser();
@@ -34,9 +39,62 @@ export default function LocationShipping() {
         navigate('/my-account/add-item/product-price');
     }
 
+    const addPicturesMutation = useMutation({
+        mutationKey: ['adding-product-pictures'],
+        mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
+        onSuccess: () => {
+            alert('Pictures added successfully')
+        }
+    })
+
+    const createProductMutation = useMutation({
+        mutationKey: ['creation-of-product'],
+        mutationFn: (sendingData) => createProduct({ productData: sendingData }),
+        onSuccess: () => {
+            alert('Product added successfully')
+            addPicturesMutation.mutate({ uploadedImages, productName: productName });
+        },
+        onError: (error) => {
+            console.error('Error creating product:', error);
+        }
+    });
+
     const handleDone = () => {
-        navigate('/my-account/add-item/location-shipping');
-    }
+        const savedData = sessionStorage.getItem('productInfo');
+        const savedPriceData = sessionStorage.getItem('productPriceData');
+
+        if (savedData && savedPriceData) {
+            const { productName, selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
+            const { price, startDate, endDate } = JSON.parse(savedPriceData);
+
+            const productData = {
+                name: productName,
+                description,
+                startPrice: price,
+                auctionStart: startDate,
+                auctionEnd: endDate,
+                selectedSubcategory,
+                selectedCategory
+            };
+            setProductName(productData.name);
+
+            if (uploadedImages) {
+                setUploadedImages(uploadedImages.map(({ name, base64 }) => {
+                    const arr = base64.split(','), mime = arr[0].match(/:(.*?);/)[1];
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length, u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    return new File([u8arr], name, { type: mime });
+                }));
+            }
+
+            createProductMutation.mutate(productData);
+        } else {
+            console.error('Missing product or price data');
+        }
+    };
 
     return (
         <div className="location-shipping-form">

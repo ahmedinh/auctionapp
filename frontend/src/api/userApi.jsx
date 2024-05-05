@@ -37,9 +37,6 @@ export async function changeUserPicture({file}) {
     const formData = new FormData();
     formData.append('file', file);
 
-    console.log(file);
-    console.log(formData);
-
     return axios.put(`${apiUrl}/api/user/picture`, formData, {
         headers: {
             'Authorization': `Bearer ${userToken}`

@@ -1,13 +1,12 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
 import ba.atlant.auctionapp.repository.*;
-import ba.atlant.auctionapp.exception.ServiceException;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,35 +26,48 @@ public class ProductService {
     private final SubCategoryRepository subCategoryRepository;
     private final ProductPictureRepository productPictureRepository;
     private final PersonRepository personRepository;
+    private final CategoryRepository categoryRepository;
     private final BidRepository bidRepository;
+    private final PersonService personService;
     private final S3Service s3Service;
 
-    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, BidRepository bidRepository, S3Service s3Service) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, CategoryRepository categoryRepository, BidRepository bidRepository, PersonService personService, S3Service s3Service) {
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
         this.personRepository = personRepository;
+        this.categoryRepository = categoryRepository;
         this.bidRepository = bidRepository;
+        this.personService = personService;
         this.s3Service = s3Service;
     }
 
     @Transactional
-    public ResponseEntity<Long> addProduct(Product product) {
+    public ResponseEntity<Product> addProduct(ProductCreationDTO productCreationDTO, String authHeader) {
+        System.out.println(productCreationDTO.getName());
         try {
-            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
+            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory());
             if (optionalSubCategory.isEmpty())
-                throw new Exception("SubCategory not found for given ID.");
+                throw new IllegalArgumentException("SubCategory not found for provided name.");
 
-            Optional<Person> optionalUser = personRepository.findById(product.getUser().getId());
-            if (optionalUser.isEmpty())
-                throw new Exception("SubCategory not found for given ID.");
+            Integer userId = personService.getUserId(authHeader);
+            Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+            if (optionalPerson.isEmpty())
+                throw new IllegalArgumentException("Person not found for given ID.");
 
+            Optional<Category> optionalCategory = categoryRepository.findByName(productCreationDTO.getSelectedCategory());
+            if (optionalCategory.isEmpty())
+                throw new IllegalArgumentException("Category not found for provided name.");
+
+            if (!optionalSubCategory.get().getCategory().equals(optionalCategory.get()))
+                throw new IllegalArgumentException("Category does not contain that subcategory.");
+
+            Product product = new Product(productCreationDTO, optionalPerson.get(), optionalSubCategory.get());
             productRepository.save(product);
-            return ResponseEntity.ok(product.getId());
+
+            return ResponseEntity.ok(product);
         } catch (DataAccessException e) {
             throw new ServiceException("Database access error occurred", e);
-        } catch (Exception e) {
-            throw new ServiceException("An unexpected error occurred", e);
         }
     }
 
@@ -110,16 +122,17 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, Long productId) throws IOException {
-        Optional<Product> optionalProduct = productRepository.findById(productId);
+    public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, String productName) throws IOException {
+        System.out.println("Array length for files is: " + files.length);
+        Optional<Product> optionalProduct = productRepository.findByName(productName);
         if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("No product found with required ID.");
+            throw new IllegalArgumentException("No product found with required name.");
         Product product = optionalProduct.get();
         List<ProductPicture> productPictureList = new ArrayList<>();
         for (MultipartFile file : files) {
             s3Service.uploadFile(file.getOriginalFilename(), file);
             productPictureList.add(new ProductPicture(
-                    file.getOriginalFilename(),
+                    productName + "/" + file.getOriginalFilename(),
                     String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename()),
                     product
             ));

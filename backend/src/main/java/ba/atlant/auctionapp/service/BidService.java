@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class BidService {
         if (optionalProduct.isEmpty())
             throw new IllegalArgumentException("No product found with provided ID.");
         Product product = optionalProduct.get();
-        if (product.getAuctionEnd().isBefore(LocalDateTime.now()))
+        if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
         Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(userId,productId);
