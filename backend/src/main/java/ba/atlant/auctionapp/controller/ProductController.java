@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.ProductPicture;
@@ -32,10 +33,11 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping()
+    @PostMapping(value = "")
     @Operation(summary = "Adding product", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Long> addProduct(@Valid @RequestBody Product product) {
-        return productService.addProduct(product);
+    public ResponseEntity<Product> addProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO,
+                                              @RequestHeader("Authorization") String authHeader) {
+        return productService.addProduct(productCreationDTO, authHeader);
     }
 
     @GetMapping("/all/new-arrivals")
@@ -94,10 +96,10 @@ public class ProductController {
     }
 
     @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "Add pictures to product")
-    public ResponseEntity<List<ProductPicture>> addProductPictures (@RequestParam("files") MultipartFile[] files,
-                                                                    @RequestParam("productId") Long productId) throws IOException {
-        return productService.addProductPictures(files, productId);
+    @Operation(summary = "Add pictures to product", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<List<ProductPicture>> addProductPictures (@RequestBody MultipartFile[] files,
+                                                                    @RequestParam("productName") String productName) throws IOException {
+        return productService.addProductPictures(files, productName);
     }
 
     @GetMapping(value = "/user/active")
