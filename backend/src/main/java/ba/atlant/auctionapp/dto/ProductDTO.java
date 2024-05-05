@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,10 +17,8 @@ public class ProductDTO {
     private String description;
     private BigDecimal startPrice;
     private LocalDateTime createdAt;
-    private LocalDateTime auctionStart;
-    private LocalDateTime auctionEnd;
-    private String size;
-    private String color;
+    private LocalDate auctionStart;
+    private LocalDate auctionEnd;
     private List<ProductPicture> productPictureList;
     private SubCategory subCategory;
     private Person person;
@@ -40,8 +39,6 @@ public class ProductDTO {
         this.createdAt = product.getCreatedAt();
         this.auctionStart = product.getAuctionStart();
         this.auctionEnd = product.getAuctionEnd();
-        this.size = product.getSize().toString();
-        this.color = product.getColor().toString();
         this.subCategory = product.getSubCategory();
         this.person = product.getUser();
         this.productPictureList = productPictureList;
