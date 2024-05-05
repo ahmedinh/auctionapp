@@ -95,3 +95,16 @@ export async function addPicturesToProduct({ productPictures, productName }) {
         }
     }).then(res => res.data);
 }
+
+export async function deleteProduct({ productName }) {
+    const userToken = getToken();
+    console.log(productName);
+    return axios.delete(`${apiUrl}/api/product/delete`, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        },
+        params: {
+            productName
+        }
+    }).then(res => res.data);
+}

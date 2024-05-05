@@ -1,12 +1,14 @@
 @import "../../utilities/Style.scss";
 
 .search-page-full {
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     .did-you-mean {
-        margin-left: 45rem;
         color: $color-grey;
-
+        padding-right: 20rem;
         .navlink {
             text-decoration: none;
             color: $color-purple;

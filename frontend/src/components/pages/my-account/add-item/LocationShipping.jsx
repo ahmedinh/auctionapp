@@ -4,7 +4,7 @@ import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
 import { clearSessionStorageProduct, getToken, getUser } from "../../../utilities/Common";
 import { useMutation } from "@tanstack/react-query";
-import { addPicturesToProduct, createProduct } from "../../../../api/productsApi";
+import { addPicturesToProduct, createProduct, deleteProduct } from "../../../../api/productsApi";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
@@ -39,11 +39,26 @@ export default function LocationShipping() {
         navigate('/my-account/add-item/product-price');
     }
 
+    const deleteProductMutation = useMutation({
+        mutationKey: ['delete-product-error'],
+        mutationFn: ({ productName }) => deleteProduct({ productName: productName }),
+        onSuccess: () => {
+            alert('Product deleted successfully')
+        },
+        onError: (error) => {
+            console.error('Error deleting product:', error);
+        }
+    })
+
     const addPicturesMutation = useMutation({
         mutationKey: ['adding-product-pictures'],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Pictures added successfully')
+        },
+        onError: (error) => {
+            console.error('Error creating product:', error);
+            deleteProductMutation.mutate({ productName: productName });
         }
     })
 

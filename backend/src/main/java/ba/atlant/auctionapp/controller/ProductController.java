@@ -113,4 +113,10 @@ public class ProductController {
     public ResponseEntity<List<ProductUserProjection>> soldUserProducts(@RequestParam("userId") Long userId) {
         return productService.soldUserProducts(userId);
     }
+
+    @DeleteMapping(value = "/delete")
+    @Operation(summary = "Deletion of product created by user", security = @SecurityRequirement(name = "bearerAuth"))
+    public void deleteProduct(@RequestParam("productName") String productName) {
+        productService.deleteProduct(productName);
+    }
 }

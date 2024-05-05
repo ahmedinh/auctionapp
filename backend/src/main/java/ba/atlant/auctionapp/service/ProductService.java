@@ -44,8 +44,10 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<Product> addProduct(ProductCreationDTO productCreationDTO, String authHeader) {
-        System.out.println(productCreationDTO.getName());
         try {
+            if (productRepository.findByName(productCreationDTO.getName()).isPresent())
+                throw new IllegalArgumentException("Product with provided name already exists.");
+
             Optional<SubCategory> optionalSubCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory());
             if (optionalSubCategory.isEmpty())
                 throw new IllegalArgumentException("SubCategory not found for provided name.");
@@ -130,10 +132,10 @@ public class ProductService {
         Product product = optionalProduct.get();
         List<ProductPicture> productPictureList = new ArrayList<>();
         for (MultipartFile file : files) {
-            s3Service.uploadFile(file.getOriginalFilename(), file);
+            s3Service.uploadFile(productName + "/" + file.getOriginalFilename(), file);
             productPictureList.add(new ProductPicture(
                     productName + "/" + file.getOriginalFilename(),
-                    String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename()),
+                    String.format("https://%s.s3.%s.amazonaws.com/%s/%s",s3Service.getBucketName(),s3Service.getRegion(),productName,file.getOriginalFilename()),
                     product
             ));
         }
@@ -151,5 +153,13 @@ public class ProductService {
         if (personRepository.findById(userId).isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
         return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
+    }
+
+    public void deleteProduct(String productName) {
+        Optional<Product> optionalProduct = productRepository.findByName(productName);
+        if (optionalProduct.isEmpty())
+            throw new IllegalArgumentException("Product with provided name is not found.");
+        Product product = optionalProduct.get();
+        productRepository.delete(product);
     }
 }

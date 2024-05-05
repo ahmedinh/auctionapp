@@ -2,17 +2,18 @@
 
 .search-page {
     display: flex;
-    margin: 0rem 0 2rem 22rem;
+    justify-content: center;
     gap: 24px;
+    width: 1120px;
+    margin-top: 1.5rem;
 
     .all-filters {
         .product-categories {
             display: flex;
             flex-direction: column;
-            width: 262px;
+            width: 214px;
             padding: 24px;
             border: 1px solid $color-grey;
-            margin-top: 1.5rem;
 
             &.headline {
                 color: $color-purple;
@@ -85,7 +86,6 @@
     }
 
     .products-part {
-        margin: 5% 20% 5% 0%;
 
         .products-content {
             display: flex;
