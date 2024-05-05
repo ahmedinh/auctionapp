@@ -1,10 +1,18 @@
 @import "../../utilities/Style.scss";
 
 .search-page-full {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .menu-a {
+        display: flex;
+        margin-left: 23rem;
+        margin-top: 1rem;
+        align-items: center;
+    }
 
     .did-you-mean {
         color: $color-grey;

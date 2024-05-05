@@ -2,110 +2,115 @@
 
 .navbar-white {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-top: 10px;
     padding: 0 10px;
     height: 60px;
 
-    .left-container {
-        flex: 0.5;
+    .content-nav-white {
         display: flex;
-        justify-content: right;
-        align-items: right;
-        margin-left: 1%;
-        img {
-            cursor: pointer;
-        }
-    }
-
-    .logo {
-        height: 56px;
-        width: auto;
-    }
-
-    .search {
-        flex: 0.55;
-        display: flex;
-        align-items: center;
-        position: relative;
-        margin-left: 14rem;
-        margin-right: 1.5rem;
-        height: 100%;
-
-        .search-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-
-            .search-bar {
-                width: 100%;
-                height: 90%;
-                padding: 0 10px;
-                border-radius: 0;
-                border: 1px solid #d8d8d8;
-            }
-
-            .search-icon {
-                position: absolute;
-                padding: 0;
-                top: 50%;
-                right: 0px;
-                height: 100%;
-                transform: translateY(-50%);
-                background: none;
-                border: none;
-                cursor: pointer;
-            }
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%; // Position it right below the search bar
-            left: 0;
-            width: 100%; // Match the width of the search container
-            background-color: white; // Or any color fitting your design
-            padding-right: 20px;
-            border: 1px solid #d8d8d8; // Optional border
-            z-index: 1000; // Ensure it's on top of other content
-            max-height: 300px; // Set a max height
-            overflow-y: auto; // Allow scrolling for many results
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Optional: Adds depth with shadow
-        }
-
-        .search-result-item {
-            padding: 10px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: #f8f8f8; // Highlight on hover
-            }
-        }
-    }
-
-    .buttons {
-        display: flex;
-        flex: 0.6;
-        gap: 30px;
-        align-items: center;
-        padding-left: 24px;
-
-        .nav-btn {
-            background: none;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            height: 100%;
+        width: 1100px;
+        justify-content: space-between;
+        .left-container {
+            flex: 0.5;
             display: flex;
-            align-items: center;
-            padding: 0;
-            color: $color-black;
-            text-decoration: none;
+            justify-content: right;
+            align-items: right;
+            margin-left: 1%;
         }
 
-        .active {
-            color: $color-purple;
-            font-weight: 700;
+        .logo {
+            height: 56px;
+            width: auto;
+        }
+
+        .right-part {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: flex-end;
+            .search {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                position: relative;
+                margin-right: 1.5rem;
+                height: 100%;
+                .search-container {
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                    width: 526px;
+
+                    .search-bar {
+                        width: 100%;
+                        height: 90%;
+                        padding: 0 10px;
+                        border-radius: 0;
+                        border: 1px solid #d8d8d8;
+                    }
+
+                    .search-icon {
+                        position: absolute;
+                        padding: 0;
+                        top: 50%;
+                        right: 0px;
+                        height: 100%;
+                        transform: translateY(-50%);
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                    }
+                }
+
+                .search-results {
+                    position: absolute;
+                    top: 100%; // Position it right below the search bar
+                    left: 0;
+                    width: 100%; // Match the width of the search container
+                    background-color: white; // Or any color fitting your design
+                    padding-right: 20px;
+                    border: 1px solid #d8d8d8; // Optional border
+                    z-index: 1000; // Ensure it's on top of other content
+                    max-height: 300px; // Set a max height
+                    overflow-y: auto; // Allow scrolling for many results
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Optional: Adds depth with shadow
+                }
+
+                .search-result-item {
+                    padding: 10px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #f8f8f8; // Highlight on hover
+                    }
+                }
+            }
+
+            .buttons {
+                display: flex;
+                gap: 30px;
+                align-items: center;
+
+                .nav-btn {
+                    background: none;
+                    font-size: 14px;
+                    border: none;
+                    cursor: pointer;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    padding: 0;
+                    color: $color-black;
+                    text-decoration: none;
+                }
+
+                .active {
+                    color: $color-purple;
+                    font-weight: 700;
+                }
+            }
         }
     }
 }

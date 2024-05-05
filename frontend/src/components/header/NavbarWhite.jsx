@@ -34,38 +34,40 @@ const NavbarWhite = () => {
 
     return (
         <div className="navbar-white">
-            <div className="left-container">
-                <img src={Logo} alt="Logo" className="logo" onClick={() => navigate('/home/new-arrivals')}/>
-            </div>
-            <div className="search">
-                <form onSubmit={handleSearch} className="search-container">
-                    <input
-                        type="text"
-                        placeholder="Try enter: Shoes"
-                        className="search-bar"
-                        value={input}
-                        onChange={(e) => handleChange(e.target.value)}
-                    />
-                    <button type="submit" className="search-icon">
-                        <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
-                    </button>
-                </form>
-                {isSearchFocused && (
-                    <div className="search-results">
+            <div className="content-nav-white">
+                <img src={Logo} alt="Logo" className="logo" />
+                <div className="right-part">
+                    <div className="search">
+                        <form onSubmit={handleSearch} className="search-container">
+                            <input
+                                type="text"
+                                placeholder="Try enter: Shoes"
+                                className="search-bar"
+                                value={input}
+                                onChange={(e) => handleChange(e.target.value)}
+                            />
+                            <button type="submit" className="search-icon">
+                                <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
+                            </button>
+                        </form>
+                        {isSearchFocused && (
+                            <div className="search-results">
 
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            <div className="buttons">
-                <NavLink to="/home" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
-                    HOME
-                </NavLink>
-                <NavLink to="/shop" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
-                    SHOP
-                </NavLink>
-                <NavLink to="/my-account" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
-                    MY ACCOUNT
-                </NavLink>
+                    <div className="buttons">
+                        <NavLink to="/home" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                            HOME
+                        </NavLink>
+                        <NavLink to="/shop" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                            SHOP
+                        </NavLink>
+                        <NavLink to="/my-account" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+                            MY ACCOUNT
+                        </NavLink>
+                    </div>
+                </div>
             </div>
         </div>
     );

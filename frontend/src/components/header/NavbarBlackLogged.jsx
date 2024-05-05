@@ -19,8 +19,8 @@ export default function NavbarBlackLogged() {
         if (getToken() && !validToken()) {
             removeSession();
             alert('Your session has expired! Please login again.');
-            window.location.reload();
             navigate('/home/new-arrivals');
+            window.location.reload();
         }
     }, [])
 
@@ -31,12 +31,14 @@ export default function NavbarBlackLogged() {
         navigate(`/home/new-arrivals`);
         window.location.reload();
     }
-    return(
+    return (
         <nav className="navbar-black-logged">
-            <SocialIcons/>
-            <div className="welcome-part">
-                <p>Hi, {firstName} {lastName}</p>
-                <p className="logout-button" onClick={handleLogout}>Logout</p>
+            <div className="nav-logged-content">
+                <SocialIcons />
+                <div className="welcome-part">
+                    <p>Hi, {firstName} {lastName}</p>
+                    <p className="logout-button" onClick={handleLogout}>Logout</p>
+                </div>
             </div>
         </nav>
     );
