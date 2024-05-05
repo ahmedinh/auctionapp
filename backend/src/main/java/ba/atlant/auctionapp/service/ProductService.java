@@ -30,6 +30,7 @@ public class ProductService {
     private final PersonRepository personRepository;
     private final CategoryRepository categoryRepository;
     private final BidRepository bidRepository;
+    private final PersonService personService;
     private final S3Service s3Service;
     private final JwtUtils jwtUtils;
 
@@ -40,6 +41,7 @@ public class ProductService {
         this.personRepository = personRepository;
         this.categoryRepository = categoryRepository;
         this.bidRepository = bidRepository;
+        this.personService = personService;
         this.s3Service = s3Service;
         this.jwtUtils = jwtUtils;
     }

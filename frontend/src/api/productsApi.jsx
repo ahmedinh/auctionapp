@@ -70,6 +70,7 @@ export async function getSoldUserProducts({ userId }) {
 
 export async function createProduct({ productData }) {
     const userToken = getToken();
+    console.log(productData);
     return axios.post(`${apiUrl}/api/product`, productData, {
         headers: {
             'Authorization': `Bearer ${userToken}`
