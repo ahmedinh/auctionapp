@@ -6,25 +6,26 @@ const CountdownTimer = ({ targetDate }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date();
+            now.setHours(0, 0, 0, 0); // Reset time to start of the day
             const endDate = new Date(targetDate);
+            endDate.setHours(23, 59, 59, 999); // Set time to end of the day
+
             const timeDiff = endDate - now;
 
-            if (timeDiff > 0) {
+            if (timeDiff >= 0) {
                 const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
-
-                let display = '';
-                if (days >= 5) {
-                    display = `${days} days`;
-                } else if (days < 5 && days > 0) {
-                    display = `${hours + (days * 24)} hours`;
-                } else if (hours > 0) {
-                    display = `${hours} hours`;
-                } else if (minutes > 0) {
-                    display = `${minutes} minutes`;
+                if (days > 0) {
+                    setTimeLeft(`${days} days`);
+                } else {
+                    // Calculate remaining hours and minutes for today
+                    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+                    if (hours > 0 || minutes > 0) {
+                        setTimeLeft(`${hours} hours and ${minutes} minutes`);
+                    } else {
+                        setTimeLeft('Today');
+                    }
                 }
-                setTimeLeft(display);
             } else {
                 clearInterval(interval);
                 setTimeLeft('Time\'s up!');
@@ -40,4 +41,5 @@ const CountdownTimer = ({ targetDate }) => {
         </div>
     );
 };
+
 export default CountdownTimer;
