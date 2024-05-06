@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { sortProducts } from "../../utilities/Common";
 
 
-export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage }) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
     const [sortCriteria, setSortCriteria] = useState('');
@@ -35,11 +35,34 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     }
 
     const handleSortChange = (event) => {
-        setSortCriteria(event.target.value);
-    };
+        const value = event.target.value;
+        let sortField, sortDirection;
 
-    const sortedProducts = productsData?.pages.flatMap(page => page.content) || [];
-    const sortedAndFilteredProducts = sortProducts(sortCriteria, sortedProducts);
+        switch (value) {
+            case 'CREATED_AT':
+                sortField = 'createdAt';
+                sortDirection = 'DESC';
+                break;
+            case 'AUCTION_END':
+                sortField = 'auctionEnd';
+                sortDirection = 'ASC';
+                break;
+            case 'START_PRICE_LOW_TO_HIGH':
+                sortField = 'startPrice';
+                sortDirection = 'ASC';
+                break;
+            case 'START_PRICE_HIGH_TO_LOW':
+                sortField = 'startPrice';
+                sortDirection = 'DESC';
+                break;
+            default:
+                sortField = 'name';
+                sortDirection = 'ASC';
+                break;
+        }
+        setSortCriteria(value);
+        onSortChange(sortField, sortDirection);
+    };
 
     return (
         <div className="search-page">

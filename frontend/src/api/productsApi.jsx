@@ -30,15 +30,15 @@ export async function getProduct({ productId }) {
     }).then(res => res.data);
 }
 
-export async function getProductsForCategory({ page, size = 9, categoryId }) {
+export async function getProductsForCategory({ page, size = 9, categoryId, sortField, sortDirection }) {
     return axios.get(`${apiUrl}/api/product/all/category`, {
-        params: { page, size, categoryId }
+        params: { page, size, categoryId, sortField, sortDirection }
     }).then(res => res.data);
 }
 
-export async function searchProducts({ page, size, query }) {
+export async function searchProducts({ page, size, query, sortField, sortDirection }) {
     return axios.get(`${apiUrl}/api/product/search-products`, {
-        params: { page, size, query }
+        params: { page, size, query, sortField, sortDirection }
     }).then(res => res.data);
 };
 

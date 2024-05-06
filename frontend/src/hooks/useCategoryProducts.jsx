@@ -1,9 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { getProductsForCategory } from '../api/productsApi';
 
-export function useCategoryProducts(fetchFunction, size, categoryId) {
+export function useCategoryProducts(categoryId, sortField, sortDirection, size = 9) {
     return useInfiniteQuery({
-        queryKey: ["categoryProducts", { categoryId }],
-        queryFn: ({ pageParam = 0 }) => fetchFunction({ page: pageParam, size, categoryId }),
+        queryKey: ["categoryProducts", { categoryId, sortField, sortDirection }],
+        queryFn: ({ pageParam = 0 }) => getProductsForCategory({ page: pageParam, size, categoryId, sortField, sortDirection }),
         getNextPageParam: (lastPage, allPages) => {
             return lastPage.last ? undefined : allPages.length;
         },
