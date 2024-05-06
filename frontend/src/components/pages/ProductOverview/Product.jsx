@@ -125,7 +125,7 @@ export default function Product() {
                             <div className="place-bid">
                                 <div className="upper">
                                     <input type="text"
-                                        placeholder={'Enter $' + (data.largestBid > data.startPrice ? data.largestBid + 1 : data.startPrice + 1) + ' or higher'}
+                                        placeholder={'Enter $' + (data.numberOfBids === 0 ? data.startPrice : (data.largestBid > data.startPrice ? data.largestBid + 1 : data.startPrice + 1)) + ' or higher'}
                                         value={newBid}
                                         onChange={(e) => setNewBid(e.target.value)} />
                                     <button onClick={() => handleBid()}>PLACE BID</button>
