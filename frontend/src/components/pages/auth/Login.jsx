@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import FacebookIcon from '../../../assets/facebook-login-icon.png';
 import GmailIcon from '../../../assets/gmail-login-icon.png';
-import './Login.scss'
-import { useMutation } from '@tanstack/react-query';
-import { login } from '../../../api/authApi';
-import { setSession } from '../../utilities/Common';
-import { useNavigate } from 'react-router-dom';
+import './Login.scss';
+import { useLoginMutation } from '../../../hooks/useLoginMutation';
+
 
 export default function Login() {
     const [email, setEmail] = useState("");
