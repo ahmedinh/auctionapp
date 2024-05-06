@@ -10,20 +10,12 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
-    const { mutate, isLoading, isError, error, data } = useMutation({
-        mutationKey: ['login'],
-        mutationFn: () => login({ email, password }),
-        onSuccess: (data) => {
-            setSession(data.person, data.token);
-            navigate(`/home/new-arrivals`)
-        }
-    });
+    const { mutate: performLogin, isLoading, isError, error, data } = useLoginMutation();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        mutate({ email: email, password: password })
+        performLogin({ email, password });
     }
 
     return (
