@@ -23,7 +23,8 @@ import ProductPrice from '../pages/my-account/add-item/ProductPrice';
 import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 import Settings from '../pages/my-account/settings/Settings';
 import SellerTable from '../pages/my-account/seller/SellerTable';
-import { myProfileRoute, sellerActiveRoute } from './AppUrls';
+import Error from '../pages/error/Error';
+import { sellerActiveRoute, myProfileRoute } from './AppUrls';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -84,6 +85,7 @@ const Router = createBrowserRouter(
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
             </Route>
+            <Route path="*" element={<Error />} />
         </Route>
     )
 );
