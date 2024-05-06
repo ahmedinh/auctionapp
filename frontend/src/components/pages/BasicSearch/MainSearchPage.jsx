@@ -3,11 +3,14 @@ import "./MainSearchPage.scss";
 import { useParams } from "react-router-dom";
 import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
+import Form from 'react-bootstrap/Form';
+import { sortProducts } from "../../utilities/Common";
 
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
+    const [sortCriteria, setSortCriteria] = useState('');
 
     const {
         status: categoriesStatus,
@@ -30,6 +33,13 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         }
         setSelected(i);
     }
+
+    const handleSortChange = (event) => {
+        setSortCriteria(event.target.value);
+    };
+
+    const sortedProducts = productsData?.pages.flatMap(page => page.content) || [];
+    const sortedAndFilteredProducts = sortProducts(sortCriteria, sortedProducts);
 
     return (
         <div className="search-page">

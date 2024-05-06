@@ -17,13 +17,15 @@ export default function CategoryProducts() {
     } = useCategoryProducts(getProductsForCategory, 9, categoryId);
 
     return (
-        <MainSearchPage
-            productsData={data}
-            productsStatus={status}
-            productsError={error}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-        />
+        <div className="search-page-full">
+            <MainSearchPage
+                productsData={data}
+                productsStatus={status}
+                productsError={error}
+                hasNextPage={hasNextPage}
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+            />
+        </div>
     );
 }
