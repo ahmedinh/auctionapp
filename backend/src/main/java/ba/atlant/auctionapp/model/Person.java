@@ -42,11 +42,6 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "Username cannot be blank.")
-    @NotNull(message = "Username cannot be null.")
-    @Column(nullable = false, unique = true)
-    private String username;
-
     @NotNull(message = "Birth date cannot be null.")
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -75,7 +70,6 @@ public class Person {
     public Person(String firstName,
                   String lastName,
                   String email,
-                  String username,
                   LocalDate birthDate,
                   String phoneNumber,
                   String shippingAddress,
@@ -87,7 +81,6 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.username = username;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.shippingAddress = shippingAddress;
@@ -98,12 +91,11 @@ public class Person {
         this.role = role;
     }
 
-    public Person(String firstName, String lastName, String email, String password, String username, LocalDate birthDate, Role role) {
+    public Person(String firstName, String lastName, String email, String password, LocalDate birthDate, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.username = username;
         this.birthDate = birthDate;
         this.role = role;
     }
@@ -142,14 +134,6 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public LocalDate getBirthDate() {

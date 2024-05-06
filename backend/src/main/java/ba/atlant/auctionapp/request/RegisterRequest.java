@@ -30,11 +30,6 @@ public class RegisterRequest extends AuthRequest {
     @Size(max = 255, message = "Password can't be longer than 255 characters")
     private String password;
 
-    @NotBlank(message = "Username cannot be blank.")
-    @NotNull(message = "Username cannot be null.")
-    @Column(nullable = false, unique = true)
-    private String username;
-
     @NotNull(message = "Birth date cannot be null.")
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -47,12 +42,11 @@ public class RegisterRequest extends AuthRequest {
                            @NotBlank(message = "Email can't be empty")
                            @Email(message = "Email format is not valid") String email,
                            @NotBlank(message = "Password can't be empty")
-                           @Size(min = 8, message = "Password must contain at least 8 characters") String password, String username, LocalDate birthDate) {
+                           @Size(min = 8, message = "Password must contain at least 8 characters") String password, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.username = username;
         this.birthDate = birthDate;
     }
 
@@ -88,14 +82,6 @@ public class RegisterRequest extends AuthRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public LocalDate getBirthDate() {
