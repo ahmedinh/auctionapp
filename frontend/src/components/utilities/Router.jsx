@@ -24,6 +24,7 @@ import ProductInfo from '../pages/my-account/add-item/ProductInfo';
 import ProductPrice from '../pages/my-account/add-item/ProductPrice';
 import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 import Settings from '../pages/my-account/settings/Settings';
+import Error from '../pages/error/Error';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -71,6 +72,7 @@ const Router = createBrowserRouter(
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
             </Route>
+            <Route path="*" element={<Error />} />
         </Route>
     )
 );

@@ -55,7 +55,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
                     {data && data.length > 0 ? (
                         data?.map((product, index) => (
                             <tr key={index}>
-                                <td className="col-s"><img src={product.url} alt="" srcset="" /></td>
+                                <td className="col-s"><img src={product.url} /></td>
                                 <td className="col1">
                                     <p>{product.name}</p>
                                     <p className="product-id">#{product.id}</p>

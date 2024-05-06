@@ -1,22 +1,27 @@
 import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { isUserAuthorized, validToken } from "./Common";
-import ProtectedLayout from "./ProtectedLayout";
+import { isUserAuthorized, validToken, removeSession } from "./Common";
+import Layout from "./Layout";
 
 const ProtectedRoute = () => {
     const navigate = useNavigate();
-    const isAuthenticated = isUserAuthorized() && validToken();
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            return navigate('/login', { replace: true });
-        }
-    }, [isAuthenticated, navigate]);
+        const authenticated = isUserAuthorized() && validToken();
 
-    return (
-        <ProtectedLayout >
+        if (!authenticated) {
+            removeSession();
+            navigate('/not-found', { replace: true });
+        }
+    }, [navigate]);
+
+    // Only render the children if authenticated
+    const authenticated = isUserAuthorized() && validToken();
+    return authenticated ? (
+        <Layout>
             <Outlet />
-        </ProtectedLayout>
-    );
+        </Layout>
+    ) : null;
 };
+
 export default ProtectedRoute;
