@@ -53,8 +53,7 @@ public class PersonService {
                 registerRequest.getLastName(),
                 registerRequest.getEmail(),
                 passwordEncoder.encode(registerRequest.getPassword()),
-                registerRequest.getUsername(),
-                        registerRequest.getBirthDate(),
+                registerRequest.getBirthDate(),
                 Role.ROLE_USER
         ));
         return getAuthResponse(registerRequest, person);
