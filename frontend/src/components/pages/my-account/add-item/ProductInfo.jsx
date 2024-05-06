@@ -242,8 +242,8 @@ export default function ProductInfo() {
                     </div>
                 </div>
             </div>
-            {Object.keys(errors) !== 0 ? (
-                <div className="error-messages">
+            {Object.keys(errors).length !== 0 ? (
+                <div className="error-messages" style={{ display: 'block' }}>
                     {errors.name && <p className="error-message">{errors.name}</p>}
                     {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
                     {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}

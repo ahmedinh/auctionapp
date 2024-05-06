@@ -51,3 +51,39 @@ export const isUserAuthorized = () => {
         return false;
     }
 };
+
+const bubbleSort = (products, comparator) => {
+    const sortedProducts = [...products];
+    let n = sortedProducts.length;
+    let swapped;
+
+    for (let i = 0; i < n - 1; i++) {
+        swapped = false;
+
+        for (let j = 0; j < n - i - 1; j++) {
+            if (comparator(sortedProducts[j], sortedProducts[j + 1])) {
+                [sortedProducts[j], sortedProducts[j + 1]] = [sortedProducts[j + 1], sortedProducts[j]];
+                swapped = true;
+            }
+        }
+
+        if (!swapped) break;
+    }
+
+    return sortedProducts;
+};
+
+export const sortProducts = (criteria, products) => {
+    switch (criteria) {
+        case 'AUCTION_END':
+            return bubbleSort(products, (a, b) => new Date(a.auctionEnd) > new Date(b.auctionEnd));
+        case 'CREATED_AT':
+            return bubbleSort(products, (a, b) => new Date(a.createdAt) > new Date(b.createdAt));
+        case 'START_PRICE_HIGH_TO_LOW':
+            return bubbleSort(products, (a, b) => a.startPrice < b.startPrice);
+        case 'START_PRICE_LOW_TO_HIGH':
+            return bubbleSort(products, (a, b) => a.startPrice > b.startPrice);
+        default:
+            return bubbleSort(products, (a, b) => a.name.localeCompare(b.name) > 0);
+    }
+}
