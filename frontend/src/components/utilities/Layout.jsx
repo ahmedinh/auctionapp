@@ -1,22 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NavbarBlack from '../header/NavbarBlack';
 import NavbarWhite from '../header/NavbarWhite';
 import Footer from '../footer/Footer';
 import { Outlet } from 'react-router-dom';
 import NavbarBlackLogged from '../header/NavbarBlackLogged';
-import { useState, useEffect } from 'react';
+import { getUser, getToken, removeSession } from '../utilities/Common';
 
 const Layout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!user && !!token);
+        const checkAuthStatus = () => {
+            const user = getUser();
+            const token = getToken();
+            setIsLoggedIn(!!user && !!token);
+        };
+        
+        checkAuthStatus();
+
+        const handleStorageChange = (e) => {
+            if (e.key === 'user' || e.key === 'token') {
+                checkAuthStatus();
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
     }, []);
+
+    const handleLogout = () => {
+        removeSession();
+        setIsLoggedIn(false); // Update state to reflect the logged-out status
+    };
+
     return (
         <>
-            {isLoggedIn ? <NavbarBlackLogged /> : <NavbarBlack />}
+            {isLoggedIn ? <NavbarBlackLogged onLogout={handleLogout} /> : <NavbarBlack />}
             <NavbarWhite />
             <main><Outlet /></main>
             <Footer />

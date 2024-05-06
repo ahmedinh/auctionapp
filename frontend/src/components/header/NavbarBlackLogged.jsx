@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./NavbarBlackLogged.scss";
 import SocialIcons from "../../assets/icons/SocialIcons";
-import { removeSession, getUser } from "../utilities/Common";
-import { useNavigate } from "react-router-dom";
-import { getToken, validToken } from "../utilities/Common";
+import { getUser, removeSession } from "../utilities/Common";
 
-export default function NavbarBlackLogged() {
-    const navigate = useNavigate();
+export default function NavbarBlackLogged({ onLogout }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
     useEffect(() => {
         const user = getUser();
-        if (user !== null) {
+        if (user) {
             setFirstName(user.firstName);
             setLastName(user.lastName);
         }
-        if (getToken() && !validToken()) {
-            removeSession();
-            alert('Your session has expired! Please login again.');
-            navigate('/home/new-arrivals');
-            window.location.reload();
-        }
-    }, [])
+    }, []);
 
     const handleLogout = (event) => {
         removeSession();
-        window.location.reload();
-        navigate(`/home/new-arrivals`);
+        onLogout(); // Update isLoggedIn state in Layout
     }
+
     return (
         <nav className="navbar-black-logged">
             <div className="nav-logged-content">

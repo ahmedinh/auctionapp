@@ -42,7 +42,6 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Birth date cannot be null.")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 

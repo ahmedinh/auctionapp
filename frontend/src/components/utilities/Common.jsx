@@ -24,7 +24,6 @@ export const validToken = () => {
     if (token === null) {
         return false;
     }
-//  const exp = decode(token, { complete: true }).payload.exp;
     const exp = jwtDecode(token).exp;
     return Date.now() < exp * 1000;
 }
