@@ -1,0 +1,66 @@
+@import '../../utilities/Style.scss';
+
+.page-full {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding-top: 147px;
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 1112px;
+
+        img {
+            width: 163px;
+            height: 56px;
+            cursor: pointer;
+        }
+
+        .error-number {
+            position: relative;
+            font-size: 192px;
+            line-height: 286.5px;
+            font-weight: 400;
+
+            p {
+                margin: 0;
+            }
+
+            .purple-404 {
+                position: relative;
+                color: $color-purple;
+                z-index: 2;
+            }
+
+            .grey-404 {
+                top: 4px;
+                left: 4px;
+                position: absolute;
+                color: $color-white;
+                z-index: 1;
+            }
+        }
+
+        .below-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: $font-size-normal;
+            font-weight: $font-weight-semibold;
+            gap: 2rem;
+
+            p {
+                margin: 0;
+            }
+
+            button {
+                font-weight: $font-weight-bold;
+                background-color: transparent;
+                border: none;
+                padding: 1rem 2rem 1rem 2rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
