@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { isUserAuthorized, validToken, removeSession } from "./Common";
 import Layout from "./Layout";
+import Error from '../pages/error/Error';
 
 const ProtectedRoute = () => {
     const navigate = useNavigate();
@@ -15,13 +16,11 @@ const ProtectedRoute = () => {
         }
     }, [navigate]);
 
-    // Only render the children if authenticated
     const authenticated = isUserAuthorized() && validToken();
     return authenticated ? (
         <Layout>
             <Outlet />
         </Layout>
-    ) : null;
+    ) : <Error/>;
 };
-
 export default ProtectedRoute;
