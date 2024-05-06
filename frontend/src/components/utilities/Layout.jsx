@@ -32,7 +32,7 @@ const Layout = () => {
 
     const handleLogout = () => {
         removeSession();
-        setIsLoggedIn(false); // Update state to reflect the logged-out status
+        setIsLoggedIn(false);
     };
 
     return (
