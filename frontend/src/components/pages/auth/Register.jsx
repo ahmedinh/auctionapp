@@ -3,7 +3,7 @@ import FacebookIcon from '../../../assets/facebook-login-icon.png';
 import GmailIcon from '../../../assets/gmail-login-icon.png';
 import './Register.scss'
 import { NavLink } from 'react-router-dom';
-import { useRegisterMutation } from '../../../hooks/useRegisterMutation'; // Adjust the path as per your project structure
+import { useRegisterMutation } from '../../../hooks/useRegisterMutation';
 
 export default function Register() {
     const [firstName, setFirstName] = useState("");
