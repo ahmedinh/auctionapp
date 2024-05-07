@@ -46,14 +46,14 @@ public class PersonController {
 
     @PostMapping("/login")
     @Operation(summary = "Log in for users")
-    public ResponseEntity<AuthResponse> logIn(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<AuthResponse> logIn(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResponse authResponse = personService.login(loginRequest);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/register")
     @Operation(summary = "Registration of users")
-    public ResponseEntity<AuthResponse> createAccount(@Valid @RequestBody RegisterRequest signUpRequest) throws Exception {
+    public ResponseEntity<AuthResponse> createAccount(@Valid @RequestBody RegisterRequest signUpRequest) {
         AuthResponse authResponse = personService.register(signUpRequest);
         return ResponseEntity.ok(authResponse);
     }
