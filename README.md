@@ -22,3 +22,5 @@ This application provides a platform for users to participate in auctions, allow
 Once both the frontend and backend servers are running, navigate to `http://localhost:3000` in your web browser to start using the Auction and Bidding App.
 ## Backend
 For testing purposes, Swagger is available at `http://localhost:8086/swagger-ui/index.html`.
+## Database
+If there is a problem with migration, simply execute the script `dropping.sql` in `pgAdmin` and it will clear database of all content.

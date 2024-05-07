@@ -9,6 +9,8 @@
         display: flex;
         gap: 119px;
         margin: 34px 20% 0% 20%;
+        justify-content: space-between;
+        width: 1120px;
 
         .categories {
             width: 262px;
@@ -70,6 +72,7 @@
             img {
                 width: 357px;
                 height: 420px;
+                object-fit: contain;
             }
 
             .left-side {

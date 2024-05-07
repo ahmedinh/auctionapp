@@ -1,0 +1,160 @@
+@import '../../utilities/Style.scss';
+
+.register-page {
+    display: flex;
+    justify-content: center;
+
+    .register-box {
+        border: 1px groove $color-white;
+        margin-top: 40px;
+        margin-bottom: 86px;
+
+        input[type=text],
+        input[type=password] {
+            padding: 18px 42px 18px 24px;
+            border: 1px solid;
+            border-color: $color-white;
+
+            &:hover {
+                border-color: $color-purple;
+            }
+        }
+
+        .register-text {
+            h5 {
+                margin: 0;
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-large;
+                line-height: $line-height-large;
+                margin: 23px 330px 23px 330px;
+            }
+        }
+
+        .register-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 64px;
+
+            .register-data {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 88px;
+                margin: 48px 95px 0px 95px;
+
+                p {
+                    margin: 0;
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-normal;
+                    line-height: $line-height-large;
+                }
+
+                .register-fields {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 32px;
+
+                    .error-message {
+                        display: block;
+                        color: red;
+                    }
+
+                    .input-field {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                    }
+                }
+
+                .register-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+
+                    .main-button {
+                        height: 56px;
+                        background-color: $color-purple;
+                        color: #fff;
+                        border: none;
+                        font-size: $font-size-normal;
+                        font-weight: $font-weight-semibold;
+                        line-height: $line-height-large;
+                        cursor: pointer;
+                    }
+
+                    .external-services {
+                        display: flex;
+                        justify-content: center;
+                        gap: 20px;
+
+                        .facebook-button,
+                        .gmail-button {
+                            display: flex;
+                            flex: 1;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            transition: background-color 0.3s, border-color 0.3s;
+
+                            img {
+                                height: 30px;
+                                width: auto;
+                            }
+
+                            &:hover {
+                                background-color: $color-white;
+                                border-color: darken($color-white, 10%);
+                            }
+                        }
+
+                        .facebook-button {
+                            color: #4267B2;
+                            border: 1px solid #4267B2;
+
+                            &:hover {
+                                background-color: #4267B2;
+                                color: #fff;
+                            }
+                        }
+
+                        .gmail-button {
+                            color: #D44638;
+                            border: 1px solid #D44638;
+
+                            &:hover {
+                                background-color: #D44638;
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .login-field {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+
+            p {
+                margin: 0;
+                color: $color-grey;
+                font-weight: $font-weight-bold;
+                font-size: $font-size-normal;
+                line-height: $line-height-normal;
+            }
+
+            .login-link {
+                text-decoration: none;
+                font-weight: $font-weight-bold;
+                color: $color-purple;
+
+            }
+        }
+    }
+}

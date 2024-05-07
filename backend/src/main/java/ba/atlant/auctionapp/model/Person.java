@@ -42,7 +42,6 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Birth date cannot be null.")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
@@ -91,12 +90,11 @@ public class Person {
         this.role = role;
     }
 
-    public Person(String firstName, String lastName, String email, String password, LocalDate birthDate, Role role) {
+    public Person(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.birthDate = birthDate;
         this.role = role;
     }
 

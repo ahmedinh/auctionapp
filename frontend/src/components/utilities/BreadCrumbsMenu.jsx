@@ -15,17 +15,18 @@ const BreadCrumbsMenu = ({ title, rightLink, fontWeight = 400 }) => {
 
     return (
         <>
-            <div className="menu-a">
-                <div className="left-part-a">
-                    <p className="left-part-text" style={{ fontWeight }}>
-                        {currentPageTitle || common.about_us}
-                    </p>
-                </div>
-                <div className="right-part">
-                    <Breadcrumbs locationLink={rightLink} />
+            <div className="full-bar">
+                <div className="content-breadcrumbs">
+                    <div className="left-part-a">
+                        <p className="left-part-text" style={{ fontWeight }}>
+                            {currentPageTitle || common.about_us}
+                        </p>
+                    </div>
+                    <div className="right-part">
+                        <Breadcrumbs locationLink={rightLink} />
+                    </div>
                 </div>
             </div>
-            <main><Outlet /></main>
         </>
     );
 };

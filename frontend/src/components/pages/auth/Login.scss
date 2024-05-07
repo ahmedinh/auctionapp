@@ -1,0 +1,157 @@
+@import '../../utilities/Style.scss';
+
+.login-page {
+    display: flex;
+    justify-content: center;
+
+    .login-box {
+        border: 1px groove;
+        border-color: $color-white;
+        margin-top: 40px;
+        margin-bottom: 86px;
+
+        input[type=text],
+        input[type=password] {
+            padding: 18px 42px 18px 24px;
+            border: 1px solid;
+            border-color: $color-white;
+
+            &:hover {
+                border-color: $color-purple;
+            }
+        }
+
+        .login-text {
+            h5 {
+                margin: 0;
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-large;
+                line-height: $line-height-large;
+                margin: 23px 330px 23px 330px;
+            }
+        }
+
+        .login-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 64px;
+
+            .login-data {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 64px;
+                margin: 48px 95px 0px 95px;
+
+                p {
+                    margin: 0;
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-normal;
+                    line-height: $line-height-large;
+                }
+
+                .login-fields {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 32px;
+
+                    .login-email {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                    }
+
+                    .login-bottom {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 24px;
+
+                        .login-password {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 16px;
+                        }
+
+                        .remember-me {
+                            display: flex;
+                            gap: 16px;
+                        }
+                    }
+                }
+
+                .login-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+
+                    .main-button {
+                        height: 56px;
+                        background-color: $color-purple;
+                        color: #fff;
+                        border: none;
+                        font-size: $font-size-normal;
+                        font-weight: $font-weight-semibold;
+                        line-height: $line-height-large;
+                        cursor: pointer;
+                    }
+
+                    .external-services {
+                        display: flex;
+                        justify-content: center;
+                        gap: 20px;
+
+                        .facebook-button,
+                        .gmail-button {
+                            display: flex;
+                            flex: 1;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            transition: background-color 0.3s, border-color 0.3s;
+
+                            img {
+                                height: 30px;
+                                width: auto;
+                            }
+
+                            &:hover {
+                                background-color: $color-white;
+                                border-color: darken($color-white, 10%);
+                            }
+                        }
+
+                        .facebook-button {
+                            color: #4267B2;
+                            border: 1px solid #4267B2;
+
+                            &:hover {
+                                background-color: #4267B2;
+                                color: #fff;
+                            }
+                        }
+
+                        .gmail-button {
+                            color: #D44638;
+                            border: 1px solid #D44638;
+
+                            &:hover {
+                                background-color: #D44638;
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .forgot-password {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+}
