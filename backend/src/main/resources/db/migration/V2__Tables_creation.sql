@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS product_picture
     name       VARCHAR(255)                            NOT NULL,
     url        VARCHAR(2000)                           NOT NULL,
     product_id BIGINT                                  NOT NULL,
-    CONSTRAINT pk_productpicture PRIMARY KEY (id)
+    CONSTRAINT pk_product_picture PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS person

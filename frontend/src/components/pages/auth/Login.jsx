@@ -4,7 +4,6 @@ import GmailIcon from '../../../assets/gmail-login-icon.png';
 import './Login.scss';
 import { useLoginMutation } from '../../../hooks/useLoginMutation';
 
-
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

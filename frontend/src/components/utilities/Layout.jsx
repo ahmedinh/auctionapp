@@ -16,7 +16,7 @@ const Layout = () => {
             const token = getToken();
             setIsLoggedIn(!!user && !!token);
         };
-        
+
         checkAuthStatus();
 
         const handleStorageChange = (e) => {
