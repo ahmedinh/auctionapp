@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
-    const [isSearchFocused ] = useState(false);
+    const [isSearchFocused] = useState(false);
     const navigate = useNavigate();
 
     const location = useLocation();

@@ -17,9 +17,6 @@ export default function Register() {
         event.preventDefault();
         performRegistration({ firstName, lastName, email, password });
     }
-
-    const displayError = isError ? error.response?.data.error_message  || error.response?.data.firstName || error.response?.data.lastName || error.response?.data.email || error.response?.data.password || 'Failed to register' : null;
-
     return (
         <div className="register-page">
             <div className="register-box">
@@ -32,22 +29,25 @@ export default function Register() {
                             <div className="input-field">
                                 <p>First Name</p>
                                 <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.firstName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Last Name</p>
                                 <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.lastName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Enter Email</p>
                                 <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.email}</p>
                             </div>
                             <div className="input-field">
                                 <p>Password</p>
                                 <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.password}</p>
                             </div>
                         </div>
                         <div className="register-buttons">
-                            {isError && <p>Error: {displayError}</p>}
                             <button type="submit" className='main-button'>Register</button>
                             <div className="external-services">
                                 <div className='facebook-button'>

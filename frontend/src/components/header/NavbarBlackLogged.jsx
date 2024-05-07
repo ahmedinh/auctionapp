@@ -4,20 +4,13 @@ import SocialIcons from "../../assets/icons/SocialIcons";
 import { getUser, removeSession } from "../utilities/Common";
 
 export default function NavbarBlackLogged({ onLogout }) {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-
-    useEffect(() => {
-        const user = getUser();
-        if (user) {
-            setFirstName(user.firstName);
-            setLastName(user.lastName);
-        }
-    }, []);
+    const user = getUser();
+    const firstName = user?.firstName;
+    const lastName = user?.lastName;
 
     const handleLogout = (event) => {
         removeSession();
-        onLogout(); // Update isLoggedIn state in Layout
+        onLogout();
     }
 
     return (
