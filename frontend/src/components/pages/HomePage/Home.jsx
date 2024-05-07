@@ -4,12 +4,13 @@ import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
+import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 
 const Home = () => {
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
     if (categoriesStatus === 'pending' || highlightStatus === 'pending') {
-        return <span>Loading...</span>;
+        return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
         return <span>Error: {categoriesError.message}</span>;
