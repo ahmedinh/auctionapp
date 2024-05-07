@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import NavbarBlack from '../header/NavbarBlack';
 import NavbarWhite from '../header/NavbarWhite';
 import Footer from '../footer/Footer';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import NavbarBlackLogged from '../header/NavbarBlackLogged';
 import { getUser, getToken, removeSession } from '../utilities/Common';
 
 const Layout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuthStatus = () => {
@@ -33,6 +34,7 @@ const Layout = () => {
     const handleLogout = () => {
         removeSession();
         setIsLoggedIn(false);
+        navigate('/home/new-arrivals')
     };
 
     return (
