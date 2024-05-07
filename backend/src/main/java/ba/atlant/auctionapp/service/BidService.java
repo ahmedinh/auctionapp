@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.BidProjection;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
