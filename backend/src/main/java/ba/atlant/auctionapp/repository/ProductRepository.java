@@ -140,7 +140,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
             COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids
             FROM Product p
-            WHERE p.person.id = :userId AND p.auctionEnd < CURRENT_TIMESTAMP 
+            WHERE p.person.id = :userId AND p.auctionEnd < CURRENT_TIMESTAMP
             AND COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) > 0
             """)
     List<ProductUserProjection> getSoldUserProducts(@Param("userId") Long userId);

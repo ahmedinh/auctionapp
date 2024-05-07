@@ -1,6 +1,5 @@
 package ba.atlant.auctionapp.service;
 
-import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
