@@ -119,7 +119,8 @@ public class PersonService {
 
             person.setFirstName(personDTO.getFirstName());
             person.setLastName(personDTO.getLastName());
-            person.setBirthDate(LocalDate.of(personDTO.getBirthYear(), personDTO.getBirthMonth(), personDTO.getBirthDay()));
+            if (personDTO.getBirthYear() != null && personDTO.getBirthMonth() != null && personDTO.getBirthDay() != null)
+                person.setBirthDate(LocalDate.of(personDTO.getBirthYear(), personDTO.getBirthMonth(), personDTO.getBirthDay()));
             person.setPhoneNumber(personDTO.getPhoneNumber());
             person.setShippingAddress(personDTO.getShippingStreet());
             person.setZipCode(personDTO.getShippingZipCode());
