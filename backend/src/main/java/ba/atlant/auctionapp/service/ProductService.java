@@ -50,24 +50,26 @@ public class ProductService {
             if (productRepository.findByName(productCreationDTO.getName()).isPresent())
                 throw new IllegalArgumentException("Product with provided name already exists.");
 
-            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory());
+            Optional<Category> optionalCategory = categoryRepository.findByName(productCreationDTO.getSelectedCategory());
+            if (optionalCategory.isEmpty())
+                throw new IllegalArgumentException("Category not found for provided name.");
+
+            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findByNameAndCategory(productCreationDTO.getSelectedSubcategory(), optionalCategory.get());
             if (optionalSubCategory.isEmpty())
                 throw new IllegalArgumentException("SubCategory not found for provided name.");
+
+            if (!optionalSubCategory.get().getCategory().equals(optionalCategory.get()))
+                throw new IllegalArgumentException("Category does not contain that subcategory.");
 
             Integer userId = personService.getUserId(authHeader);
             Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
             if (optionalPerson.isEmpty())
                 throw new IllegalArgumentException("Person not found for given ID.");
 
-            Optional<Category> optionalCategory = categoryRepository.findByName(productCreationDTO.getSelectedCategory());
-            if (optionalCategory.isEmpty())
-                throw new IllegalArgumentException("Category not found for provided name.");
-
-            if (!optionalSubCategory.get().getCategory().equals(optionalCategory.get()))
-                throw new IllegalArgumentException("Category does not contain that subcategory.");
-
             Product product = new Product(productCreationDTO, optionalPerson.get(), optionalSubCategory.get());
+            System.out.println("Prije product savea.");
             productRepository.save(product);
+            System.out.println("Poslije product savea.");
 
             return ResponseEntity.ok(product);
         } catch (DataAccessException e) {
@@ -183,6 +185,10 @@ public class ProductService {
         Optional<Product> optionalProduct = productRepository.findByName(productName);
         if (optionalProduct.isEmpty())
             throw new IllegalArgumentException("Product with provided name is not found.");
+        List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(optionalProduct.get().getId());
+        if (!productPictureList.isEmpty()) {
+            productPictureRepository.deleteAll(productPictureList);
+        }
         Product product = optionalProduct.get();
         productRepository.delete(product);
     }
