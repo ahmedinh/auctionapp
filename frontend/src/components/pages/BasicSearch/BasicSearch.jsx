@@ -41,12 +41,8 @@ export default function BasicSearch() {
                     </p>
                 ) : ""}
             </div>
-            <div className="menu-a" style={{ height: "30px", marginTop: "1rem" }}>
-                <div className="left-part-a" style={{ marginLeft: "22.5rem" }}>
-                    <p className="left-part-text" style={{ margin: "0" }}>
-                        <Breadcrumbs locationLink={currentPageTitle} />
-                    </p>
-                </div>
+            <div className="menu-a" >
+                <Breadcrumbs locationLink={currentPageTitle} />
             </div>
             <MainSearchPage
                 productsData={basicSearchResults}

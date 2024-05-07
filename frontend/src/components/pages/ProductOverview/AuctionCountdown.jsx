@@ -23,7 +23,7 @@ const AuctionCountdown = ({ auctionEnd }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
-        }, 1000); // Update every second
+        }, 1000);
 
         return () => clearTimeout(timer);
     });
