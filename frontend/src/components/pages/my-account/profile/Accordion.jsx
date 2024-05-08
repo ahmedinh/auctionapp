@@ -8,6 +8,7 @@ import './Accordion.scss';
 import ProfilePicture from '../../../../assets/profile-picture.png';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { changeUserInfo, changeUserPicture, getUserInfo, getUserPicture } from '../../../../api/userApi';
+import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -31,13 +32,13 @@ const AccordionExpandIcon = () => {
     const [state, setState] = useState('');
     const [country, setCountry] = useState('');
 
-    
+
     const { status, error, data } = useQuery({ queryKey: ['get-user-info'], queryFn: () => getUserInfo() })
-    const { status: pictureStatus, error: pictreError, data: pictureData, refetch } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
-    
+    const { status: pictureStatus, error: pictureError, data: pictureData, refetch } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
+
     const mutation = useMutation({ mutationKey: ['change-user-info'], mutationFn: (payload) => changeUserInfo({ payload: payload }) });
     const mutationPicture = useMutation({ mutationKey: ['change-user-picture'], mutationFn: (file) => changeUserPicture({ file: file }) });
-    
+
     const handleFileChange = event => {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
@@ -111,6 +112,10 @@ const AccordionExpandIcon = () => {
             setCountry(data.country);
         }
     }, [data]);
+
+    if (status === 'pending' || pictureStatus === 'pending') {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className='accordion-section'>
