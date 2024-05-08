@@ -9,46 +9,44 @@
     padding-top: 32px;
     color: $color-white;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 
-    .auction-section {
+    .content-footer {
         display: flex;
-        flex-direction: column;
-        gap: 24px;
-        text-align: left;
-        margin: 0;
-        width: 100%;
-        margin-left: 19%;
+        justify-content: space-between;
+        width: 1120px;
 
-        .auction-title {
-            color: $color-grey;
-            font-size: 16px;
-            opacity: 50%;
-        }
-
-        .options {
+        .auction-section {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            font-size: 16px;
+            gap: 24px;
+            text-align: left;
+            margin: 0;
 
-            a {
-                color: $color-white;
-                text-decoration: none;
+            .auction-title {
+                color: $color-grey;
+                font-size: 16px;
+                opacity: 50%;
+            }
+
+            .options {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                font-size: 16px;
+
+                a {
+                    color: $color-white;
+                    text-decoration: none;
+                }
             }
         }
-    }
-
-    .get-in-touch {
-        text-align: left;
-        width: 100%;
-        align-items: right;
-        margin-left: 18%;
 
         .get-in-touch-content {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            width: 225px !important;
 
             .get-in-touch-text {
                 color: $color-grey;
