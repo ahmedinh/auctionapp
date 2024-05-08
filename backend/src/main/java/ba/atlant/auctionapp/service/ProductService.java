@@ -67,9 +67,7 @@ public class ProductService {
                 throw new IllegalArgumentException("Person not found for given ID.");
 
             Product product = new Product(productCreationDTO, optionalPerson.get(), optionalSubCategory.get());
-            System.out.println("Prije product savea.");
             productRepository.save(product);
-            System.out.println("Poslije product savea.");
 
             return ResponseEntity.ok(product);
         } catch (DataAccessException e) {
@@ -151,7 +149,6 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, String productName) throws IOException {
-        System.out.println("Array length for files is: " + files.length);
         Optional<Product> optionalProduct = productRepository.findByName(productName);
         if (optionalProduct.isEmpty())
             throw new IllegalArgumentException("No product found with required name.");

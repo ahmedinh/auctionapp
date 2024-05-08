@@ -73,7 +73,6 @@ public class ProductController {
             @RequestParam(defaultValue = "1") Long categoryId,
             @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "asc") String sortDirection) {
-        System.out.println(sortField + " " + sortDirection);
         return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection);
     }
 
