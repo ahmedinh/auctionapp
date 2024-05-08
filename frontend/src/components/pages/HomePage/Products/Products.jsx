@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import "./Products.scss";
 import ProductCard from "./ProductCard";
 import { useProducts } from "../../../../hooks/useProducts";
+import LoadingSpinner from "../../../utilities/loading-spinner/LoadingSpinner";
 
 export function Products({ fetchFunction, queryKeyPrefix }) {
     const {
@@ -36,7 +37,9 @@ export function Products({ fetchFunction, queryKeyPrefix }) {
         };
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    if (status === 'loading') return <h1>Loading...</h1>;
+    if (status === 'loading') return (
+        <LoadingSpinner />
+    );
     if (status === 'error') return <h1>Error: {error.message}</h1>;
 
     return (
