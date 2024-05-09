@@ -14,10 +14,7 @@ import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
-
     const [person, setPerson] = useState();
-
-
     const userInfo = useUserInfoGet();
     const userPicture = useUserPictureGet();
 
