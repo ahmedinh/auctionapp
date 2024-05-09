@@ -19,7 +19,7 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
     List<Bid> findAllByPerson(Person person);
 
     @Query("""
-            SELECT b.product.id as id,
+            SELECT b.product.id as productId,
             b.product.name as productName,
             (select pp.url from ProductPicture pp WHERE pp.id = (select min(pp2.id) FROM ProductPicture pp2 WHERE pp2.product.id = b.product.id)) as productPictureUrl,
             b.product.auctionEnd as auctionEnd,

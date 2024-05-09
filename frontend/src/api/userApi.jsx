@@ -8,10 +8,7 @@ export async function changeUserInfo({ payload }) {
         headers: {
             'Authorization': `Bearer ${userToken}`
         }
-    }).then(res => res.data).catch(error => {
-        console.error('Error updating user info:', error.response);
-        throw error; // Rethrow after logging or handle as needed
-    });
+    }).then(res => res.data);
 }
 
 export async function getUserInfo() {
@@ -32,23 +29,14 @@ export async function getUserPicture() {
     }).then(res => res.data);
 }
 
-export async function changeUserPicture({file}) {
+export async function changeUserPicture({ file }) {
     const userToken = getToken();
-    const formData = new FormData();
-    formData.append('file', file);
-
-    console.log(file);
-    console.log(formData);
-
+    const formData = new FormData('file', file);
     return axios.put(`${apiUrl}/api/user/picture`, formData, {
         headers: {
             'Authorization': `Bearer ${userToken}`
         }
-    }).then(res => res.data)
-      .catch(err => {
-          console.error('Error uploading picture:', err);
-          throw err;
-      });
+    }).then(res => res.data);
 }
 
 export async function getUserBids() {

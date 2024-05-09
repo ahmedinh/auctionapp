@@ -38,7 +38,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
 
     return (
         <div className="table-view">
-            <table class="table">
+            <table className="table">
                 <thead>
                     <th scope="col" className="col-s1">Item</th>
                     <th scope="col" className="col1">Name</th>
@@ -48,11 +48,11 @@ export default function SellerTable({ fetchProducts, queryString }) {
                     <th scope="col" className="col1">Highest bid</th>
                     <th scope="col" className="col1"></th>
                 </thead>
-                <tbody>
-                    {data && data.length > 0 ? (
-                        data?.map((product, index) => (
+                {data && data.length > 0 ? (
+                    data?.map((product, index) => (
+                        <tbody>
                             <tr key={index}>
-                                <td className="col-s"><img src={product.url} alt="" srcset="" /></td>
+                                <td className="col-s"><img src={product.url} /></td>
                                 <td className="col1">
                                     <p>{product.name}</p>
                                     <p className="product-id">#{product.id}</p>
@@ -67,9 +67,9 @@ export default function SellerTable({ fetchProducts, queryString }) {
                                     </button>
                                 </td>
                             </tr>
-                        ))
-                    ) : renderNoProducts()}
-                </tbody>
+                        </tbody>
+                    ))
+                ) : renderNoProducts()}
             </table>
         </div>
     )
