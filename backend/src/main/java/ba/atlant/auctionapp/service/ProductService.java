@@ -9,6 +9,7 @@ import ba.atlant.auctionapp.repository.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,14 +41,8 @@ public class ProductService {
     @Transactional
     public ResponseEntity<Long> addProduct(Product product) {
         try {
-            Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(product.getSubCategory().getId());
-            if (optionalSubCategory.isEmpty())
-                throw new Exception("SubCategory not found for given ID.");
-
-            Optional<Person> optionalUser = personRepository.findById(product.getUser().getId());
-            if (optionalUser.isEmpty())
-                throw new Exception("SubCategory not found for given ID.");
-
+            subCategoryRepository.findById(product.getSubCategory().getId()).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
+            personRepository.findById(product.getUser().getId()).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
             productRepository.save(product);
             return ResponseEntity.ok(product.getId());
         } catch (DataAccessException e) {
@@ -68,23 +63,18 @@ public class ProductService {
     }
 
     public ResponseEntity<ProductDTO> getHighlighted() {
-        Optional<Product> optionalProduct = productRepository.findById(9L);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("Product not found for given ID.");
-        Product product = optionalProduct.get();
+        Product product = productRepository.findById(9L).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
         return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
     }
 
     public ResponseEntity<ProductDTO> getProduct(Long id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("Product not found for given ID.");
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
         List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
         List<Bid> bidList = bidRepository.findAllByProductId(id);
         if (bidList.isEmpty())
-            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, BigDecimal.valueOf(0), 0));
+            return ResponseEntity.ok(new ProductDTO(product, productPictureList, BigDecimal.valueOf(0), 0));
         else
-            return ResponseEntity.ok(new ProductDTO(optionalProduct.get(), productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
+            return ResponseEntity.ok(new ProductDTO(product, productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForCategory(int page, int size, Long categoryId) {
@@ -109,10 +99,7 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, Long productId) throws IOException {
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("No product found with required ID.");
-        Product product = optionalProduct.get();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
         List<ProductPicture> productPictureList = new ArrayList<>();
         for (MultipartFile file : files) {
             s3Service.uploadFile(file.getOriginalFilename(), file);
@@ -128,13 +115,13 @@ public class ProductService {
 
     public ResponseEntity<List<ProductUserProjection>> activeUserProducts(Long userId) {
         if (personRepository.findById(userId).isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
+            throw new ResourceNotFoundException("No user found with provided ID.");
         return ResponseEntity.ok().body(productRepository.getActiveUserProducts(userId));
     }
 
     public ResponseEntity<List<ProductUserProjection>> soldUserProducts(Long userId) {
         if (personRepository.findById(userId).isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
+            throw new ResourceNotFoundException("No user found with provided ID.");
         return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
     }
 }

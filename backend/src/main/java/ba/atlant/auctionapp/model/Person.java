@@ -211,7 +211,7 @@ public class Person {
         return pictureUrl;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setPictureUrl(String bucketName, String region, String originalFilename) {
+        this.pictureUrl = String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, originalFilename);
     }
 }

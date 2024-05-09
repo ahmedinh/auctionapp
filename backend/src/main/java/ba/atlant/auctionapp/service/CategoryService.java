@@ -6,6 +6,7 @@ import ba.atlant.auctionapp.projection.SubCategoryProjection;
 import ba.atlant.auctionapp.repository.CategoryRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.repository.SubCategoryRepository;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class CategoryService {
     public ResponseEntity<List<Category>> searchCategories(String query) {
         List<Category> categoryList = categoryRepository.searchCategories(query);
         if (categoryList.isEmpty())
-            throw new IllegalArgumentException("No categories found for given name.");
+            throw new ResourceNotFoundException("No categories found for given name.");
         return ResponseEntity.ok(categoryList);
     }
 }

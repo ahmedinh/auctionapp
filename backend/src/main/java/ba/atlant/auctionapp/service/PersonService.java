@@ -13,6 +13,7 @@ import ba.atlant.auctionapp.request.AuthRequest;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -104,9 +105,7 @@ public class PersonService {
 
     public ResponseEntity<PersonProjection> getCurrentUser(String authHeader) {
         Integer userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId.toString()));
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
+        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         PersonProjection personProjection = personRepository.getPersonInformation(Long.valueOf(userId.toString()));
         return ResponseEntity.ok(personProjection);
     }
@@ -115,12 +114,7 @@ public class PersonService {
     public ResponseEntity<PersonDTO> modifyCurrentUser(String authHeader, PersonDTO personDTO) {
         try {
             Integer userId = getUserId(authHeader);
-            Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
-
-            if (optionalPerson.isEmpty())
-                throw new IllegalArgumentException("No user found with provided ID.");
-            Person person = optionalPerson.get();
-
+            Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
             person.setFirstName(personDTO.getFirstName());
             person.setLastName(personDTO.getLastName());
             person.setBirthDate(LocalDate.of(personDTO.getBirthYear(), personDTO.getBirthMonth(), personDTO.getBirthDay()));
@@ -132,7 +126,7 @@ public class PersonService {
             person.setCountry(personDTO.getShippingCountry());
             if ((personDTO.getExpirationYear() == null || personDTO.getExpirationMonth() == null || personDTO.getCardName() == null || personDTO.getCardNumber() == null || personDTO.getCvc() == null)
             && (personDTO.getExpirationYear() != null || personDTO.getExpirationMonth() != null || personDTO.getCardName() != null || personDTO.getCardNumber() != null || personDTO.getCvc() != null)) {
-                throw new IllegalArgumentException("Incomplete data for credit card information.");
+                throw new ResourceNotFoundException("Incomplete data for credit card information.");
             }
 
             Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
@@ -157,25 +151,19 @@ public class PersonService {
     @Transactional
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
         Integer userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
-        Person person = optionalPerson.get();
+        Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
         s3Service.uploadFile(file.getOriginalFilename(), file);
-        person.setPictureUrl(String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename()));
+        person.setPictureUrl(s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename());
         personRepository.save(person);
         return ResponseEntity.ok(person);
     }
 
     public ResponseEntity<Map<String,String>> getUserPicture(String authHeader) {
         Integer userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
-        Person person = optionalPerson.get();
-        Map<String, String> map = new HashMap<>();
-        map.put("url", person.getPictureUrl());
-        return ResponseEntity.ok(map);
+        Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Map<String, String> personPictureUrl = new HashMap<>();
+        personPictureUrl.put("url", person.getPictureUrl());
+        return ResponseEntity.ok(personPictureUrl);
     }
 }
