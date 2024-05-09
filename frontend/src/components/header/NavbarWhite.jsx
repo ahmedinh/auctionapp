@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
+import '../utilities/Style.scss'
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
@@ -47,7 +48,7 @@ const NavbarWhite = () => {
                                 onChange={(e) => handleChange(e.target.value)}
                             />
                             <button type="submit" className="search-icon">
-                                <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
+                                <Icon icon="mdi-light:magnify" className="icon-styling" />
                             </button>
                         </form>
                         {isSearchFocused && (

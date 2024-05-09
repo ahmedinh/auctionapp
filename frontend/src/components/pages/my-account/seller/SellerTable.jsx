@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { getUser } from "../../../utilities/Common";
-import './SellerTable.scss';
-import { useNavigate } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
+import { getUser, getToken } from '../../../utilities/Common';
+import TableView from '../TableView';
 import CartPicture from '../../../../assets/cart.png';
-import CountdownTimer from "../CountdownTimer";
+import CountdownTimer from '../CountdownTimer';
+import { useNavigate } from 'react-router-dom';
 
 export default function SellerTable({ fetchProducts, queryString }) {
     const navigate = useNavigate();
@@ -14,63 +14,39 @@ export default function SellerTable({ fetchProducts, queryString }) {
     const { data, error, isError, isLoading, status } = useQuery({
         queryKey: [queryString],
         queryFn: () => fetchProducts({ userId })
-    })
+    });
 
-    const handleProductRedirect = (productId) => {
-        navigate(`/shop/product/${productId}`);
-    }
+    const tableHeaders = ["Name", "Time left", "Your price", "No. bids", "Highest bid", ""];
 
-    const renderNoProducts = () => {
-        return (
-            <div className="no-products">
-                <div className="no-products-content">
-                    <div className="cart-text">
-                        <img src={CartPicture} alt="" />
-                        <p className="message">You do not have any scheduled items for sale.</p>
-                    </div>
-                    <button onClick={() => navigate('/my-account/add-item/product-info')}>
-                        START SELLING
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    const rowRenderer = (product, index) => (
+        <tr key={index}>
+            <td className="col-s"><img src={product.url} /></td>
+            <td className="col1">
+                <p>{product.name}</p>
+                <p className="product-id">#{product.id}</p>
+            </td>
+            <td className="col1"><CountdownTimer targetDate={product.auctionEnd} /></td>
+            <td className="col1">${product.startPrice.toFixed(2)}</td>
+            <td className="col1">{product.noOfBids}</td>
+            <td className="col1">${product.maxBid.toFixed(2)}</td>
+            <td className="col1">
+                <button onClick={() => navigate(`/shop/product/${product.id}`)}>
+                    VIEW
+                </button>
+            </td>
+        </tr>
+    );
 
     return (
-        <div className="table-view">
-            <table className="table">
-                <thead>
-                    <th scope="col" className="col-s1">Item</th>
-                    <th scope="col" className="col1">Name</th>
-                    <th scope="col" className="col1">Time left</th>
-                    <th scope="col" className="col1">Your price</th>
-                    <th scope="col" className="col1">No. bids</th>
-                    <th scope="col" className="col1">Highest bid</th>
-                    <th scope="col" className="col1"></th>
-                </thead>
-                {data && data.length > 0 ? (
-                    data?.map((product, index) => (
-                        <tbody>
-                            <tr key={index}>
-                                <td className="col-s"><img src={product.url} /></td>
-                                <td className="col1">
-                                    <p>{product.name}</p>
-                                    <p className="product-id">#{product.id}</p>
-                                </td>
-                                <td className="col1"><CountdownTimer targetDate={product.auctionEnd} /></td>
-                                <td className="col1">${product.startPrice.toFixed(2)}</td>
-                                <td className="col1">{product.noOfBids}</td>
-                                <td className="col1">${product.maxBid.toFixed(2)}</td>
-                                <td className="col1">
-                                    <button onClick={() => handleProductRedirect(product.id)}>
-                                        VIEW
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    ))
-                ) : renderNoProducts()}
-            </table>
-        </div>
-    )
-};
+        <TableView
+            data={data}
+            fetchStatus={status}
+            noItemsMessage="You do not have any scheduled items for sale."
+            noItemsActionLabel="START SELLING"
+            noItemsRedirect="/my-account/add-item/product-info"
+            tableHeaders={tableHeaders}
+            rowRenderer={rowRenderer}
+            icon={CartPicture}
+        />
+    );
+}
