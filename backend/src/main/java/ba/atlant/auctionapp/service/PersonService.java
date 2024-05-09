@@ -4,8 +4,10 @@ import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.PersonDTO;
 import ba.atlant.auctionapp.enumeration.Role;
 import ba.atlant.auctionapp.exception.EmailAlreadyUsedException;
+import ba.atlant.auctionapp.model.CreditCard;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.projection.PersonProjection;
+import ba.atlant.auctionapp.repository.CreditCardRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.request.AuthRequest;
 import ba.atlant.auctionapp.request.LoginRequest;
@@ -35,13 +37,15 @@ public class PersonService {
     final JwtUtils jwtUtils;
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CreditCardRepository creditCardRepository;
     private final S3Service s3Service;
 
-    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils, S3Service s3Service) {
+    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils, CreditCardRepository creditCardRepository, S3Service s3Service) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.creditCardRepository = creditCardRepository;
         this.s3Service = s3Service;
     }
 
@@ -126,13 +130,23 @@ public class PersonService {
             person.setShippingCity(personDTO.getShippingCity());
             person.setState(personDTO.getShippingState());
             person.setCountry(personDTO.getShippingCountry());
-            person.setExpirationYear(personDTO.getExpirationYear());
-            person.setExpirationMonth(personDTO.getExpirationMonth());
-            person.setCardName(personDTO.getCardName());
-            person.setCVV(personDTO.getCvc());
-            person.setCardNumber(personDTO.getCardNumber());
+            if ((personDTO.getExpirationYear() == null || personDTO.getExpirationMonth() == null || personDTO.getCardName() == null || personDTO.getCardNumber() == null || personDTO.getCvc() == null)
+            && (personDTO.getExpirationYear() != null || personDTO.getExpirationMonth() != null || personDTO.getCardName() != null || personDTO.getCardNumber() != null || personDTO.getCvc() != null)) {
+                throw new IllegalArgumentException("Incomplete data for credit card information.");
+            }
+
+            Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
+            CreditCard creditCard = optionalCreditCard.orElseGet(CreditCard::new);
+
+            creditCard.setExpirationYear(personDTO.getExpirationYear());
+            creditCard.setExpirationMonth(personDTO.getExpirationMonth());
+            creditCard.setCardName(personDTO.getCardName());
+            creditCard.setCVV(personDTO.getCvc());
+            creditCard.setCardNumber(personDTO.getCardNumber());
+            creditCard.setPerson(person);
 
             personRepository.save(person);
+            creditCardRepository.save(creditCard);
             return ResponseEntity.ok(personDTO);
         } catch (Exception e) {
             System.out.println("Error modifying user: " + e.getMessage());
