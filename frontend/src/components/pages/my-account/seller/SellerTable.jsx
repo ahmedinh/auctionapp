@@ -5,16 +5,18 @@ import TableView from '../TableView';
 import CartPicture from '../../../../assets/cart.png';
 import CountdownTimer from '../CountdownTimer';
 import { useNavigate } from 'react-router-dom';
+import { useSellerProducts } from '../../../../hooks/useSellerProducts';
+import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 
 export default function SellerTable({ fetchProducts, queryString }) {
     const navigate = useNavigate();
     const user = getUser();
     const userId = user.id;
 
-    const { data, error, isError, isLoading, status } = useQuery({
-        queryKey: [queryString],
-        queryFn: () => fetchProducts({ userId })
-    });
+    const { data, error, isError, isLoading, status } = useSellerProducts({ fetchProducts, queryString, userId });
+
+    if (status === 'pending' || status === 'loading')
+        return <LoadingSpinner/>;
 
     const tableHeaders = ["Name", "Time left", "Your price", "No. bids", "Highest bid", ""];
 
