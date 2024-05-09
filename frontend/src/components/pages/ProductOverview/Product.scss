@@ -1,6 +1,7 @@
 @import "../../utilities/Style.scss";
 
 .product-page {
+    min-height: 100vh;
     .product {
         display: flex;
         flex-direction: row;
