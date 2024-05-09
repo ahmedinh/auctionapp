@@ -31,7 +31,8 @@ export async function getUserPicture() {
 
 export async function changeUserPicture({ file }) {
     const userToken = getToken();
-    const formData = new FormData('file', file);
+    const formData = new FormData();
+    formData.append('file', file);
     return axios.put(`${apiUrl}/api/user/picture`, formData, {
         headers: {
             'Authorization': `Bearer ${userToken}`

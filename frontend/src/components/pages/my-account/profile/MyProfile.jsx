@@ -4,6 +4,7 @@ import BreadCrumbsMenu from "../../../utilities/BreadCrumbsMenu";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import '../../../utilities/Style.scss'
+import { myAccountRoute } from "../../../utilities/AppUrls";
 
 const MyProfile = () => {
     return (
@@ -12,31 +13,31 @@ const MyProfile = () => {
             <div className="page-content">
                 <div className="nav-buttons">
                     <div className="smaller-buttons">
-                        <NavLink to='/my-account/profile' className={({ isActive }) =>
+                        <NavLink to={myAccountRoute + 'profile'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "profile-button"
                         }>
                             <Icon icon="bx:bxs-user" className="icon-styling" />
                             Profile
                         </NavLink>
-                        <NavLink to='/my-account/seller' className={({ isActive }) =>
+                        <NavLink to={myAccountRoute + 'seller'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "other-button"
                         }>
                             <Icon icon="oi:list" className="icon-styling" />
                             Seller
                         </NavLink>
-                        <NavLink to='/my-account/bids' className={({ isActive }) =>
+                        <NavLink to={myAccountRoute + 'bids'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "other-button"
                         }>
                             <Icon icon="material-symbols:monetization-on" className="icon-styling" />
                             Bids
                         </NavLink>
-                        <NavLink to='/my-account/wishlist' className={({ isActive }) =>
+                        <NavLink to={myAccountRoute + 'wishlist'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "other-button"
                         }>
                             <Icon icon="mdi:heart-outline" className="icon-styling" />
                             Wishlist
                         </NavLink>
-                        <NavLink to='/my-account/settings' className={({ isActive }) =>
+                        <NavLink to={myAccountRoute + 'settings'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "other-button"
                         }>
                             <Icon icon="fluent:settings-48-regular" className="icon-styling" />

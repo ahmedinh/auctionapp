@@ -6,8 +6,10 @@ import Typography from '@mui/material/Typography';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import './Accordion.scss';
 import ProfilePicture from '../../../../assets/profile-picture.png';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { changeUserInfo, changeUserPicture, getUserInfo, getUserPicture } from '../../../../api/userApi';
+import { useUserInfoGet } from '../../../../hooks/useUserInfoGet';
+import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
+import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
+import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -31,26 +33,20 @@ const AccordionExpandIcon = () => {
     const [state, setState] = useState('');
     const [country, setCountry] = useState('');
 
-    
-    const { status, error, data } = useQuery({ queryKey: ['get-user-info'], queryFn: () => getUserInfo() })
-    const { status: pictureStatus, error: pictreError, data: pictureData } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
-    
-    const mutation = useMutation({ mutationKey: ['change-user-info'], mutationFn: (payload) => changeUserInfo({ payload: payload }) });
-    const mutationPicture = useMutation({ mutationKey: ['change-user-picture'], mutationFn: (file) => changeUserPicture({ file: file }) });
-    
+
+    const userInfo = useUserInfoGet();
+    const userPicture = useUserPictureGet();
+
+    const changeUserInfoMutation = useChangeUserInfo();
+    const changeUserPictureMutation = useChangeUserPicture();
+
     const handleFileChange = event => {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
             setSelectedFile(file);
-            console.log('File selected:', file.name);
-            mutationPicture.mutate(file, {
-                onSuccess: (data) => {
-                    alert('You successfuly changed picture!')
-                    console.log('Mutation successful', data);
-                },
-                onError: (error) => {
-                    alert('Picture did not change. ', error?.message)
-                    console.error('Mutation failed', error);
+            changeUserPictureMutation.mutate(file, {
+                onSuccess: () => {
+                    userPicture.refetch();
                 }
             });
         }
@@ -76,40 +72,30 @@ const AccordionExpandIcon = () => {
             shippingState: state,
             shippingCountry: country,
         };
-        console.log(payload);
-        mutation.mutate(payload, {
-            onSuccess: (data) => {
-                alert('You successfuly changed information!')
-                console.log('Mutation successful', data);
-            },
-            onError: (error) => {
-                alert('Information did not change. ', error?.message)
-                console.error('Mutation failed', error);
-            }
-        });
+        changeUserInfoMutation.mutate(payload);
     }
 
     useEffect(() => {
-        if (data) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setEmail(data.email);
-            setBirthDay(data.birthDay);
-            setBirthMonth(data.birthMonth);
-            setBirthYear(data.birthYear);
-            setPhoneNumber(data.phoneNumber);
-            setCardName(data.cardName);
-            setCardNumber(data.cardNumber);
-            setExpirationMonth(data.expirationMonth);
-            setExpirationYear(data.expirationYear);
-            setCVC(data.cvc);
-            setStreet(data.shippingStreet);
-            setCity(data.shippingCity);
-            setZipCode(data.shippingZipCode);
-            setState(data.shippingState);
-            setCountry(data.country);
+        if (userInfo.data) {
+            setFirstName(userInfo.data.firstName);
+            setLastName(userInfo.data.lastName);
+            setEmail(userInfo.data.email);
+            setBirthDay(userInfo.data.birthDay);
+            setBirthMonth(userInfo.data.birthMonth);
+            setBirthYear(userInfo.data.birthYear);
+            setPhoneNumber(userInfo.data.phoneNumber);
+            setCardName(userInfo.data.cardName);
+            setCardNumber(userInfo.data.cardNumber);
+            setExpirationMonth(userInfo.data.expirationMonth);
+            setExpirationYear(userInfo.data.expirationYear);
+            setCVC(userInfo.data.cvc);
+            setStreet(userInfo.data.shippingStreet);
+            setCity(userInfo.data.shippingCity);
+            setZipCode(userInfo.data.shippingZipCode);
+            setState(userInfo.data.shippingState);
+            setCountry(userInfo.data.country);
         }
-    }, [data]);
+    }, [userInfo.data]);
 
     return (
         <div className='accordion-section'>
@@ -125,13 +111,13 @@ const AccordionExpandIcon = () => {
                 <AccordionDetails>
                     <div className="user-section">
                         <div className="picture-section">
-                            <img src={pictureData?.url ? pictureData?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' />
+                            <img src={userPicture.data?.url ? userPicture.data?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' />
                             <input
                                 type="file"
                                 style={{ display: 'none' }}
-                                ref={fileInputRef} // You will define this ref using useRef
+                                ref={fileInputRef}
                                 onChange={handleFileChange}
-                                accept="image/*" // Restrict file selection to images
+                                accept="image/*"
                             />
                             <p className='change-photo-button' onClick={() => fileInputRef.current.click()}>
                                 Change photo
