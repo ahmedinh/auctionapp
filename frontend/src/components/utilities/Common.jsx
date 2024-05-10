@@ -40,3 +40,40 @@ export const isUserAuthorized = () => {
         return false;
     }
 };
+
+export function isDateValid(day, month, year) {
+    if (!day && !month && !year) {
+        return true;
+    }
+    else if (!day || !month || !year) {
+        return false;
+    }
+
+    const yearNum = parseInt(year, 10);
+    const monthNum = parseInt(month, 10) - 1;
+    const dayNum = parseInt(day, 10);
+
+    if (yearNum < 1850 || yearNum > 3000 || monthNum < 0 || monthNum > 11) {
+        return false;
+    }
+
+    const date = new Date(yearNum, monthNum, dayNum);
+    if (date.getFullYear() !== yearNum || date.getMonth() !== monthNum || date.getDate() !== dayNum) {
+        return false;
+    }
+
+    return true;
+}
+
+export const validateExpirationDate = (expirationMonth, expirationYear) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear() % 100; // last two digits
+    const currentMonth = currentDate.getMonth() + 1;
+    const expMonth = parseInt(expirationMonth);
+    const expYear = parseInt(expirationYear);
+
+    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+        return false;
+    }
+    return expMonth >= 1 && expMonth <= 12;
+};

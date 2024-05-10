@@ -1,7 +1,6 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
-import ba.atlant.auctionapp.dto.CreditCardDTO;
 import ba.atlant.auctionapp.dto.PersonDTO;
 import ba.atlant.auctionapp.enumeration.Role;
 import ba.atlant.auctionapp.exception.EmailAlreadyUsedException;
@@ -14,6 +13,7 @@ import ba.atlant.auctionapp.request.AuthRequest;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -102,16 +102,34 @@ public class PersonService {
         return ResponseEntity.ok(personProjection);
     }
 
-    private void updateCreditCardInfo(CreditCardDTO creditCardDTO, Person person) {
-        if (creditCardDTO != null) {
-            CreditCard creditCard = new CreditCard(
-                    creditCardDTO.getCardName(),
-                    creditCardDTO.getCardNumber(),
-                    creditCardDTO.getExpirationMonth(),
-                    creditCardDTO.getExpirationYear(),
-                    creditCardDTO.getCvc(), person);
-            creditCardRepository.save(creditCard);
+    private boolean isCreditCardEmpty (PersonDTO personDTO) {
+        return Strings.isEmpty(personDTO.getCardName()) &&
+               Strings.isEmpty(personDTO.getCardNumber()) &&
+               personDTO.getExpirationMonth() == null &&
+               personDTO.getExpirationYear() == null &&
+               personDTO.getCvc() == null;
+    }
+
+    private boolean isCreditCardComplete (PersonDTO personDTO) {
+        return personDTO.getCardName() != null &&
+               personDTO.getCardNumber() != null &&
+               personDTO.getExpirationMonth() != null &&
+               personDTO.getExpirationYear() != null &&
+               personDTO.getCvc() != null;
+    }
+
+    private void updateCreditCardInfo(PersonDTO personDTO, Person person) {
+        if (isCreditCardEmpty(personDTO)) {
+            Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
+            optionalCreditCard.ifPresent(creditCardRepository::delete);
+            return;
         }
+        if (isCreditCardComplete(personDTO)) {
+            CreditCard creditCard = new CreditCard(personDTO.getCardName(), personDTO.getCardNumber(), personDTO.getExpirationMonth(), personDTO.getExpirationYear(), personDTO.getCvc(), person);
+            creditCardRepository.save(creditCard);
+            return;
+        }
+        throw new IllegalArgumentException("Credit card data is not complete.");
     }
 
     @Transactional
@@ -121,14 +139,15 @@ public class PersonService {
             Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
             person.setFirstName(personDTO.getFirstName());
             person.setLastName(personDTO.getLastName());
-            person.setBirthDate(LocalDate.of(personDTO.getBirthYear(), personDTO.getBirthMonth(), personDTO.getBirthDay()));
+            if (personDTO.getBirthYear() != null && personDTO.getBirthMonth() != null && personDTO.getBirthDay() != null)
+                person.setBirthDate(LocalDate.of(personDTO.getBirthYear(), personDTO.getBirthMonth(), personDTO.getBirthDay()));
             person.setPhoneNumber(personDTO.getPhoneNumber());
             person.setShippingAddress(personDTO.getShippingStreet());
             person.setZipCode(personDTO.getShippingZipCode());
             person.setShippingCity(personDTO.getShippingCity());
             person.setState(personDTO.getShippingState());
             person.setCountry(personDTO.getShippingCountry());
-            updateCreditCardInfo(personDTO.getCreditCardDTO(), person);
+            updateCreditCardInfo(personDTO, person);
             personRepository.save(person);
             return ResponseEntity.ok(personDTO);
         } catch (Exception e) {

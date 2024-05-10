@@ -11,11 +11,13 @@ import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
 import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
 import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
+import { isDateValid, validateExpirationDate } from '../../../utilities/Common';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     const [person, setPerson] = useState();
+    const [errors, setErrors] = useState({});
     const userInfo = useUserInfoGet();
     const userPicture = useUserPictureGet();
 
@@ -35,10 +37,28 @@ const AccordionExpandIcon = () => {
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const payload = {
-            ...person
-        };
-        updateUserInfo(payload);
+        const newErrors = {};
+        const payload = { ...person };
+
+        if (!isDateValid(payload.birthDay, payload.birthMonth, payload.birthYear)) {
+            newErrors.date = 'Invalid date';
+        }
+
+        if ([payload.cardName, payload.cardNumber, payload.expirationMonth, payload.expirationYear, payload.cvc].some(field => !field)) {
+            newErrors.card = 'All card fields must be filled';
+        } else {
+            if (!/^\d{13,19}$/.test(payload.cardNumber)) {
+                newErrors.card = 'Card number must be between 13 and 19 digits and contain only numbers';
+            } else if (!validateExpirationDate(payload.expirationMonth, payload.expirationYear)) {
+                newErrors.card = 'Invalid expiration date';
+            }
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            updateUserInfo(person);
+        }
     }
 
     useEffect(() => {
@@ -104,6 +124,7 @@ const AccordionExpandIcon = () => {
                                     <input type="number" placeholder='MM' name="" id="" value={person?.birthMonth || ''} onChange={(e) => handleOnChangeField('birthMonth', e.target.value)} />
                                     <input type="number" placeholder='YYYY' name="" id="" value={person?.birthYear || ''} onChange={(e) => handleOnChangeField('birthYear', e.target.value)} />
                                 </div>
+                                {errors.date && <div className="error">{errors.date}</div>}
                             </div>
                             <div className="phone-section">
                                 <p>Phone Number</p>
@@ -134,13 +155,13 @@ const AccordionExpandIcon = () => {
                                 <p>
                                     Name on Card
                                 </p>
-                                <input type="text" placeholder='JOHN DOE' value={person?.cardName} onChange={(e) => handleOnChangeField('cardName', e.target.value)} />
+                                <input type="text" placeholder='JOHN DOE' value={person?.cardName || ''} onChange={(e) => handleOnChangeField('cardName', e.target.value)} />
                             </div>
                             <div className="card-number">
                                 <p>
                                     Card Number
                                 </p>
-                                <input type="text" placeholder='XXXX-XXXX-XXXX-XXXX' value={person?.cardNumber} onChange={(e) => handleOnChangeField('cardNumber', e.target.value)} />
+                                <input type="text" placeholder='XXXX-XXXX-XXXX-XXXX' value={person?.cardNumber || ''} onChange={(e) => handleOnChangeField('cardNumber', e.target.value)} />
                             </div>
                             <div className="expiration-cvc">
                                 <div className="exp-date">
@@ -155,6 +176,7 @@ const AccordionExpandIcon = () => {
                                     <input type="number" placeholder='***' value={person?.cvc || ''} onChange={(e) => handleOnChangeField('cvc', e.target.value)} />
                                 </div>
                             </div>
+                            {errors.card && <div className="error">{errors.card}</div>}
                         </div>
                     </div>
                 </AccordionDetails>
@@ -173,7 +195,7 @@ const AccordionExpandIcon = () => {
                         <div className="all-fields">
                             <div className="street">
                                 <p>Street</p>
-                                <input type="text" placeholder='123 Main Street' value={person?.shippingStreet} onChange={(e) => handleOnChangeField('shippingStreet', e.target.value)} />
+                                <input type="text" placeholder='123 Main Street' value={person?.shippingStreet || ''} onChange={(e) => handleOnChangeField('shippingStreet', e.target.value)} />
                             </div>
                             <div className="city">
                                 <div className="city-part">
