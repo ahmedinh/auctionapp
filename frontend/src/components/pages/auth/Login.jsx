@@ -2,29 +2,16 @@ import React, { useState } from 'react';
 import FacebookIcon from '../../../assets/facebook-login-icon.png';
 import GmailIcon from '../../../assets/gmail-login-icon.png';
 import './Login.scss'
-import { useMutation } from '@tanstack/react-query';
-import { login } from '../../../api/authApi';
-import { setSession } from '../../utilities/Common';
-import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../../hooks/useLoginMutation';
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-
-    const { mutate, isLoading, isError, error, data } = useMutation({
-        mutationKey: ['login'],
-        mutationFn: () => login({ email, password }),
-        onSuccess: (data) => {
-            setSession(data.person, data.token);
-            navigate(`/home/new-arrivals`)
-        }
-
-    });
+    const { mutate: performLogin, isLoading, isError, error, data } = useLoginMutation();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        mutate({ email: email, password: password })
+        performLogin({ email, password });
     }
 
     return (

@@ -2,33 +2,20 @@ import React, { useState } from 'react';
 import FacebookIcon from '../../../assets/facebook-login-icon.png';
 import GmailIcon from '../../../assets/gmail-login-icon.png';
 import './Register.scss'
-import { NavLink, useNavigate } from 'react-router-dom';
-import { register } from '../../../api/authApi';
-import { setSession } from '../../utilities/Common';
-import { useMutation } from '@tanstack/react-query';
+import { NavLink } from 'react-router-dom';
+import { useRegisterMutation } from '../../../hooks/useRegisterMutation';
 
 export default function Register() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-
-    const { mutate, isLoading, isError, error, data } = useMutation({
-        mutationKey: ['register'],
-        mutationFn: () => register({ firstName, lastName, email, password }),
-        onSuccess: (data) => {
-            setSession(data.person, data.token);
-            navigate(`/home/new-arrivals`)
-        }
-
-    });
+    const { mutate: performRegistration, isLoading, isError, error, data } = useRegisterMutation();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        mutate({ firstName: firstName, lastName: lastName, email: email, password: password })
+        performRegistration({ firstName, lastName, email, password });
     }
-
     return (
         <div className="register-page">
             <div className="register-box">
@@ -41,14 +28,17 @@ export default function Register() {
                             <div className="input-field">
                                 <p>First Name</p>
                                 <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.firstName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Last Name</p>
                                 <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.lastName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Enter Email</p>
                                 <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.email}</p>
                             </div>
                             <div className="input-field">
                                 <p>Password</p>
@@ -57,6 +47,10 @@ export default function Register() {
                         </div>
                         <div className="register-buttons">
                         {isError && <p>Error: {error.response?.data.error_message  || error.response?.data.firstName || error.response?.data.lastName || error.response?.data.email || error.response?.data.password || 'Failed to register'}</p>}
+                                <p className='error-message'>{error?.response?.data?.password}</p>
+                            </div>
+                        </div>
+                        <div className="register-buttons">
                             <button type="submit" className='main-button'>Register</button>
                             <div className="external-services">
                                 <div className='facebook-button'>

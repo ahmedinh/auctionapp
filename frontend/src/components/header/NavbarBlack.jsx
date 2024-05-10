@@ -15,11 +15,13 @@ const NavbarBlack = () => {
     }, []);
     return (
         <nav className="navbar-black">
-            <SocialIcons />
-            <div className="chunk sign-in">
-                <NavLink to="/login">Login</NavLink>
-                or
-                <NavLink to="/register">Create an account</NavLink>
+            <div className="nav-black-content">
+                <SocialIcons />
+                <div className="auth-links">
+                    <NavLink to="/login">Login</NavLink>
+                    or
+                    <NavLink to="/register">Create an account</NavLink>
+                </div>
             </div>
         </nav>
     );

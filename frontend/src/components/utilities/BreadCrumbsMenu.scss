@@ -1,15 +1,16 @@
-.menu-a {
+.full-bar {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: center;
+    .content-breadcrumbs {
+        display: flex;
+        width: 1100px;
+        justify-content: space-between;
+        .left-part-a {
+            text-align: left;
+        }
 
-    .left-part-a {
-        text-align: left;
-        margin-left: 20%;
-    }
-
-    .right-part {
-        text-align: right;
-        margin-right: 20%;
+        .right-part {
+            text-align: right;
+        }
     }
 }
