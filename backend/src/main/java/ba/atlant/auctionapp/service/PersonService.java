@@ -1,6 +1,7 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
+import ba.atlant.auctionapp.dto.CreditCardDTO;
 import ba.atlant.auctionapp.dto.PersonDTO;
 import ba.atlant.auctionapp.enumeration.Role;
 import ba.atlant.auctionapp.exception.EmailAlreadyUsedException;
@@ -101,23 +102,15 @@ public class PersonService {
         return ResponseEntity.ok(personProjection);
     }
 
-    private long countNonNullFields(PersonDTO personDTO) {
-        return Arrays.stream(PersonDTO.class.getDeclaredFields()).filter(field -> {
-            field.setAccessible(true);
-            try {
-                return field.get(personDTO) != null;
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }).count();
-    }
-
-    public void validatePersonDTO(PersonDTO personDTO) {
-        long nonNullCount = countNonNullFields(personDTO);
-        long fieldCount = PersonDTO.class.getDeclaredFields().length;
-
-        if (nonNullCount != 0 && nonNullCount != fieldCount) {
-            throw new ResourceNotFoundException("Incomplete data for credit card information.");
+    private void updateCreditCardInfo(CreditCardDTO creditCardDTO, Person person) {
+        if (creditCardDTO != null) {
+            CreditCard creditCard = new CreditCard(
+                    creditCardDTO.getCardName(),
+                    creditCardDTO.getCardNumber(),
+                    creditCardDTO.getExpirationMonth(),
+                    creditCardDTO.getExpirationYear(),
+                    creditCardDTO.getCvc(), person);
+            creditCardRepository.save(creditCard);
         }
     }
 
@@ -135,20 +128,8 @@ public class PersonService {
             person.setShippingCity(personDTO.getShippingCity());
             person.setState(personDTO.getShippingState());
             person.setCountry(personDTO.getShippingCountry());
-            validatePersonDTO(personDTO);
-
-            Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
-            CreditCard creditCard = optionalCreditCard.orElseGet(CreditCard::new);
-
-            creditCard.setExpirationYear(personDTO.getExpirationYear());
-            creditCard.setExpirationMonth(personDTO.getExpirationMonth());
-            creditCard.setCardName(personDTO.getCardName());
-            creditCard.setCVV(personDTO.getCvc());
-            creditCard.setCardNumber(personDTO.getCardNumber());
-            creditCard.setPerson(person);
-
+            updateCreditCardInfo(personDTO.getCreditCardDTO(), person);
             personRepository.save(person);
-            creditCardRepository.save(creditCard);
             return ResponseEntity.ok(personDTO);
         } catch (Exception e) {
             System.out.println("Error modifying user: " + e.getMessage());
