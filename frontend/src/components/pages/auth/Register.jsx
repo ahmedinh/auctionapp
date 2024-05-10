@@ -27,38 +27,37 @@ export default function Register() {
                         <div className="register-fields">
                             <div className="input-field">
                                 <p>First Name</p>
-                                <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                                <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.firstName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Last Name</p>
-                                <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                                <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.lastName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Enter Email</p>
-                                <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                                <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.email}</p>
                             </div>
                             <div className="input-field">
                                 <p>Password</p>
-                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                         </div>
                         <div className="register-buttons">
-                        {isError && <p>Error: {error.response?.data.error_message  || error.response?.data.firstName || error.response?.data.lastName || error.response?.data.email || error.response?.data.password || 'Failed to register'}</p>}
-                                <p className='error-message'>{error?.response?.data?.password}</p>
-                            </div>
+                            {isError && <p>Error: {error.response?.data.error_message || error.response?.data.firstName || error.response?.data.lastName || error.response?.data.email || error.response?.data.password || 'Failed to register'}</p>}
+                            <p className='error-message'>{error?.response?.data?.password}</p>
                         </div>
                         <div className="register-buttons">
                             <button type="submit" className='main-button'>Register</button>
                             <div className="external-services">
                                 <div className='facebook-button'>
-                                    <img src={FacebookIcon} alt="FacebookIcon" />
+                                    <img src={FacebookIcon} alt="Facebook login icon" />
                                     Signup with Facebook
                                 </div>
                                 <div className='gmail-button'>
-                                    <img src={GmailIcon} alt="GmailIcon" />
+                                    <img src={GmailIcon} alt="Gmail login icon" />
                                     Signup with Gmail
                                 </div>
                             </div>
