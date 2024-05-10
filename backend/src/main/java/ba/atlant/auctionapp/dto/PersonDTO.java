@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.dto;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,19 +41,24 @@ public class PersonDTO {
 
     private String shippingCountry;
 
+    @Nullable
     private String cardName;
 
+    @Nullable
     @Pattern(regexp = "^[0-9]*$", message = "Card number must contain only digits.")
     @Size(min = 13, max = 19, message = "Card number must contain between 13 and 19 digits.")
     private String cardNumber;
 
+    @Nullable
     @Min(value = 1, message = "Expiration month must be at least 1")
     @Max(value = 12, message = "Expiration month must be no more than 12")
     private Integer expirationMonth;
 
+    @Nullable
     @Positive(message = "Birth year must be at least 1")
     private Integer expirationYear;
 
+    @Nullable
     @Min(value = 100, message = "CVV must be at least 100")
     @Max(value = 9999, message = "CVV must be no more than 9999")
     private Integer cvc;

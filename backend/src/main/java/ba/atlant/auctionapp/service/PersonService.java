@@ -27,10 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PersonService {
@@ -64,13 +61,7 @@ public class PersonService {
         if (personRepository.existsByEmail(registerRequest.getEmail())) {
             throw new EmailAlreadyUsedException("Email already in use");
         }
-        Person person = personRepository.save(new Person(
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                registerRequest.getEmail(),
-                passwordEncoder.encode(registerRequest.getPassword()),
-                Role.ROLE_USER
-        ));
+        Person person = personRepository.save(new Person(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail(), passwordEncoder.encode(registerRequest.getPassword()), Role.ROLE_USER));
         return getAuthResponse(registerRequest, person);
     }
 
@@ -83,8 +74,7 @@ public class PersonService {
     }
 
     private AuthResponse getAuthResponse(AuthRequest authRequest, Person person) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         person.setPassword(null);
@@ -94,6 +84,7 @@ public class PersonService {
     public Boolean existsByEmail(String email) {
         return personRepository.existsByEmail(email);
     }
+
     public Person getByEmail(String email) {
         return personRepository.findByEmail(email).orElse(null);
     }
@@ -110,6 +101,26 @@ public class PersonService {
         return ResponseEntity.ok(personProjection);
     }
 
+    private long countNonNullFields(PersonDTO personDTO) {
+        return Arrays.stream(PersonDTO.class.getDeclaredFields()).filter(field -> {
+            field.setAccessible(true);
+            try {
+                return field.get(personDTO) != null;
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }).count();
+    }
+
+    public void validatePersonDTO(PersonDTO personDTO) {
+        long nonNullCount = countNonNullFields(personDTO);
+        long fieldCount = PersonDTO.class.getDeclaredFields().length;
+
+        if (nonNullCount != 0 && nonNullCount != fieldCount) {
+            throw new ResourceNotFoundException("Incomplete data for credit card information.");
+        }
+    }
+
     @Transactional
     public ResponseEntity<PersonDTO> modifyCurrentUser(String authHeader, PersonDTO personDTO) {
         try {
@@ -124,10 +135,7 @@ public class PersonService {
             person.setShippingCity(personDTO.getShippingCity());
             person.setState(personDTO.getShippingState());
             person.setCountry(personDTO.getShippingCountry());
-            if ((personDTO.getExpirationYear() == null || personDTO.getExpirationMonth() == null || personDTO.getCardName() == null || personDTO.getCardNumber() == null || personDTO.getCvc() == null)
-            && (personDTO.getExpirationYear() != null || personDTO.getExpirationMonth() != null || personDTO.getCardName() != null || personDTO.getCardNumber() != null || personDTO.getCvc() != null)) {
-                throw new ResourceNotFoundException("Incomplete data for credit card information.");
-            }
+            validatePersonDTO(personDTO);
 
             Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
             CreditCard creditCard = optionalCreditCard.orElseGet(CreditCard::new);
@@ -154,12 +162,12 @@ public class PersonService {
         Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
         s3Service.uploadFile(file.getOriginalFilename(), file);
-        person.setPictureUrl(s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename());
+        person.setPictureUrl(s3Service.getBucketName(), s3Service.getRegion(), file.getOriginalFilename());
         personRepository.save(person);
         return ResponseEntity.ok(person);
     }
 
-    public ResponseEntity<Map<String,String>> getUserPicture(String authHeader) {
+    public ResponseEntity<Map<String, String>> getUserPicture(String authHeader) {
         Integer userId = getUserId(authHeader);
         Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         Map<String, String> personPictureUrl = new HashMap<>();
