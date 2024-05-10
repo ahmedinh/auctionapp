@@ -5,6 +5,7 @@ import Footer from '../footer/Footer';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavbarBlackLogged from '../header/NavbarBlackLogged';
 import { getUser, getToken, removeSession, validToken } from '../utilities/Common';
+import { homePageRoute } from './AppUrls';
 
 const Layout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,7 +14,7 @@ const Layout = () => {
     const handleLogout = () => {
         removeSession();
         setIsLoggedIn(false);
-        navigate('/home/new-arrivals')
+        navigate(homePageRoute + 'new-arrivals')
     };
 
     useEffect(() => {

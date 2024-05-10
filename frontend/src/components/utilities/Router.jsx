@@ -19,14 +19,15 @@ import ProtectedRoute from './ProtectedRoute';
 import Bids from '../pages/my-account/bids/Bids';
 import Settings from '../pages/my-account/settings/Settings';
 import SellerTable from '../pages/my-account/seller/SellerTable';
+import { myProfileRoute, newArrivalsRoute, sellerActiveRoute } from './AppUrls';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
             <Route element={<Layout />}>
-                <Route index element={<Navigate replace to="/home/new-arrivals" />} />
+                <Route index element={<Navigate replace to={newArrivalsRoute} />} />
                 <Route path="home" element={<Home />}>
-                    <Route index element={<Navigate replace to="/home/new-arrivals" />} />
+                    <Route index element={<Navigate replace to={newArrivalsRoute} />} />
                     <Route path="new-arrivals" element={<NewArrivals />} />
                     <Route path="last-chance" element={<LastChance />} />
                 </Route>
@@ -44,10 +45,10 @@ const Router = createBrowserRouter(
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account" element={<MyProfile />}>
-                    <Route index element={<Navigate replace to="/my-account/profile" />} />
+                    <Route index element={<Navigate replace to={myProfileRoute} />} />
                     <Route path="profile" element={<AccordionExpandIcon />} />
                     <Route path="seller" element={<Seller />}>
-                        <Route index element={<Navigate replace to="/my-account/seller/active" />} />
+                        <Route index element={<Navigate replace to={sellerActiveRoute} />} />
                         <Route path="active" element={<SellerTable />} />
                         <Route path="sold" element={<SellerTable />} />
                     </Route>

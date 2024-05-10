@@ -7,14 +7,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSellerProducts } from '../../../../hooks/useSellerProducts';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 import { getActiveUserProducts, getSoldUserProducts } from '../../../../api/productsApi';
+import { addProductInfoRoute, sellerActiveRoute, shopPageRoute } from '../../../utilities/AppUrls';
 
 export default function SellerTable() {
     const navigate = useNavigate();
     const location = useLocation();
     const user = getUser();
     const userId = user.id;
-    const fetchProducts = location.pathname === "/my-account/seller/active" ? getActiveUserProducts : getSoldUserProducts;
-    const queryString = location.pathname === "/my-account/seller/active" ? "active-products-user" : "sold-products-user";
+    const fetchProducts = location.pathname === sellerActiveRoute ? getActiveUserProducts : getSoldUserProducts;
+    const queryString = location.pathname === sellerActiveRoute ? "active-products-user" : "sold-products-user";
 
     const { data, error, isError, isLoading, status } = useSellerProducts({ fetchProducts, queryString, userId });
 
@@ -35,7 +36,7 @@ export default function SellerTable() {
             <td className="col1">{product.noOfBids}</td>
             <td className="col1">${product.maxBid.toFixed(2)}</td>
             <td className="col1">
-                <button onClick={() => navigate(`/shop/product/${product.id}`)}>
+                <button onClick={() => navigate(shopPageRoute + `product/${product.id}`)}>
                     VIEW
                 </button>
             </td>
@@ -48,7 +49,7 @@ export default function SellerTable() {
             fetchStatus={status}
             noItemsMessage="You do not have any scheduled items for sale."
             noItemsActionLabel="START SELLING"
-            noItemsRedirect="/my-account/add-item/product-info"
+            noItemsRedirect={addProductInfoRoute}
             tableHeaders={tableHeaders}
             rowRenderer={rowRenderer}
             icon={CartPicture}

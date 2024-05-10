@@ -5,6 +5,7 @@ import HammerPicture from '../../../../assets/hammer.svg';
 import { useBids } from '../../../../hooks/useBids';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 import CountdownTimer from '../CountdownTimer';
+import { newArrivalsRoute, shopPageRoute } from '../../../utilities/AppUrls';
 
 export default function Bids() {
     const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function Bids() {
             <td className="col1">{bid.noOfBids}</td>
             <td className="col1">${bid.maxBid.toFixed(2)}</td>
             <td className="col1">
-                <button onClick={() => navigate(`/shop/product/${bid.productId}`)}>
+                <button onClick={() => navigate(shopPageRoute + `product/${bid.productId}`)}>
                     BID
                 </button>
             </td>
@@ -41,7 +42,7 @@ export default function Bids() {
             fetchStatus={status}
             noItemsMessage="You don't have any bids and there are so many cool products available for sale."
             noItemsActionLabel="START BIDDING"
-            noItemsRedirect="/home/new-arrivals"
+            noItemsRedirect={newArrivalsRoute}
             tableHeaders={tableHeaders}
             rowRenderer={rowRenderer}
             icon={HammerPicture}

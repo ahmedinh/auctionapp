@@ -31,13 +31,15 @@ public interface PersonRepository extends JpaRepository<Person, Long>, PagingAnd
             p.zipCode as shippingZipCode,
             p.state as shippingState,
             p.country as shippingCountry,
-            (SELECT cc.cardName FROM CreditCard cc WHERE cc.person.id = p.id) as cardName,
-            (SELECT cc.cardNumber FROM CreditCard cc WHERE cc.person.id = p.id) as cardNumber,
-            (SELECT cc.expirationMonth FROM CreditCard cc WHERE cc.person.id = p.id) as expirationMonth,
-            (SELECT cc.expirationYear FROM CreditCard cc WHERE cc.person.id = p.id) as expirationYear,
-            (SELECT cc.CVV FROM CreditCard cc WHERE cc.person.id = p.id) as CVC
+            cc.cardName as cardName,
+            cc.cardNumber as cardNumber,
+            cc.expirationMonth as expirationMonth,
+            cc.expirationYear as expirationYear,
+            cc.CVV as CVC
             FROM Person p
+            LEFT JOIN CreditCard cc ON cc.person.id = p.id
             WHERE p.id = :userId
             """)
     PersonProjection getPersonInformation(@Param("userId") Long userId);
+
 }

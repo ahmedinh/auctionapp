@@ -5,12 +5,13 @@ import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
 import { useThresholdSearch } from "../../../hooks/useThresholdSearch";
 import "./BasicSearch.scss";
+import { homePageRoute } from "../../utilities/AppUrls";
 
 
 export default function BasicSearch() {
     let [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query");
-    const [currentPageTitle, setCurrentPageTitle] = useState(`/home/search-results-for-${query}`)
+    const [currentPageTitle, setCurrentPageTitle] = useState(homePageRoute + `search-results-for-${query}`)
 
     const {
         data: basicSearchResults,

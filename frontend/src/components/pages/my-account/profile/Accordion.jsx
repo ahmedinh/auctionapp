@@ -10,6 +10,7 @@ import { useUserInfoGet } from '../../../../hooks/useUserInfoGet';
 import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
 import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
 import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
+import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -18,14 +19,14 @@ const AccordionExpandIcon = () => {
     const userInfo = useUserInfoGet();
     const userPicture = useUserPictureGet();
 
-    const changeUserInfoMutation = useChangeUserInfo();
-    const changeUserPictureMutation = useChangeUserPicture();
+    const { mutate: updateUserInfo } = useChangeUserInfo();
+    const { mutate: updateUserPicture } = useChangeUserPicture();
 
     const handleFileChange = event => {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
             setSelectedFile(file);
-            changeUserPictureMutation.mutate(file, {
+            updateUserPicture(file, {
                 onSuccess: () => {
                     userPicture.refetch();
                 }
@@ -37,7 +38,7 @@ const AccordionExpandIcon = () => {
         const payload = {
             ...person
         };
-        changeUserInfoMutation.mutate(payload);
+        updateUserInfo(payload);
     }
 
     useEffect(() => {
@@ -52,6 +53,9 @@ const AccordionExpandIcon = () => {
             [fieldName]: value
         }))
     }
+
+    if (userPicture.status === 'pending' || userInfo.status === 'pending')
+        return <LoadingSpinner />;
 
     return (
         <div className='accordion-section'>
