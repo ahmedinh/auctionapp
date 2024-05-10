@@ -24,15 +24,15 @@ import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 import Settings from '../pages/my-account/settings/Settings';
 import SellerTable from '../pages/my-account/seller/SellerTable';
 import Error from '../pages/error/Error';
-import { sellerActiveRoute, myProfileRoute } from './AppUrls';
+import { sellerActiveRoute, myProfileRoute, newArrivalsRoute } from './AppUrls';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
             <Route element={<Layout />}>
-                <Route index element={<Navigate replace to="/home/new-arrivals" />} />
+                <Route index element={<Navigate replace to={newArrivalsRoute} />} />
                 <Route path="home" element={<Home />}>
-                    <Route index element={<Navigate replace to="/home/new-arrivals" />} />
+                    <Route index element={<Navigate replace to={newArrivalsRoute} />} />
                     <Route path="new-arrivals" element={<NewArrivals />} />
                     <Route path="last-chance" element={<LastChance />} />
                 </Route>
