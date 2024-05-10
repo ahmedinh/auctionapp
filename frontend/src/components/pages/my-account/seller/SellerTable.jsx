@@ -1,17 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { getUser, getToken } from '../../../utilities/Common';
 import TableView from '../TableView';
 import CartPicture from '../../../../assets/cart.png';
 import CountdownTimer from '../CountdownTimer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSellerProducts } from '../../../../hooks/useSellerProducts';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
+import { getActiveUserProducts, getSoldUserProducts } from '../../../../api/productsApi';
 
-export default function SellerTable({ fetchProducts, queryString }) {
+export default function SellerTable() {
     const navigate = useNavigate();
+    const location = useLocation();
     const user = getUser();
     const userId = user.id;
+    const fetchProducts = location.pathname === "/my-account/seller/active" ? getActiveUserProducts : getSoldUserProducts;
+    const queryString = location.pathname === "/my-account/seller/active" ? "active-products-user" : "sold-products-user";
 
     const { data, error, isError, isLoading, status } = useSellerProducts({ fetchProducts, queryString, userId });
 
