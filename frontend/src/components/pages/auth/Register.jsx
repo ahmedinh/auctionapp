@@ -42,12 +42,9 @@ export default function Register() {
                             </div>
                             <div className="input-field">
                                 <p>Password</p>
-                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <p className='error-message'>{error?.response?.data?.password}</p>
                             </div>
-                        </div>
-                        <div className="register-buttons">
-                            {isError && <p>Error: {error.response?.data.error_message || error.response?.data.firstName || error.response?.data.lastName || error.response?.data.email || error.response?.data.password || 'Failed to register'}</p>}
-                            <p className='error-message'>{error?.response?.data?.password}</p>
                         </div>
                         <div className="register-buttons">
                             <button type="submit" className='main-button'>Register</button>

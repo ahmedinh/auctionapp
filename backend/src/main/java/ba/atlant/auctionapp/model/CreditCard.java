@@ -26,21 +26,19 @@ public class CreditCard {
     @Column(name = "card_number")
     private String cardNumber;
 
-    @NotBlank(message = "Expiration month cannot be blank.")
     @NotNull(message = "Expiration month cannot be null.")
     @Column(name = "expiration_month")
     @Positive(message = "Expiration month must be a positive integer.")
     private Integer expirationMonth;
 
-    @NotBlank(message = "Expiration year cannot be blank.")
     @NotNull(message = "Expiration year cannot be null.")
     @Positive(message = "Expiration year must be a positive integer.")
     @Column(name = "expiration_year")
-    private Integer expiration_year;
+    private Integer expirationYear;
 
     @NotNull(message = "CVV number cannot be null.")
-    @NotBlank(message = "CVV number cannot be blank.")
-    @Size(min = 100, max = 9999, message = "CVV must be a three- or a four-digit number.")
+    @Min(value = 100, message = "CVV must be a three- or a four-digit number.")
+    @Max(value = 9999, message = "CVV must be a three- or a four-digit number.")
     private Integer CVV;
 
     @ManyToOne
@@ -50,11 +48,11 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String cardName, String cardNumber, Integer expirationMonth, Integer expiration_year, Integer CVV, Person person) {
+    public CreditCard(String cardName, String cardNumber, Integer expirationMonth, Integer expirationYear, Integer CVV, Person person) {
         this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expirationMonth = expirationMonth;
-        this.expiration_year = expiration_year;
+        this.expirationYear = expirationYear;
         this.CVV = CVV;
         this.person = person;
     }
@@ -87,12 +85,12 @@ public class CreditCard {
         this.expirationMonth = expirationMonth;
     }
 
-    public Integer getExpiration_year() {
-        return expiration_year;
+    public Integer getExpirationYear() {
+        return expirationYear;
     }
 
-    public void setExpiration_year(Integer expiration_year) {
-        this.expiration_year = expiration_year;
+    public void setExpirationYear(Integer expirationYear) {
+        this.expirationYear = expirationYear;
     }
 
     public Integer getCVV() {
@@ -103,11 +101,11 @@ public class CreditCard {
         this.CVV = CVV;
     }
 
-    public Person getUser() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setUser(Person person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 }

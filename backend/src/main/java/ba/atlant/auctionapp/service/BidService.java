@@ -7,6 +7,7 @@ import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,8 @@ public class BidService {
     }
 
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
-        Integer userId = personService.getUserId(token);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
+        Integer userId =personService.getUserId(token);
+        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
     }
 

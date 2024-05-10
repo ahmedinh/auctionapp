@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -65,5 +67,18 @@ public class GlobalExceptionHandler {
         }
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ValidationErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        List<ValidationErrorResponse.Violation> violations = e.getConstraintViolations()
+                .stream()
+                .map(violation -> new ValidationErrorResponse.Violation(
+                        violation.getPropertyPath().toString(),
+                        violation.getMessage()))
+                .collect(Collectors.toList());
+
+        ValidationErrorResponse errorResponse = new ValidationErrorResponse(violations);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
