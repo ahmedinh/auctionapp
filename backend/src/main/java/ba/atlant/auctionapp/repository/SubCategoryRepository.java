@@ -21,10 +21,25 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Long>,
     List<SubCategory> findSubCategoriesByCategory(Category category);
 
     @Query("""
-        SELECT sc.id as id, sc.name as name, COUNT(p) as noOfProducts
-        FROM SubCategory sc LEFT JOIN Product p ON p.subCategory.id = sc.id
-        WHERE sc.category.id=:categoryId
-        GROUP BY sc
-        """)
+            SELECT sc.id as id, sc.name as name, COUNT(p) as noOfProducts
+            FROM SubCategory sc LEFT JOIN Product p ON p.subCategory.id = sc.id
+            WHERE sc.category.id=:categoryId
+            GROUP BY sc
+            """)
     List<SubCategoryProjection> getSubCategoriesForSearch(@Param("categoryId") Long categoryId);
+
+    /***
+     * The result of this query is a list of subcategories in which the specified user (user_id) has placed bids,
+     * ranked by the number of bids from highest to lowest.
+     */
+    @Query(value = """
+            SELECT sc.id as id, sc.name as name
+            FROM sub_category sc
+            JOIN
+            (SELECT p.subcategory_id, COUNT(b.id) AS bid_count
+            FROM bid b
+            JOIN product p ON b.product_id = p.id WHERE b.user_id = :userId GROUP BY p.subcategory_id)
+            as bid_counts ON sc.id = bid_counts.subcategory_id ORDER BY bid_counts.bid_count DESC
+            """, nativeQuery = true)
+    List<SubCategoryProjection> getSubCategoriesByMostUserBids(@Param("userId") Long userId);
 }

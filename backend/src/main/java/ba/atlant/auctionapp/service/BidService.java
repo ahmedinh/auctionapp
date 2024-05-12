@@ -30,11 +30,11 @@ public class BidService {
     }
 
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
-        Integer userId = personService.getUserId(token);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+        Long userId = personService.getUserId(token);
+        Optional<Person> optionalPerson = personRepository.findById(userId);
         if (optionalPerson.isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
-        return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
     public boolean placeBid(Long userId, Long productId, BigDecimal amount) {

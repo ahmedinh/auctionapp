@@ -93,13 +93,13 @@ public class PersonService {
         return personRepository.findByEmail(email).orElse(null);
     }
 
-    Integer getUserId(String authHeader) {
+    Long getUserId(String authHeader) {
         String token = authHeader.substring(7);
-        return jwtUtils.getUserIdFromJwtToken(token);
+        return Long.valueOf(jwtUtils.getUserIdFromJwtToken(token));
     }
 
     public ResponseEntity<PersonProjection> getCurrentUser(String authHeader) {
-        Integer userId = getUserId(authHeader);
+        Long userId = getUserId(authHeader);
         Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId.toString()));
         if (optionalPerson.isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
@@ -110,8 +110,8 @@ public class PersonService {
     @Transactional
     public ResponseEntity<PersonDTO> modifyCurrentUser(String authHeader, PersonDTO personDTO) {
         try {
-            Integer userId = getUserId(authHeader);
-            Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+            Long userId = getUserId(authHeader);
+            Optional<Person> optionalPerson = personRepository.findById(userId);
 
             if (optionalPerson.isEmpty())
                 throw new IllegalArgumentException("No user found with provided ID.");
@@ -143,8 +143,8 @@ public class PersonService {
 
     @Transactional
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
-        Integer userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+        Long userId = getUserId(authHeader);
+        Optional<Person> optionalPerson = personRepository.findById(userId);
         if (optionalPerson.isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
         Person person = optionalPerson.get();
@@ -156,8 +156,8 @@ public class PersonService {
     }
 
     public ResponseEntity<Map<String,String>> getUserPicture(String authHeader) {
-        Integer userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+        Long userId = getUserId(authHeader);
+        Optional<Person> optionalPerson = personRepository.findById(userId);
         if (optionalPerson.isEmpty())
             throw new IllegalArgumentException("No user found with provided ID.");
         Person person = optionalPerson.get();

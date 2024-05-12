@@ -6,6 +6,7 @@ import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
+import ba.atlant.auctionapp.projection.SubCategoryProjection;
 import ba.atlant.auctionapp.repository.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -61,8 +62,8 @@ public class ProductService {
             if (!optionalSubCategory.get().getCategory().equals(optionalCategory.get()))
                 throw new IllegalArgumentException("Category does not contain that subcategory.");
 
-            Integer userId = personService.getUserId(authHeader);
-            Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId));
+            Long userId = personService.getUserId(authHeader);
+            Optional<Person> optionalPerson = personRepository.findById(userId);
             if (optionalPerson.isEmpty())
                 throw new IllegalArgumentException("Person not found for given ID.");
 
@@ -143,8 +144,7 @@ public class ProductService {
             sort = Sort.by(sortField).descending();
         }
 
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return pageable;
+        return PageRequest.of(page, size, sort);
     }
 
     @Transactional
@@ -188,5 +188,46 @@ public class ProductService {
         }
         Product product = optionalProduct.get();
         productRepository.delete(product);
+    }
+
+    public ResponseEntity getRecommendedProducts(Long userId) {
+        if (userId == null || bidRepository.getUserBids(userId).isEmpty()) {
+            return ResponseEntity.ok(productRepository.getRecommendedProductsNotLogged());
+        }
+        List<SubCategoryProjection> subCategoryProjectionList = subCategoryRepository.getSubCategoriesByMostUserBids(userId);
+        List<ProductProjection> productProjectionList1 = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryProjectionList.get(0).getId());
+
+        // List to hold the final selection of products
+        List<ProductProjection> recommendedProducts = new ArrayList<>();
+
+        // Add first two products from productProjectionList1 if available
+        if (productProjectionList1.size() >= 2) {
+            recommendedProducts.add(productProjectionList1.get(0));
+            recommendedProducts.add(productProjectionList1.get(1));
+        } else if (!productProjectionList1.isEmpty()) {
+            // If there is at least one product, add it
+            recommendedProducts.add(productProjectionList1.get(0));
+        }
+
+        // Check if there is a second subcategory
+        if (subCategoryProjectionList.size() > 1) {
+            List<ProductProjection> productProjectionList2 = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryProjectionList.get(1).getId());
+            // Add the first product from productProjectionList2 if available
+            if (!productProjectionList2.isEmpty())
+                recommendedProducts.add(productProjectionList2.get(0));
+        }
+
+        while (recommendedProducts.size() < 3) {
+            List<ProductProjection> additionalProducts = productRepository.getRecommendedProductsNotLogged();
+            for (ProductProjection product : additionalProducts) {
+                if (recommendedProducts.size() >= 3)
+                    break;
+                if (!recommendedProducts.contains(product))
+                    recommendedProducts.add(product);
+            }
+            if (additionalProducts.isEmpty())
+                break;
+        }
+        return ResponseEntity.ok(recommendedProducts);
     }
 }

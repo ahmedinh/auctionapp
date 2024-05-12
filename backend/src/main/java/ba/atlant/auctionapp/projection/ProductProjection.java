@@ -15,4 +15,5 @@ public interface ProductProjection {
     String getSize();
     String getColor();
     String getUrl();
+    Integer getBidCount();
 }
