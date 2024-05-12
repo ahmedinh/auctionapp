@@ -108,3 +108,11 @@ export async function deleteProduct({ productName }) {
         }
     }).then(res => res.data);
 }
+
+export async function getRecommendedProducts(userId) {
+    return axios.get(`${apiUrl}/api/product/recommended`, {
+        params: {
+            userId
+        }
+    }).then(res => res.data);
+}
