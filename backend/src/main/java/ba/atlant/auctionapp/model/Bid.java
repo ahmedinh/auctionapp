@@ -1,6 +1,5 @@
 package ba.atlant.auctionapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -22,12 +21,10 @@ public class Bid {
     @NotNull(message = "Bid amount cannot be null.")
     private BigDecimal amount;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Person person;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -47,11 +44,11 @@ public class Bid {
         this.amount = amount;
     }
 
-    public Person getUser() {
+    public Person getPerson() {
         return person;
     }
 
-    public void setUser(Person person) {
+    public void setPerson(Person person) {
         this.person = person;
     }
 

@@ -121,10 +121,3 @@ INSERT INTO product_picture (name, url, product_id) VALUES
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic1.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic1.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic2.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic2.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic3.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic3.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R'));
-
-insert into bid (amount, user_id, product_id)
-values (71.00, 2, 2),
-       (72.00, 2, 3),
-       (73.00, 2, 4),
-       (74.00, 2, 5),
-       (75.00, 2, 6);

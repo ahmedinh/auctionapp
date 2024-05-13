@@ -1,0 +1,84 @@
+@import '../../../utilities/Style.scss';
+
+.my-account {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .page-content {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        width: 1120px;
+        margin-top: 40px;
+
+        .nav-buttons {
+            display: flex;
+            gap: 13.5rem;
+
+            .smaller-buttons {
+                display: flex;
+                gap: 13px;
+
+                .profile-button,
+                .other-button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 16px;
+                    width: 134px;
+                    height: 56px;
+                    border: 1px groove $color-white;
+                    background-color: #fff;
+                    font-weight: $font-weight-semibold;
+                    text-decoration: none;
+                    color: #000;
+
+                    &:hover {
+                        border-color: $color-purple;
+                        transition: 0.5s;
+                    }
+
+                }
+                .active-button-style {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 16px;
+                    width: 134px;
+                    height: 56px;
+                    font-weight: $font-weight-semibold;
+                    text-decoration: none;
+                    color: #000;
+                    background-color: $color-purple;
+                    border: none;
+                    color: #fff;
+                }
+            }
+
+            .add-item-button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 32px;
+                width: 262px;
+                height: 56px;
+                background-color: $color-purple;
+                border: none;
+                color: #fff;
+                font-weight: $font-weight-bold;
+            }
+        }
+
+        .expandable-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .outlet-class {
+            width: 1120px;
+        }
+    }
+}

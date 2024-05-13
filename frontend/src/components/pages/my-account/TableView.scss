@@ -1,0 +1,139 @@
+@import '../../utilities/Style.scss';
+
+.table-view {
+    margin-bottom: 99px;
+    width: 1120px;
+
+    table {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        table-layout: fixed;
+        border: 1px groove $color-white;
+        display: flex;
+
+        thead {
+            display: flex;
+            flex-grow: 1;
+            justify-content: space-between;
+            margin: 1rem 1rem 1rem 2rem;
+
+            tr {
+                text-align: left;
+                font-weight: $font-weight-semibold;
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .col-s1 {
+                width: 80px;
+            }
+
+            .col1 {
+                width: 15%;
+            }
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        tbody {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            font-weight: $font-weight-bold;
+
+            tr {
+                display: flex;
+                flex-grow: 1;
+                justify-content: space-between;
+                align-items: center;
+                margin: 1rem 1rem 1rem 2rem;
+
+                .col1 {
+                    width: 15%;
+                }
+
+                .col-s {
+                    width: 80px;
+                    text-align: left;
+                }
+
+                td {
+                    text-align: left;
+                    text-wrap: wrap;
+
+                    p {
+                        margin: 0;
+                    }
+
+                    button {
+                        padding: 16px 32px 16px 32px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border: 3px solid $color-white;
+                        font-weight: $font-weight-bold;
+                        background-color: #fff;
+                        cursor: pointer;
+
+                        &:hover {
+                            border-color: $color-purple;
+                        }
+                    }
+
+                    .product-id {
+                        cursor: pointer;
+                        color: $color-purple;
+                        font-weight: $font-weight-normal;
+                    }
+                }
+            }
+        }
+        .no-products {
+            .no-products-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+                margin-bottom: 32px;
+
+                .cart-text {
+                    margin-top: 35.5px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 35.5px;
+
+                    .cart-icon {
+                        width: 92px;
+                        height: 92px;
+                    }
+
+                    p {
+                        margin: 0;
+                        font-weight: $font-weight-normal;
+                    }
+
+                }
+                button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: none;
+                    background-color: #fff;
+                    font-size: $font-size-normal;
+                    padding: 16px 32px 16px 32px;
+                    font-weight: $font-weight-bold;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

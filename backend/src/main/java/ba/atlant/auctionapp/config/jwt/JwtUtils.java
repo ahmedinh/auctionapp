@@ -35,12 +35,17 @@ public class JwtUtils {
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .claim("role", role)
+                .claim("userId", userPrincipal.getId())
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 
     public String getEmailFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Long getUserIdFromJwtToken(String token) {
+        return (Long) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
     }
 
     public boolean validateJwtToken(String authToken, HttpServletResponse response) throws IOException {

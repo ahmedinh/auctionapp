@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
 import AuctionCountdown from "./AuctionCountdown";
+import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
 
 export default function Product() {
     let { productId } = useParams();
@@ -22,7 +23,7 @@ export default function Product() {
     });
 
     if (status === 'pending') {
-        return <span>Loading...</span>
+        return <LoadingSpinner />;
     }
 
     if (status === 'error') {

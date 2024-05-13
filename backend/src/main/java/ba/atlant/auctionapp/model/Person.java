@@ -2,10 +2,8 @@ package ba.atlant.auctionapp.model;
 
 import ba.atlant.auctionapp.enumeration.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 
 /**
@@ -62,6 +60,9 @@ public class Person {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    @Column(name = "picture_url")
+    private String pictureUrl;
 
     public Person() {
     }
@@ -204,5 +205,13 @@ public class Person {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String bucketName, String region, String originalFilename) {
+        this.pictureUrl = String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, originalFilename);
     }
 }
