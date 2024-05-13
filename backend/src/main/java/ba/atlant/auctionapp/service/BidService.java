@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
@@ -13,17 +14,17 @@ import java.util.List;
 public class BidService {
     private final BidRepository bidRepository;
     private final PersonRepository personRepository;
-    private final PersonService personService;
+    private final JwtUtils jwtUtils;
 
-    public BidService(BidRepository bidRepository, PersonRepository personRepository, PersonService personService) {
+    public BidService(BidRepository bidRepository, PersonRepository personRepository, JwtUtils jwtUtils) {
         this.bidRepository = bidRepository;
         this.personRepository = personRepository;
-        this.personService = personService;
+        this.jwtUtils = jwtUtils;
     }
 
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
-        Integer userId =personService.getUserId(token);
-        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
+        Long userId = jwtUtils.getUserIdFromJwtToken(token.substring(7));
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 }
