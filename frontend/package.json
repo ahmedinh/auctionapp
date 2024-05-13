@@ -22,6 +22,7 @@
     "react-icons": "^5.0.1",
     "react-scripts": "5.0.1",
     "react-stomp": "^5.1.0",
+    "react-stripe-checkout": "^2.6.3",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
