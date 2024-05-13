@@ -12,4 +12,5 @@ public interface ProductUserProjection {
     String getUrl();
     BigDecimal getMaxBid();
     Integer getNoOfBids();
+    String getTimeLeft();
 }

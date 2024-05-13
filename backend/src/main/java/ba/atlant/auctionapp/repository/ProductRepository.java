@@ -164,7 +164,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.startPrice as startPrice,
             (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
             COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
-            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids
+            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids,
+            get_time_left(p.auctionEnd) as timeLeft
             FROM Product p
             WHERE p.person.id = :userId AND p.auctionEnd > CURRENT_TIMESTAMP
             """)
@@ -177,7 +178,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.startPrice as startPrice,
             (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
             COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
-            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids
+            COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids,
+            get_time_left(p.auctionEnd) as timeLeft
             FROM Product p
             WHERE p.person.id = :userId AND p.auctionEnd < CURRENT_TIMESTAMP
             AND COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) > 0
