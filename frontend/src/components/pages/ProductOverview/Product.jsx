@@ -56,7 +56,7 @@ export default function Product() {
         }
     }, []);
 
-    if (status === 'pending') {
+    if (status === 'loading') {
         return <LoadingSpinner />;
     }
 
