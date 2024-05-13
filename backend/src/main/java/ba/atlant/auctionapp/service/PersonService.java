@@ -75,7 +75,8 @@ public class PersonService {
     }
 
     private AuthResponse getAuthResponse(AuthRequest authRequest, Person person) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         person.setPassword(null);
@@ -90,14 +91,9 @@ public class PersonService {
         return personRepository.findByEmail(email).orElse(null);
     }
 
-    Integer getUserId(String authHeader) {
-        String token = authHeader.substring(7);
-        return jwtUtils.getUserIdFromJwtToken(token);
-    }
-
     public ResponseEntity<PersonProjection> getCurrentUser(String authHeader) {
-        Integer userId = getUserId(authHeader);
-        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         PersonProjection personProjection = personRepository.getPersonInformation(Long.valueOf(userId.toString()));
         return ResponseEntity.ok(personProjection);
     }
@@ -135,8 +131,8 @@ public class PersonService {
     @Transactional
     public ResponseEntity<PersonDTO> modifyCurrentUser(String authHeader, PersonDTO personDTO) {
         try {
-            Integer userId = getUserId(authHeader);
-            Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+            Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+            Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
             person.setFirstName(personDTO.getFirstName());
             person.setLastName(personDTO.getLastName());
             if (personDTO.getBirthYear() != null && personDTO.getBirthMonth() != null && personDTO.getBirthDay() != null)
@@ -158,8 +154,8 @@ public class PersonService {
 
     @Transactional
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
-        Integer userId = getUserId(authHeader);
-        Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Long userId = jwtUtils.getUserIdFromJwtToken(authHeader.substring(7));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
         s3Service.uploadFile(file.getOriginalFilename(), file);
         person.setPictureUrl(s3Service.getBucketName(), s3Service.getRegion(), file.getOriginalFilename());
@@ -168,8 +164,8 @@ public class PersonService {
     }
 
     public ResponseEntity<Map<String, String>> getUserPicture(String authHeader) {
-        Integer userId = getUserId(authHeader);
-        Person person = personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Long userId = jwtUtils.getUserIdFromJwtToken(authHeader.substring(7));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         Map<String, String> personPictureUrl = new HashMap<>();
         personPictureUrl.put("url", person.getPictureUrl());
         return ResponseEntity.ok(personPictureUrl);

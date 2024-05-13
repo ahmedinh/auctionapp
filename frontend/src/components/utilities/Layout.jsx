@@ -46,7 +46,7 @@ const Layout = () => {
         <>
             {isLoggedIn ? <NavbarBlackLogged onLogout={handleLogout} /> : <NavbarBlack />}
             <NavbarWhite />
-            <main><Outlet /></main>
+            <main><Outlet/></main>
             <Footer />
         </>
     );
