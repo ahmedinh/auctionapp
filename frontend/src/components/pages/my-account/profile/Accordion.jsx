@@ -116,6 +116,9 @@ const AccordionExpandIcon = () => {
     if (status === 'pending' || pictureStatus === 'pending') {
         return <LoadingSpinner />;
     }
+    if (status === 'loading' || pictureStatus === 'loading') {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className='accordion-section'>

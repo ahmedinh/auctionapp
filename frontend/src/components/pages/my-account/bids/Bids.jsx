@@ -1,20 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { getUserBids } from "../../../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import '../seller/SellerTable.scss';
 import './Bids.scss';
 import HammerPicture from '../../../../assets/hammer.svg';
-import CountdownTimer from "../CountdownTimer";
+import Payment from "../../payment/Payment";
+import { getUserId } from "../../../utilities/Common";
 
 
 export default function Bids() {
     const navigate = useNavigate();
+    const userId = getUserId();
+    const [auctionEnded, setAuctionEnded] = useState({});
 
     const { data, error, isError, isLoading, status } = useQuery({
-        queryKey: ['get-user-bids'],
+        queryKey: ['get-user-bids', userId],
         queryFn: () => getUserBids()
     })
+
+    const handleTimeUp = (productId) => {
+        setAuctionEnded(prev => ({ ...prev, [productId]: true }));
+    };
 
     const handleProductRedirect = (productId) => {
         navigate(`/shop/product/${productId}`);
@@ -57,14 +64,18 @@ export default function Bids() {
                                     <p>{bid.productName}</p>
                                     <p className="product-id">#{bid.id}</p>
                                 </td>
-                                <td className="col1"><CountdownTimer targetDate={bid.auctionEnd}/></td>
+                                <td className="col1">{bid.timeLeft}</td>
                                 <td className="col1">${bid.userPrice.toFixed(2)}</td>
                                 <td className="col1">{bid.noOfBids}</td>
                                 <td className="col1">${bid.maxBid.toFixed(2)}</td>
                                 <td className="col1">
-                                    <button onClick={() => handleProductRedirect(bid.id)}>
-                                        BID
-                                    </button>
+                                    {bid.timeLeft === 'Time is up!' && bid.maxBid === bid.userPrice ? (
+                                        <Payment />
+                                    ) : (bid.timeLeft === 'Time is up!' ? (
+                                        <p>Auction ended</p>
+                                    ) : (
+                                        <button onClick={() => handleProductRedirect(bid.id)}>BID</button>
+                                    ))}
                                 </td>
                             </tr>
                         ))

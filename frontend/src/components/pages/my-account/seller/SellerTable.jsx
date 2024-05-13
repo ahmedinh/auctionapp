@@ -4,7 +4,7 @@ import { getUser } from "../../../utilities/Common";
 import './SellerTable.scss';
 import { useNavigate } from "react-router-dom";
 import CartPicture from '../../../../assets/cart.png';
-import CountdownTimer from "../CountdownTimer";
+import { CountdownTimer } from "../CountdownTimer";
 
 export default function SellerTable({ fetchProducts, queryString }) {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
     const userId = user.id;
 
     const { data, error, status } = useQuery({
-        queryKey: [queryString],
+        queryKey: [queryString, userId],
         queryFn: () => fetchProducts({ userId })
     })
 
@@ -60,7 +60,7 @@ export default function SellerTable({ fetchProducts, queryString }) {
                                     <p>{product.name}</p>
                                     <p className="product-id">#{product.id}</p>
                                 </td>
-                                <td className="col1"><CountdownTimer targetDate={product.auctionEnd} /></td>
+                                <td className="col1">{product.timeLeft}</td>
                                 <td className="col1">${product.startPrice.toFixed(2)}</td>
                                 <td className="col1">{product.noOfBids}</td>
                                 <td className="col1">${product.maxBid.toFixed(2)}</td>

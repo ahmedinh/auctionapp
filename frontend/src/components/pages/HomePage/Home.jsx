@@ -6,7 +6,6 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
-import ProductCard from "./Products/ProductCard";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -15,6 +14,9 @@ const Home = () => {
     const { status: recommendedStatus, error: recommendedError, data: recommendedData } = useRecommendedProducts();
 
     if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
+        return <LoadingSpinner />;
+    }
+    if (categoriesStatus === 'loading' || highlightStatus === 'loading' || recommendedStatus === 'loading') {
         return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
