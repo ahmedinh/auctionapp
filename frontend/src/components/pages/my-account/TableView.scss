@@ -1,13 +1,16 @@
-@import '../../../utilities/Style.scss';
+@import '../../utilities/Style.scss';
 
 .table-view {
     margin-bottom: 99px;
+    width: 1120px;
 
     table {
         display: flex;
         flex-direction: column;
         width: 100%;
         table-layout: fixed;
+        border: 1px groove $color-white;
+        display: flex;
 
         thead {
             display: flex;
@@ -15,9 +18,12 @@
             justify-content: space-between;
             margin: 1rem 1rem 1rem 2rem;
 
-            th {
+            tr {
                 text-align: left;
                 font-weight: $font-weight-semibold;
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
             }
 
             .col-s1 {
@@ -32,6 +38,7 @@
         img {
             width: 80px;
             height: 80px;
+            object-fit: contain;
         }
 
         tbody {
@@ -87,33 +94,26 @@
                     }
                 }
             }
+        }
+        .no-products {
+            .no-products-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+                margin-bottom: 32px;
 
-            .no-products {
-                .no-products-content {
+                .cart-text {
+                    margin-top: 35.5px;
                     display: flex;
                     flex-direction: column;
+                    justify-content: center;
                     align-items: center;
-                    gap: 24px;
-                    margin-bottom: 32px;
+                    gap: 35.5px;
 
-                    .cart-text {
-                        margin-top: 35.5px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 35.5px;
-
-                        .cart-icon {
-                            width: 92px;
-                            height: 92px;
-                        }
-
-                        p {
-                            margin: 0;
-                            font-weight: $font-weight-normal;
-                        }
-
+                    .cart-icon {
+                        width: 92px;
+                        height: 92px;
                     }
                     button {
                         display: flex;
@@ -127,6 +127,18 @@
                         font-weight: $font-weight-bold;
                         cursor: pointer;
                     }
+
+                }
+                button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: none;
+                    background-color: #fff;
+                    font-size: $font-size-normal;
+                    padding: 16px 32px 16px 32px;
+                    font-weight: $font-weight-bold;
+                    cursor: pointer;
                 }
             }
         }

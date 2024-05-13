@@ -8,6 +8,7 @@ import AuctionCountdown from "./AuctionCountdown";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
+import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
 
 export default function Product() {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -58,7 +59,7 @@ export default function Product() {
     }, []);
 
     if (status === 'pending') {
-        return <span>Loading...</span>
+        return <LoadingSpinner />;
     }
 
     if (status === 'error') {

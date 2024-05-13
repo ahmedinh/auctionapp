@@ -6,111 +6,76 @@ import Typography from '@mui/material/Typography';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import './Accordion.scss';
 import ProfilePicture from '../../../../assets/profile-picture.png';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { changeUserInfo, changeUserPicture, getUserInfo, getUserPicture } from '../../../../api/userApi';
+import { useUserInfoGet } from '../../../../hooks/useUserInfoGet';
+import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
+import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
+import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
+import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
+import { isDateValid, validateExpirationDate } from '../../../utilities/Common';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
+    const [person, setPerson] = useState();
+    const [errors, setErrors] = useState({});
+    const userInfo = useUserInfoGet();
+    const userPicture = useUserPictureGet();
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [birthDay, setBirthDay] = useState('');
-    const [birthMonth, setBirthMonth] = useState('');
-    const [birthYear, setBirthYear] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [cardName, setCardName] = useState('');
-    const [cardNumber, setCardNumber] = useState('');
-    const [expirationMonth, setExpirationMonth] = useState('');
-    const [expirationYear, setExpirationYear] = useState('');
-    const [cvc, setCVC] = useState('');
-    const [street, setStreet] = useState('');
-    const [city, setCity] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
+    const { mutate: updateUserInfo } = useChangeUserInfo();
+    const { mutate: updateUserPicture } = useChangeUserPicture();
 
-    
-    const { status, error, data } = useQuery({ queryKey: ['get-user-info'], queryFn: () => getUserInfo() })
-    const { status: pictureStatus, error: pictreError, data: pictureData, refetch } = useQuery({ queryKey: ['get-user-picture'], queryFn: () => getUserPicture() })
-    
-    const mutation = useMutation({ mutationKey: ['change-user-info'], mutationFn: (payload) => changeUserInfo({ payload: payload }) });
-    const mutationPicture = useMutation({ mutationKey: ['change-user-picture'], mutationFn: (file) => changeUserPicture({ file: file }) });
-    
     const handleFileChange = event => {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
             setSelectedFile(file);
-            console.log('File selected:', file.name);
-            mutationPicture.mutate(file, {
-                onSuccess: (data) => {
-                    alert('You successfuly changed picture!')
-                    refetch();
-                    console.log('Mutation successful', data);
-                },
-                onError: (error) => {
-                    alert('Picture did not change. ', error?.message)
-                    console.error('Mutation failed', error);
+            updateUserPicture(file, {
+                onSuccess: () => {
+                    userPicture.refetch();
                 }
             });
         }
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const payload = {
-            firstName,
-            lastName,
-            email,
-            birthDay: parseInt(birthDay),
-            birthMonth: parseInt(birthMonth, 10),
-            birthYear: parseInt(birthYear, 10),
-            phoneNumber,
-            cardName,
-            cardNumber,
-            expirationMonth: parseInt(expirationMonth, 10),
-            expirationYear: parseInt(expirationYear, 10),
-            cvc: parseInt(cvc, 10),
-            shippingStreet: street,
-            shippingCity: city,
-            shippingZipCode: zipCode,
-            shippingState: state,
-            shippingCountry: country,
-        };
-        console.log(payload);
-        mutation.mutate(payload, {
-            onSuccess: (data) => {
-                alert('You successfuly changed information!')
-                console.log('Mutation successful', data);
-            },
-            onError: (error) => {
-                alert('Information did not change. ', error?.message)
-                console.error('Mutation failed', error);
+        const newErrors = {};
+        const payload = { ...person };
+
+        if (!isDateValid(payload.birthDay, payload.birthMonth, payload.birthYear)) {
+            newErrors.date = 'Invalid date';
+        }
+
+        if ([payload.cardName, payload.cardNumber, payload.expirationMonth, payload.expirationYear, payload.cvc].some(field => !field)) {
+            newErrors.card = 'All card fields must be filled';
+        } else {
+            if (!/^\d{13,19}$/.test(payload.cardNumber)) {
+                newErrors.card = 'Card number must be between 13 and 19 digits and contain only numbers';
+            } else if (!validateExpirationDate(payload.expirationMonth, payload.expirationYear)) {
+                newErrors.card = 'Invalid expiration date';
             }
-        });
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            updateUserInfo(person);
+        }
     }
 
     useEffect(() => {
-        if (data) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setEmail(data.email);
-            setBirthDay(data.birthDay);
-            setBirthMonth(data.birthMonth);
-            setBirthYear(data.birthYear);
-            setPhoneNumber(data.phoneNumber);
-            setCardName(data.cardName);
-            setCardNumber(data.cardNumber);
-            setExpirationMonth(data.expirationMonth);
-            setExpirationYear(data.expirationYear);
-            setCVC(data.cvc);
-            setStreet(data.shippingStreet);
-            setCity(data.shippingCity);
-            setZipCode(data.shippingZipCode);
-            setState(data.shippingState);
-            setCountry(data.country);
+        if (userInfo.data) {
+            setPerson(userInfo.data);
         }
-    }, [data]);
+    }, [userInfo.data]);
+
+    const handleOnChangeField = (fieldName, value) => {
+        setPerson(prev => ({
+            ...prev,
+            [fieldName]: value
+        }))
+    }
+
+    if (userPicture.status === 'pending' || userInfo.status === 'pending')
+        return <LoadingSpinner />;
 
     return (
         <div className='accordion-section'>
@@ -126,13 +91,13 @@ const AccordionExpandIcon = () => {
                 <AccordionDetails>
                     <div className="user-section">
                         <div className="picture-section">
-                            <img src={pictureData?.url ? pictureData?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' />
+                            <img src={userPicture.data?.url ? userPicture.data?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' />
                             <input
                                 type="file"
                                 style={{ display: 'none' }}
-                                ref={fileInputRef} // You will define this ref using useRef
+                                ref={fileInputRef}
                                 onChange={handleFileChange}
-                                accept="image/*" // Restrict file selection to images
+                                accept="image/*"
                             />
                             <p className='change-photo-button' onClick={() => fileInputRef.current.click()}>
                                 Change photo
@@ -142,28 +107,29 @@ const AccordionExpandIcon = () => {
                         <div className="information-section">
                             <div className="first-name-section">
                                 <p>First Name</p>
-                                <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                <input type="text" placeholder='John' value={person?.firstName || ''} onChange={(e) => handleOnChangeField('firstName', e.target.value)} />
                             </div>
                             <div className="last-name-section">
                                 <p>Last Name</p>
-                                <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                <input type="text" placeholder='Doe' value={person?.lastName || ''} onChange={(e) => handleOnChangeField('lastName', e.target.value)} />
                             </div>
                             <div className="email-section">
                                 <p>Email Address</p>
-                                <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input type="text" placeholder='user@domain.com' value={person?.email || ''} onChange={(e) => handleOnChangeField('email', e.target.value)} />
                             </div>
                             <div className="date-section">
                                 <p>Date of Birth</p>
                                 <div className="date-of-birth">
-                                    <input type="number" placeholder='DD' name="" id="" value={birthDay} onChange={(e) => setBirthDay(e.target.value)} />
-                                    <input type="number" placeholder='MM' name="" id="" value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)} />
-                                    <input type="number" placeholder='YYYY' name="" id="" value={birthYear} onChange={(e) => setBirthYear(e.target.value)} />
+                                    <input type="number" placeholder='DD' name="" id="" value={person?.birthDay || ''} onChange={(e) => handleOnChangeField('birthDay', e.target.value)} />
+                                    <input type="number" placeholder='MM' name="" id="" value={person?.birthMonth || ''} onChange={(e) => handleOnChangeField('birthMonth', e.target.value)} />
+                                    <input type="number" placeholder='YYYY' name="" id="" value={person?.birthYear || ''} onChange={(e) => handleOnChangeField('birthYear', e.target.value)} />
                                 </div>
+                                {errors.date && <div className="error">{errors.date}</div>}
                             </div>
                             <div className="phone-section">
                                 <p>Phone Number</p>
                                 <div className="for-number">
-                                    <input type="text" placeholder='+32534231564' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                    <input type="text" placeholder='+32534231564' value={person?.phoneNumber || ''} onChange={(e) => handleOnChangeField('phoneNumber', e.target.value)} />
                                     <div className="not-verified">
                                         Not verified
                                     </div>
@@ -189,27 +155,28 @@ const AccordionExpandIcon = () => {
                                 <p>
                                     Name on Card
                                 </p>
-                                <input type="text" placeholder='JOHN DOE' value={cardName} onChange={(e) => setCardName(e.target.value)} />
+                                <input type="text" placeholder='JOHN DOE' value={person?.cardName || ''} onChange={(e) => handleOnChangeField('cardName', e.target.value)} />
                             </div>
                             <div className="card-number">
                                 <p>
                                     Card Number
                                 </p>
-                                <input type="text" placeholder='XXXX-XXXX-XXXX-XXXX' value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
+                                <input type="text" placeholder='XXXX-XXXX-XXXX-XXXX' value={person?.cardNumber || ''} onChange={(e) => handleOnChangeField('cardNumber', e.target.value)} />
                             </div>
                             <div className="expiration-cvc">
                                 <div className="exp-date">
                                     <p>Expiration Date</p>
-                                    <input type="number" placeholder='MM' value={expirationMonth} onChange={(e) => setExpirationMonth(e.target.value)} />
+                                    <input type="number" placeholder='MM' value={person?.expirationMonth || ''} onChange={(e) => handleOnChangeField('expirationMonth', e.target.value)} />
                                 </div>
                                 <div className="year-input">
-                                    <input type="number" placeholder='YY' value={expirationYear} onChange={(e) => setExpirationYear(e.target.value)} />
+                                    <input type="number" placeholder='YY' value={person?.expirationYear || ''} onChange={(e) => handleOnChangeField('expirationYear', e.target.value)} />
                                 </div>
                                 <div className="CVC-input">
                                     <p>CVC/CVV</p>
-                                    <input type="number" placeholder='***' value={cvc} onChange={(e) => setCVC(e.target.value)} />
+                                    <input type="number" placeholder='***' value={person?.cvc || ''} onChange={(e) => handleOnChangeField('cvc', e.target.value)} />
                                 </div>
                             </div>
+                            {errors.card && <div className="error">{errors.card}</div>}
                         </div>
                     </div>
                 </AccordionDetails>
@@ -228,25 +195,25 @@ const AccordionExpandIcon = () => {
                         <div className="all-fields">
                             <div className="street">
                                 <p>Street</p>
-                                <input type="text" placeholder='123 Main Street' value={street} onChange={(e) => setStreet(e.target.value)} />
+                                <input type="text" placeholder='123 Main Street' value={person?.shippingStreet || ''} onChange={(e) => handleOnChangeField('shippingStreet', e.target.value)} />
                             </div>
                             <div className="city">
                                 <div className="city-part">
                                     <p>City</p>
-                                    <input type="text" placeholder='eg. Madrid' value={city} onChange={(e) => setCity(e.target.value)} />
+                                    <input type="text" placeholder='eg. Madrid' value={person?.shippingCity || ''} onChange={(e) => handleOnChangeField('shippingCity', e.target.value)} />
                                 </div>
                                 <div className="zip-code-part">
                                     <p>Zip Code</p>
-                                    <input type="text" placeholder='XXXXXXX' value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+                                    <input type="text" placeholder='XXXXXXX' value={person?.shippingZipCode || ''} onChange={(e) => handleOnChangeField('shippingZipCode', e.target.value)} />
                                 </div>
                             </div>
                             <div className="state">
                                 <p>State</p>
-                                <input type="text" placeholder='eg. Asturias' value={state} onChange={(e) => setState(e.target.value)} />
+                                <input type="text" placeholder='eg. Asturias' value={person?.shippingState || ''} onChange={(e) => handleOnChangeField('shippingState', e.target.value)} />
                             </div>
                             <div className="country">
                                 <p>Country</p>
-                                <input type="text" placeholder='eg. Spain' value={country} onChange={(e) => setCountry(e.target.value)} />
+                                <input type="text" placeholder='eg. Spain' value={person?.shippingCountry || ''} onChange={(e) => handleOnChangeField('shippingCountry', e.target.value)} />
                             </div>
                         </div>
                     </div>

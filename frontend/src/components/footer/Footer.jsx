@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import "./Footer.scss";
 import { common } from "../../messages/Text";
 import SocialIcons from "../../assets/icons/SocialIcons";
+import { homePageRoute } from "../utilities/AppUrls";
 
 const Footer = () => {
     return (
@@ -12,13 +13,13 @@ const Footer = () => {
                     AUCTION
                 </p>
                 <div className="options">
-                    <NavLink to="/home/about-us" activeClassName="active">
+                    <NavLink to={homePageRoute + 'about-us'} activeClassName="active">
                         {common.about_us}
                     </NavLink>
-                    <NavLink to="/home/terms-and-conditions" activeClassName="active">
+                    <NavLink to={homePageRoute + 'terms-and-conditions'} activeClassName="active">
                         {common.terms_and_conditions}
                     </NavLink>
-                    <NavLink to="/home/privacy-and-policy" activeClassName="active">
+                    <NavLink to={homePageRoute + 'privacy-and-policy'} activeClassName="active">
                         {common.privacy_and_policy}
                     </NavLink>
                 </div>

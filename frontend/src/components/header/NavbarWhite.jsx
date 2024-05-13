@@ -3,10 +3,12 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./NavbarWhite.scss";
 import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
+import '../utilities/Style.scss'
+import { homePageRoute } from "../utilities/AppUrls";
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
-    const [isSearchFocused ] = useState(false);
+    const [isSearchFocused] = useState(false);
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -14,7 +16,7 @@ const NavbarWhite = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const query = params.get('query');
-        const isSearchPage = location.pathname === '/home/search' || location.pathname === '/home/search-advanced';
+        const isSearchPage = location.pathname === homePageRoute + 'search' || location.pathname === homePageRoute + 'search-advanced';
 
         if (isSearchPage && query) {
             setInput(decodeURIComponent(query));
@@ -29,13 +31,13 @@ const NavbarWhite = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(`/home/search?query=${encodeURIComponent(input)}`);
+        navigate(homePageRoute + `search?query=${encodeURIComponent(input)}`);
     };
 
     return (
         <div className="navbar-white">
             <div className="content-nav-white">
-                <img src={Logo} alt="Logo" className="logo" />
+                <img src={Logo} alt="Logo" className="logo" onClick={() => navigate(homePageRoute + 'new-arrivals')}/>
                 <div className="right-part">
                     <div className="search">
                         <form onSubmit={handleSearch} className="search-container">
@@ -47,7 +49,7 @@ const NavbarWhite = () => {
                                 onChange={(e) => handleChange(e.target.value)}
                             />
                             <button type="submit" className="search-icon">
-                                <Icon icon="mdi-light:magnify" style={{ height: "20px", width: "20px" }} />
+                                <Icon icon="mdi-light:magnify" className="icon-styling" />
                             </button>
                         </form>
                         {isSearchFocused && (

@@ -4,13 +4,15 @@ import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
+import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 
 const Home = () => {
     const navigate = useNavigate();
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
     if (categoriesStatus === 'pending' || highlightStatus === 'pending') {
-        return <span>Loading...</span>;
+        return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
         return <span>Error: {categoriesError.message}</span>;
@@ -29,7 +31,7 @@ const Home = () => {
                         <ul>
                             {categoriesData?.map((category) => (
                                 <React.Fragment key={category.id}>
-                                    <li><NavLink to={`/home/categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
+                                    <li><NavLink to={homePageRoute + `categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
                                 </React.Fragment>
                             ))}
                             <li><NavLink to="/categories" style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
@@ -52,10 +54,10 @@ const Home = () => {
             </div>
             <div className="bottom">
                 <div className="menu-bar">
-                    <NavLink to="/home/new-arrivals" className="link" activeClassName="active">
+                    <NavLink to={newArrivalsRoute} className="link" activeClassName="active">
                         New Arrivals
                     </NavLink>
-                    <NavLink to="/home/last-chance" className="link" activeClassName="active">
+                    <NavLink to={lastChanceRoute} className="link" activeClassName="active">
                         Last Chance
                     </NavLink>
                 </div>

@@ -19,15 +19,22 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
     List<Bid> findAllByPerson(Person person);
 
     @Query("""
-            SELECT b.product.id as id,
+            SELECT b.product.id as productId,
             b.product.name as productName,
-            (select pp.url from ProductPicture pp WHERE pp.id = (select min(pp2.id) FROM ProductPicture pp2 WHERE pp2.product.id = b.product.id)) as productPictureUrl,
+            pp.url as productPictureUrl,
             b.product.auctionEnd as auctionEnd,
             b.amount as userPrice,
-            (SELECT COUNT(bb.id) FROM Bid bb WHERE bb.product.id = b.product.id) as noOfBids,
-            (SELECT MAX(bb.amount) FROM Bid bb WHERE bb.product.id = b.product.id) as maxBid
+            COUNT(bb.id) as noOfBids,
+            MAX(bb.amount) as maxBid
             FROM Bid b
+            JOIN ProductPicture pp ON pp.id = (
+                SELECT MIN(pp2.id)
+                FROM ProductPicture pp2
+                WHERE pp2.product.id = b.product.id
+            )
+            LEFT JOIN Bid bb ON bb.product.id = b.product.id
             WHERE b.person.id = :userId
+            GROUP BY b.product.id, b.product.name, pp.url, b.product.auctionEnd, b.amount
             """)
     List<BidProjection> getUserBids(@Param("userId") Long userId);
 

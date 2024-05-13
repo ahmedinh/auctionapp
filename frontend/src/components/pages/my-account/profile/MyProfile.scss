@@ -2,12 +2,16 @@
 
 .my-account {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .page-content {
         display: flex;
         flex-direction: column;
         gap: 64px;
-        margin: 40px 22rem 0rem 22rem;
+        width: 1120px;
+        margin-top: 40px;
 
         .nav-buttons {
             display: flex;
@@ -73,6 +77,10 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
+        }
+
+        .outlet-class {
+            width: 1120px;
         }
     }
 }
