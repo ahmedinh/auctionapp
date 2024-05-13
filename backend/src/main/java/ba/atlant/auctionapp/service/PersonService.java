@@ -59,9 +59,8 @@ public class PersonService {
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
-        if (personRepository.existsByEmail(registerRequest.getEmail())) {
+        if (personRepository.existsByEmail(registerRequest.getEmail()))
             throw new EmailAlreadyUsedException("Email already in use");
-        }
         Person person = personRepository.save(new Person(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail(), passwordEncoder.encode(registerRequest.getPassword()), Role.ROLE_USER));
         return getAuthResponse(registerRequest, person);
     }
@@ -154,7 +153,7 @@ public class PersonService {
 
     @Transactional
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
-        Long userId = jwtUtils.getUserIdFromJwtToken(authHeader.substring(7));
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
         s3Service.uploadFile(file.getOriginalFilename(), file);
@@ -164,7 +163,7 @@ public class PersonService {
     }
 
     public ResponseEntity<Map<String, String>> getUserPicture(String authHeader) {
-        Long userId = jwtUtils.getUserIdFromJwtToken(authHeader.substring(7));
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         Map<String, String> personPictureUrl = new HashMap<>();
         personPictureUrl.put("url", person.getPictureUrl());
