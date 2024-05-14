@@ -16,14 +16,13 @@ import MyProfile from '../pages/my-account/profile/MyProfile';
 import AccordionExpandIcon from '../pages/my-account/profile/Accordion';
 import Seller from '../pages/my-account/seller/Seller';
 import ProtectedRoute from './ProtectedRoute';
-import SellerActive from '../pages/my-account/seller/SellerActive';
-import SellerSold from '../pages/my-account/seller/SellerSold';
 import Bids from '../pages/my-account/bids/Bids';
 import AddItemLayout from '../pages/my-account/add-item/AddItemLayout';
 import ProductInfo from '../pages/my-account/add-item/ProductInfo';
 import ProductPrice from '../pages/my-account/add-item/ProductPrice';
 import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 import Settings from '../pages/my-account/settings/Settings';
+import SellerTable from '../pages/my-account/seller/SellerTable';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -53,8 +52,8 @@ const Router = createBrowserRouter(
                         <Route path="profile" element={<AccordionExpandIcon />} />
                         <Route path="seller" element={<Seller />}>
                             <Route index element={<Navigate replace to="/my-account/seller/active" />} />
-                            <Route path="active" element={<SellerActive />} />
-                            <Route path="sold" element={<SellerSold />} />
+                            <Route path="active" element={<SellerTable />} />
+                            <Route path="sold" element={<SellerTable />} />
                         </Route>
                         <Route path="bids" element={<Bids />} />
                         <Route path="settings" element={<Settings />} />

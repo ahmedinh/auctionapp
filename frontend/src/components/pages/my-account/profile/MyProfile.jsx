@@ -47,7 +47,7 @@ const MyProfile = () => {
                     <button className="add-item-button">
                         <Icon icon="akar-icons:plus" className="icon-styling" />
                         ADD ITEM
-                    </NavLink>
+                    </button>
                 </div>
                 <main className="outlet-class"><Outlet /></main>
             </div>
