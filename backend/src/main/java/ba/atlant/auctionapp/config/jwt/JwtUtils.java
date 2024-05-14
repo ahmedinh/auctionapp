@@ -44,8 +44,8 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Integer getUserIdFromJwtToken(String token) {
-        return (Integer)Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
+    public Long getUserIdFromJwtToken(String token) {
+        return (Long) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
     }
 
     public boolean validateJwtToken(String authToken, HttpServletResponse response) throws IOException {
