@@ -45,7 +45,7 @@ public class JwtUtils {
     }
 
     public Integer getUserIdFromJwtToken(String token) {
-        return (Integer)Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
+        return (Integer) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
     }
 
     public boolean validateJwtToken(String authToken, HttpServletResponse response) throws IOException {

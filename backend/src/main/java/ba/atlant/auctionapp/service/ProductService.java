@@ -125,14 +125,12 @@ public class ProductService {
     }
 
     public ResponseEntity<List<ProductUserProjection>> activeUserProducts(Long userId) {
-        if (personRepository.findById(userId).isEmpty())
-            throw new ResourceNotFoundException("No user found with provided ID.");
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         return ResponseEntity.ok().body(productRepository.getActiveUserProducts(userId));
     }
 
     public ResponseEntity<List<ProductUserProjection>> soldUserProducts(Long userId) {
-        if (personRepository.findById(userId).isEmpty())
-            throw new ResourceNotFoundException("No user found with provided ID.");
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
     }
 

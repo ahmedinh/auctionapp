@@ -44,6 +44,20 @@ const Router = createBrowserRouter(
                 <Route path="shop">
                     <Route path="product/:productId" element={<Product />} />
                 </Route>
+
+            </Route>
+            <Route element={<ProtectedRoute />}>
+                <Route path="my-account" element={<MyProfile />}>
+                    <Route index element={<Navigate replace to={myProfileRoute} />} />
+                    <Route path="profile" element={<AccordionExpandIcon />} />
+                    <Route path="seller" element={<Seller />}>
+                        <Route index element={<Navigate replace to={sellerActiveRoute} />} />
+                        <Route path="active" element={<SellerTable />} />
+                        <Route path="sold" element={<SellerTable />} />
+                    </Route>
+                    <Route path="bids" element={<Bids />} />
+                    <Route path="settings" element={<Settings />} />
+                </Route>
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account">

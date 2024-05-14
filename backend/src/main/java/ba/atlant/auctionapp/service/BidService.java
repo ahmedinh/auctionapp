@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.Product;
@@ -22,29 +23,24 @@ public class BidService {
     private final BidRepository bidRepository;
     private final ProductRepository productRepository;
     private final PersonRepository personRepository;
-    private final PersonService personService;
+    private final JwtUtils jwtUtils;
 
-    public BidService(BidRepository bidRepository, ProductRepository productRepository, PersonRepository personRepository, PersonService personService) {
+    public BidService(BidRepository bidRepository, ProductRepository productRepository, PersonRepository personRepository, JwtUtils jwtUtils) {
         this.bidRepository = bidRepository;
         this.productRepository = productRepository;
         this.personRepository = personRepository;
-        this.personService = personService;
+        this.jwtUtils = jwtUtils;
     }
 
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
-        Integer userId =personService.getUserId(token);
-        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
     }
 
     public boolean placeBid(Long userId, Long productId, BigDecimal amount) {
-        Optional<Person> optionalPerson = personRepository.findById(userId);
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("No product found with provided ID.");
-        Product product = optionalProduct.get();
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
         if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
@@ -63,7 +59,7 @@ public class BidService {
         }
         bid.setAmount(amount);
         bid.setProduct(product);
-        bid.setPerson(optionalPerson.get());
+        bid.setPerson(person);
         bidRepository.save(bid);
         return true;
     }

@@ -9,21 +9,19 @@ import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
 import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
+import { useProduct } from "../../../hooks/useProduct";
 
 export default function Product() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [stompClient, setStompClient] = useState(null);
     const [notification, setNotification] = useState('');
+    const [notificationColor, setNotificationColor] = useState('');
     let { productId } = useParams();
-    const [acceptedBid, setAcceptedBid] = useState(0);
     const [newBid, setNewBid] = useState('');
     const [errorBid, setErrorBid] = useState('');
     const {
         status, data, error, refetch
-    } = useQuery({
-        queryKey: ['product', productId],
-        queryFn: () => getProduct({ productId }),
-    })
+    } = useProduct({ productId });
     const [mainImage, setMainImage] = useState(() => {
         if (data && data.productPictureList.length > 0) {
             return data.productPictureList[0];
@@ -40,11 +38,11 @@ export default function Product() {
                 const receivedMessage = JSON.parse(message.body);
                 if (receivedMessage.accepted === true) {
                     setNotification('Congrats! You are the highest bidder!');
-                    setAcceptedBid(1);
+                    setNotificationColor('#417505');
                 }
                 else if (receivedMessage.accepted === false) {
                     setNotification('There are higher bids than yours. You could give a second try!')
-                    setAcceptedBid(2);
+                    setNotificationColor('#AB944E');
                 }
                 refetch();
             });
@@ -58,7 +56,7 @@ export default function Product() {
         }
     }, []);
 
-    if (status === 'pending') {
+    if (status === 'loading') {
         return <LoadingSpinner />;
     }
 
@@ -93,7 +91,7 @@ export default function Product() {
     return (
         <div className="product-page">
             <BreadCrumbsMenu title={data.name} rightLink="shop/single-product" fontWeight={700} />
-            {acceptedBid === 1 ? <p className="notification-text" style={{ color: "#417505" }}>{notification}</p> : (acceptedBid === 2 ? <p className="notification-text" style={{ color: "#AB944E" }}>{notification}</p> : null)}
+            <p className="notification-text" style={{ color: notificationColor }}>{notification}</p>
             <div className="product">
                 <div className="product-pictures">
                     <div className="main-image">
@@ -126,7 +124,7 @@ export default function Product() {
                             <div className="place-bid">
                                 <div className="upper">
                                     <input type="text"
-                                        placeholder={'Enter $' + (data.largestBid > data.startPrice ? data.largestBid + 1 : data.startPrice + 1) + ' or higher'}
+                                        placeholder={'Enter $' + (data.largestBid >= data.startPrice ? data.largestBid + 1 : data.startPrice) + ' or higher'}
                                         value={newBid}
                                         onChange={(e) => setNewBid(e.target.value)} />
                                     <button onClick={() => handleBid()}>PLACE BID</button>
