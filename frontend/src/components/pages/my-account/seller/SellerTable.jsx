@@ -4,7 +4,6 @@ import { getUser } from "../../../utilities/Common";
 import './SellerTable.scss';
 import { useNavigate } from "react-router-dom";
 import CartPicture from '../../../../assets/cart.png';
-import { CountdownTimer } from "../CountdownTimer";
 
 export default function SellerTable({ fetchProducts, queryString }) {
     const navigate = useNavigate();
