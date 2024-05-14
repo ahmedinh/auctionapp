@@ -35,7 +35,7 @@ public class BidService {
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
     private boolean isBidValid(BidRequest bidRequest, Product product) {
