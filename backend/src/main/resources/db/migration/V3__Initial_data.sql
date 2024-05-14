@@ -33,7 +33,6 @@ INSERT INTO sub_category (name, category_id) VALUES
                                                  ('Peripherals', (SELECT id FROM category c WHERE c.name='Computers'));
 
 -- Insertion of products
-SELECT * from product;
 INSERT INTO product (name, description, start_price, created_at, auction_start, auction_end, size, color, subcategory_id, user_id) VALUES
                                                                                                                                        ('Adidas Breaknet Sleek Sneaker - Womens','Rock a bit of retro style with the Breaknet Sleek sneaker from adidas. This lace-up is upgraded with a plush Cloudfoam footbed set atop of contrasting gum sole for the perfect balance of fashion and function.',50,'2024-05-01T01:00:00.000','2024-05-02','2024-07-01', 'LARGE', 'BLACK', (SELECT sc.id FROM sub_category sc WHERE sc.name='Shoes' AND sc.category_id = (SELECT id FROM category c WHERE c.name='Women')), ((SELECT p.id FROM person p WHERE p.email='ahmedinhasanovic2000@gmail.com'))),
                                                                                                                                        ('Adidas Grand Court 2.0 Sneaker - Womens','You cannot go wrong with the classic design of the Grand Court 2.0 sneaker from adidas. This lace-up features a versatile silhouette that you can effortlessly rock with any casual outfit.',69.99,'2024-05-01T01:15:00.000','2024-05-02','2024-06-25', 'LARGE', 'BLACK', (SELECT sc.id FROM sub_category sc WHERE sc.name='Shoes' AND sc.category_id = (SELECT id FROM category c WHERE c.name='Women')), ((SELECT p.id FROM person p WHERE p.email='ahmedinhasanovic2000@gmail.com'))),
@@ -121,3 +120,9 @@ INSERT INTO product_picture (name, url, product_id) VALUES
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic1.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic1.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic2.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic2.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic3.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic3.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R'));
+insert into bid (amount, user_id, product_id)
+values (71.00, 2, 2),
+       (72.00, 2, 3),
+       (73.00, 2, 4),
+       (74.00, 2, 5),
+       (75.00, 2, 6);

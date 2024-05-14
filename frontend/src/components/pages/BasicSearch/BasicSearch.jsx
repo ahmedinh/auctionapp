@@ -5,12 +5,13 @@ import Breadcrumbs from "../../utilities/Breadcrumbs";
 import { useThresholdSearch } from "../../../hooks/useThresholdSearch";
 import { useBasicSearch } from '../../../hooks/useBasicSearch';
 import "./BasicSearch.scss";
+import { homePageRoute } from "../../utilities/AppUrls";
 
 
 export default function BasicSearch() {
     let [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query");
-    const currentPageTitle = `/home/search-results-for-${query}`;
+    const [currentPageTitle, setCurrentPageTitle] = useState(homePageRoute + `search-results-for-${query}`)
 
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
