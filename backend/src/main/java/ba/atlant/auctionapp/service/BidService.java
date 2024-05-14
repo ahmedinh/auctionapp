@@ -8,13 +8,13 @@ import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
+import ba.atlant.auctionapp.request.BidRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,29 +35,29 @@ public class BidService {
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
-    public boolean placeBid(Long userId, Long productId, BigDecimal amount) {
-        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
+    public boolean placeBid(BidRequest bidRequest) {
+        Person person = personRepository.findById(bidRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
         if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
-        Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(userId,productId);
+        Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(bidRequest.getUserId(),bidRequest.getProductId());
         Bid bid = optionalBid.orElseGet(Bid::new);
 
-        Optional<Bid> optionalMaxBid = bidRepository.findTopByProductIdOrderByAmountDesc(productId);
-        if (optionalMaxBid.isPresent() && amount.compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1) {
+        Optional<Bid> optionalMaxBid = bidRepository.findTopByProductIdOrderByAmountDesc(bidRequest.getProductId());
+        if (optionalMaxBid.isPresent() && bidRequest.getAmount().compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1) {
             System.out.println("You tried to place a lower bid.");
             return false;
         }
-        if (bid.getAmount() != null && bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(amount) > 0 ||
-                amount.add(BigDecimal.valueOf(1)).compareTo(product.getStartPrice()) < 1) {
+        if (bid.getAmount() != null && bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(bidRequest.getAmount()) > 0 ||
+            bidRequest.getAmount().add(BigDecimal.valueOf(1)).compareTo(product.getStartPrice()) < 1) {
             System.out.println("You tried to place a lower bid.");
             return false;
         }
-        bid.setAmount(amount);
+        bid.setAmount(bidRequest.getAmount());
         bid.setProduct(product);
         bid.setPerson(person);
         bidRepository.save(bid);
