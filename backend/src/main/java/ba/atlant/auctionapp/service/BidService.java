@@ -48,11 +48,7 @@ public class BidService {
         boolean lowerThanHighestBid = optionalMaxBid.isPresent() && bidRequest.getAmount().compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1;
         boolean lowerThanStartPrice = optionalMaxBid.isEmpty() && bidRequest.getAmount().compareTo(product.getStartPrice()) < 0;
 
-        if (lowerThanHighestBid || lowerThanStartPrice) {
-            System.out.println("You tried to place a lower bid.");
-            return false;
-        }
-        return true;
+        return !(lowerThanHighestBid || lowerThanStartPrice);
     }
 
     public boolean isBidPlaced(BidRequest bidRequest) {
