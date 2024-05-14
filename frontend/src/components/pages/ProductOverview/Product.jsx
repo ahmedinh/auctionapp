@@ -57,8 +57,12 @@ export default function Product() {
         return <LoadingSpinner />;
     }
 
-    if (status === 'error' || !data) {
+    if (status === 'error') {
         return <span>Error: {error?.message}</span>;
+    }
+
+    if (!data) {
+        return <LoadingSpinner/>;
     }
 
     const handleImageClick = (selectedImage) => {
