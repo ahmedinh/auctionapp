@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
 import ba.atlant.auctionapp.exception.ServiceException;
@@ -29,18 +30,19 @@ public class ProductService {
     private final PersonRepository personRepository;
     private final CategoryRepository categoryRepository;
     private final BidRepository bidRepository;
-    private final PersonService personService;
     private final S3Service s3Service;
+    private final JwtUtils jwtUtils;
 
-    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, CategoryRepository categoryRepository, BidRepository bidRepository, PersonService personService, S3Service s3Service) {
+    public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, CategoryRepository categoryRepository, BidRepository bidRepository, JwtUtils jwtUtils, S3Service s3Service) {
+
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
         this.personRepository = personRepository;
         this.categoryRepository = categoryRepository;
         this.bidRepository = bidRepository;
-        this.personService = personService;
         this.s3Service = s3Service;
+        this.jwtUtils = jwtUtils;
     }
 
     @Transactional
@@ -49,13 +51,12 @@ public class ProductService {
             if (productRepository.findByName(productCreationDTO.getName()).isPresent())
                 throw new IllegalArgumentException("Product with provided name already exists.");
             SubCategory subCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory()).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
-            Long userId = Long.valueOf(personService.getUserId(authHeader));
+            Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
             Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
             Category category = categoryRepository.findByName(productCreationDTO.getSelectedCategory()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given ID."));
             if (subCategory.getCategory().equals(category))
-                throw new IllegalArgumentException("Category does not contain that subcategory.");
+                throw new ResourceNotFoundException("Category does not contain that subcategory.");
             Product product = new Product(productCreationDTO, person, subCategory);
-            subCategoryRepository.findById(product.getSubCategory().getId()).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
             productRepository.save(product);
             return ResponseEntity.ok(product);
         } catch (DataAccessException e) {
