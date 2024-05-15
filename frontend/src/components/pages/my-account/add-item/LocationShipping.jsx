@@ -59,11 +59,12 @@ export default function LocationShipping() {
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Product added successfully');
+            clearSessionStorageProduct();
             navigate('/home/new-arrivals');
         },
         onError: (error) => {
             console.error('Error creating product:', error);
-            deleteProductMutation.mutate({ productName: productName });
+            deleteProductMutation.mutate({ productName });
         }
     })
 
