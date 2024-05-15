@@ -11,7 +11,7 @@ export function Products({ fetchFunction, queryKeyPrefix }) {
         data,
         isFetchingNextPage,
         hasNextPage,
-        fetchNextPage,
+        fetchNextPage
     } = useProducts(fetchFunction, queryKeyPrefix);
 
     const loadMoreRef = useRef(null);
