@@ -54,7 +54,7 @@ export default function LocationShipping() {
         mutationKey: ['adding-product-pictures'],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
-            alert('Pictures added successfully');
+            alert('Product added successfully');
             navigate('/home/new-arrivals');
         },
         onError: (error) => {
@@ -65,9 +65,8 @@ export default function LocationShipping() {
 
     const createProductMutation = useMutation({
         mutationKey: ['creation-of-product'],
-        mutationFn: (sendingData) => createProduct({ productData: sendingData }),
+        mutationFn: (productData) => createProduct({ productData }),
         onSuccess: () => {
-            alert('Product added successfully')
             addPicturesMutation.mutate({ uploadedImages, productName: productName });
         },
         onError: (error) => {
