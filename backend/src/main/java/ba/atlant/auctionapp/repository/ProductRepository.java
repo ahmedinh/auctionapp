@@ -207,7 +207,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ORDER BY bidCount DESC, p.auctionEnd ASC
             LIMIT 3
             """)
-    List<ProductProjection> getRecommendedProductsNotLogged();
+    List<ProductProjection> getDefaultRecommendedProducts();
 
     /***
      * Query is designed to retrieve a list of products from a specific subcategory that a particular user has not bid on, or his bid is not the highest bid,

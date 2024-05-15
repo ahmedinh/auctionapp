@@ -129,7 +129,7 @@ public class ProductController {
 
     @GetMapping(value = "/recommended")
     @Operation(summary = "Fetch recommended products for users")
-    public ResponseEntity getRecommendedProducts(@Nullable @RequestParam(value = "userId") Long userId) {
+    public ResponseEntity<List<ProductProjection>> getRecommendedProducts(@Nullable @RequestParam(value = "userId") Long userId) {
         return productService.getRecommendedProducts(userId);
     }
 }
