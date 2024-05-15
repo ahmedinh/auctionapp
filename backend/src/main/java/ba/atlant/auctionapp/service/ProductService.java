@@ -162,6 +162,10 @@ public class ProductService {
         Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
         List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
         if (pictures != null && !pictures.isEmpty()) {
+            for (ProductPicture productPicture : pictures) {
+                s3Service.deleteObject(productPicture.getUrl());
+            }
+            s3Service.deleteObject(String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),productName));
             productPictureRepository.deleteAll(pictures);
         }
         productRepository.delete(product);
