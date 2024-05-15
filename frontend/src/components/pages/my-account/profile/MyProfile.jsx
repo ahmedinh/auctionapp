@@ -1,5 +1,6 @@
 import React from "react";
 import './MyProfile.scss';
+import '../../../utilities/Style.scss';
 import BreadCrumbsMenu from "../../../utilities/BreadCrumbsMenu";
 import { NavLink, Outlet } from "react-router-dom";
 import { Icon } from '@iconify/react';
@@ -44,10 +45,10 @@ const MyProfile = () => {
                             Settings
                         </NavLink>
                     </div>
-                    <button className="add-item-button">
+                    <NavLink to='/my-account/add-item/product-info' className="add-item-button">
                         <Icon icon="akar-icons:plus" className="icon-styling" />
                         ADD ITEM
-                    </button>
+                    </NavLink>
                 </div>
                 <main className="outlet-class"><Outlet /></main>
             </div>

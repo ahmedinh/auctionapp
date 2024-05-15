@@ -2,11 +2,13 @@ import React from "react";
 import './AddItemLayout.scss';
 import BreadCrumbsMenu from "../../../utilities/BreadCrumbsMenu";
 import { Outlet, useLocation } from "react-router-dom";
+import ScrollToTop from "../../../utilities/ScrollToTop";
 
 export default function AddItemLayout() {
 
     const location = useLocation();
     const currentRoute = location.pathname;
+    ScrollToTop();
 
     const getDotClass = (index) => {
         if (currentRoute === '/my-account/add-item/product-info' && index === 0) {

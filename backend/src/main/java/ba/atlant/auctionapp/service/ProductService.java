@@ -51,12 +51,12 @@ public class ProductService {
         try {
             if (productRepository.findByName(productCreationDTO.getName()).isPresent())
                 throw new IllegalArgumentException("Product with provided name already exists.");
-            SubCategory subCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory()).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
+            Category category = categoryRepository.findByName(productCreationDTO.getSelectedCategory()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given ID."));
+            SubCategory subCategory = subCategoryRepository.findByNameAndCategory(productCreationDTO.getSelectedSubcategory(), category).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
             Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
             Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
-            Category category = categoryRepository.findByName(productCreationDTO.getSelectedCategory()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given ID."));
-            if (subCategory.getCategory().equals(category))
-                throw new ResourceNotFoundException("Category does not contain that subcategory.");
+            if (!subCategory.getCategory().equals(category))
+                throw new ResourceNotFoundException("Provided category does not contain provided subcategory.");
             Product product = new Product(productCreationDTO, person, subCategory);
             productRepository.save(product);
             return ResponseEntity.ok(product);
@@ -128,8 +128,7 @@ public class ProductService {
             sort = Sort.by(sortField).descending();
         }
 
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return pageable;
+        return PageRequest.of(page, size, sort);
     }
 
     @Transactional
@@ -158,15 +157,13 @@ public class ProductService {
         return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
     }
 
+    @Transactional
     public void deleteProduct(String productName) {
-        Optional<Product> optionalProduct = productRepository.findByName(productName);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("Product with provided name is not found.");
-        List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(optionalProduct.get().getId());
-        if (!productPictureList.isEmpty()) {
-            productPictureRepository.deleteAll(productPictureList);
+        Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
+        List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
+        if (pictures != null && !pictures.isEmpty()) {
+            productPictureRepository.deleteAll(pictures);
         }
-        Product product = optionalProduct.get();
         productRepository.delete(product);
     }
 }

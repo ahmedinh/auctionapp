@@ -21,7 +21,7 @@ public class BidWebSocketController {
     @MessageMapping("/bid")
     @SendTo("/topic/bids")
     public BidResponse handleBidMessage(@Payload BidRequest bidRequest) {
-        boolean isAccepted = bidService.placeBid(bidRequest);
+        boolean isAccepted = bidService.isBidPlaced(bidRequest);
         return new BidResponse(bidRequest.getAmount(), isAccepted);
     }
 }

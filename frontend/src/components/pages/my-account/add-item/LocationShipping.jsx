@@ -16,7 +16,6 @@ export default function LocationShipping() {
     const [country, setCountry] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
-    let [sendingData, setSendingData] = useState({});
 
     useEffect(() => {
         const user = getUser();
@@ -54,19 +53,20 @@ export default function LocationShipping() {
         mutationKey: ['adding-product-pictures'],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
-            alert('Pictures added successfully')
+            alert('Product added successfully');
+            clearSessionStorageProduct();
+            navigate('/home/new-arrivals');
         },
         onError: (error) => {
             console.error('Error creating product:', error);
-            deleteProductMutation.mutate({ productName: productName });
+            deleteProductMutation.mutate({ productName });
         }
     })
 
     const createProductMutation = useMutation({
         mutationKey: ['creation-of-product'],
-        mutationFn: (sendingData) => createProduct({ productData: sendingData }),
+        mutationFn: (productData) => createProduct({ productData }),
         onSuccess: () => {
-            alert('Product added successfully')
             addPicturesMutation.mutate({ uploadedImages, productName: productName });
         },
         onError: (error) => {
@@ -89,7 +89,13 @@ export default function LocationShipping() {
                 auctionStart: startDate,
                 auctionEnd: endDate,
                 selectedSubcategory,
-                selectedCategory
+                selectedCategory,
+                returnAddress: address,
+                returnEmail: email,
+                returnCity: city,
+                returnZipCode: zipcode,
+                returnCountry: country,
+                returnPhoneNumber: phoneNumber
             };
             setProductName(productData.name);
 

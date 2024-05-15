@@ -38,29 +38,30 @@ public class BidService {
         return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
-    public boolean placeBid(BidRequest bidRequest) {
-        Person person = personRepository.findById(bidRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
+    private boolean isBidValid(BidRequest bidRequest, Product product) {
         if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
-        Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(bidRequest.getUserId(),bidRequest.getProductId());
-        Bid bid = optionalBid.orElseGet(Bid::new);
-
         Optional<Bid> optionalMaxBid = bidRepository.findTopByProductIdOrderByAmountDesc(bidRequest.getProductId());
-        if (optionalMaxBid.isPresent() && bidRequest.getAmount().compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1) {
-            System.out.println("You tried to place a lower bid.");
-            return false;
+
+        boolean lowerThanHighestBid = optionalMaxBid.isPresent() && bidRequest.getAmount().compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1;
+        boolean lowerThanStartPrice = optionalMaxBid.isEmpty() && bidRequest.getAmount().compareTo(product.getStartPrice()) < 0;
+
+        return !(lowerThanHighestBid || lowerThanStartPrice);
+    }
+
+    public boolean isBidPlaced(BidRequest bidRequest) {
+        Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
+        Person person = personRepository.findById(bidRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        if (isBidValid(bidRequest, product)) {
+            Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(bidRequest.getUserId(),bidRequest.getProductId());
+            Bid bid = optionalBid.orElseGet(Bid::new);
+            bid.setAmount(bidRequest.getAmount());
+            bid.setProduct(product);
+            bid.setPerson(person);
+            bidRepository.save(bid);
+            return true;
         }
-        if (bid.getAmount() != null && bid.getAmount().add(BigDecimal.valueOf(1)).compareTo(bidRequest.getAmount()) > 0 ||
-            bidRequest.getAmount().add(BigDecimal.valueOf(1)).compareTo(product.getStartPrice()) < 1) {
-            System.out.println("You tried to place a lower bid.");
-            return false;
-        }
-        bid.setAmount(bidRequest.getAmount());
-        bid.setProduct(product);
-        bid.setPerson(person);
-        bidRepository.save(bid);
-        return true;
+        return false;
     }
 }

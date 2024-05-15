@@ -3,7 +3,6 @@ package ba.atlant.auctionapp.model;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -61,6 +60,19 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)
     private Person person;
 
+    @Column(name = "return_address")
+    private String returnAddress;
+    @Column(name = "return_email")
+    private String returnEmail;
+    @Column(name = "return_city")
+    private String returnCity;
+    @Column(name = "return_zipcode")
+    private String returnZipCode;
+    @Column(name = "return_country")
+    private String returnCountry;
+    @Column(name = "return_phone_number")
+    private String returnPhoneNumber;
+
     public Product() {
     }
 
@@ -73,6 +85,12 @@ public class Product {
         setPerson(person);
         setSubCategory(subCategory);
         setStartPrice(productCreationDTO.getStartPrice());
+        setReturnAddress(productCreationDTO.getReturnAddress());
+        setReturnEmail(productCreationDTO.getReturnEmail());
+        setReturnCity(productCreationDTO.getReturnCountry());
+        setReturnZipCode(productCreationDTO.getReturnZipCode());
+        setReturnCountry(productCreationDTO.getReturnCountry());
+        setReturnPhoneNumber(productCreationDTO.getReturnPhoneNumber());
     }
 
     public Product(String name,
@@ -179,5 +197,53 @@ public class Product {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getReturnAddress() {
+        return returnAddress;
+    }
+
+    public void setReturnAddress(String returnAddress) {
+        this.returnAddress = returnAddress;
+    }
+
+    public String getReturnEmail() {
+        return returnEmail;
+    }
+
+    public void setReturnEmail(String returnEmail) {
+        this.returnEmail = returnEmail;
+    }
+
+    public String getReturnCity() {
+        return returnCity;
+    }
+
+    public void setReturnCity(String returnCity) {
+        this.returnCity = returnCity;
+    }
+
+    public String getReturnZipCode() {
+        return returnZipCode;
+    }
+
+    public void setReturnZipCode(String returnZipCode) {
+        this.returnZipCode = returnZipCode;
+    }
+
+    public String getReturnCountry() {
+        return returnCountry;
+    }
+
+    public void setReturnCountry(String returnCountry) {
+        this.returnCountry = returnCountry;
+    }
+
+    public String getReturnPhoneNumber() {
+        return returnPhoneNumber;
+    }
+
+    public void setReturnPhoneNumber(String returnPhoneNumber) {
+        this.returnPhoneNumber = returnPhoneNumber;
     }
 }
