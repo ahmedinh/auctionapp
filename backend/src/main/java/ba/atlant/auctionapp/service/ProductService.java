@@ -190,43 +190,27 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public ResponseEntity getRecommendedProducts(Long userId) {
+    public ResponseEntity<List<ProductProjection>> getRecommendedProducts(Long userId) {
         if (userId == null || bidRepository.getUserBids(userId).isEmpty()) {
-            return ResponseEntity.ok(productRepository.getRecommendedProductsNotLogged());
+            return ResponseEntity.ok(productRepository.getDefaultRecommendedProducts());
         }
-        List<SubCategoryProjection> subCategoryProjectionList = subCategoryRepository.getSubCategoriesByMostUserBids(userId);
-        List<ProductProjection> productProjectionList1 = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryProjectionList.get(0).getId());
+        List<SubCategoryProjection> subCategoryListWithMostUserBids = subCategoryRepository.getSubCategoriesByMostUserBids(userId);
+        List<ProductProjection> mostPopularProductsForUser = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(0).getId());
 
-        // List to hold the final selection of products
-        List<ProductProjection> recommendedProducts = new ArrayList<>();
+        List<ProductProjection> recommendedProducts = productRepository.getDefaultRecommendedProducts().subList(0,3);
 
-        // Add first two products from productProjectionList1 if available
-        if (productProjectionList1.size() >= 2) {
-            recommendedProducts.add(productProjectionList1.get(0));
-            recommendedProducts.add(productProjectionList1.get(1));
-        } else if (!productProjectionList1.isEmpty()) {
-            // If there is at least one product, add it
-            recommendedProducts.add(productProjectionList1.get(0));
+        // Add first two products from mostPopularProductsForUser if available
+        if (!mostPopularProductsForUser.isEmpty()) {
+            recommendedProducts.set(0, mostPopularProductsForUser.get(0));
+            if (mostPopularProductsForUser.size() >= 2)
+                recommendedProducts.set(1, mostPopularProductsForUser.get(1));
         }
 
-        // Check if there is a second subcategory
-        if (subCategoryProjectionList.size() > 1) {
-            List<ProductProjection> productProjectionList2 = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryProjectionList.get(1).getId());
-            // Add the first product from productProjectionList2 if available
-            if (!productProjectionList2.isEmpty())
-                recommendedProducts.add(productProjectionList2.get(0));
-        }
-
-        while (recommendedProducts.size() < 3) {
-            List<ProductProjection> additionalProducts = productRepository.getRecommendedProductsNotLogged();
-            for (ProductProjection product : additionalProducts) {
-                if (recommendedProducts.size() >= 3)
-                    break;
-                if (!recommendedProducts.contains(product))
-                    recommendedProducts.add(product);
-            }
-            if (additionalProducts.isEmpty())
-                break;
+        // Add third product from secondMostPopularProductsForUser if available
+        if (subCategoryListWithMostUserBids.size() > 1) {
+            List<ProductProjection> secondMostPopularProductsForSubCategory = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(1).getId());
+            if (!secondMostPopularProductsForSubCategory.isEmpty())
+                recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(2));
         }
         return ResponseEntity.ok(recommendedProducts);
     }
