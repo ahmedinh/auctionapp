@@ -135,8 +135,13 @@ public class ProductService {
         return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
     }
 
+    @Transactional
     public void deleteProduct(String productName) {
         Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
+        List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
+        if (pictures != null && !pictures.isEmpty()) {
+            productPictureRepository.deleteAll(pictures);
+        }
         productRepository.delete(product);
     }
 }
