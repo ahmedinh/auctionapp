@@ -241,6 +241,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
                             (SELECT bb.product.id
                             FROM Bid bb GROUP BY bb.product.id HAVING MAX(bb.amount) = (SELECT MAX(bbb.amount) FROM Bid bbb WHERE bbb.product.id = bb.product.id AND bbb.person.id = :userId)))
             AND p.auctionEnd > CURRENT_TIMESTAMP
+            AND p.person.id != :userId
             ORDER BY (SELECT COUNT(b.id) FROM Bid b WHERE b.product.id = p.id AND b.person.id <> :userId) DESC, p.auctionEnd ASC
     """)
     List<ProductProjection> getProductsFromPopularSubCategoryForUser(@Param("userId") Long userId, @Param("subCategoryId") Long subCategoryId);

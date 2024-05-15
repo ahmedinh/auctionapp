@@ -73,9 +73,6 @@ const AccordionExpandIcon = () => {
             [fieldName]: value
         }))
     }
-    if (status === 'loading' || pictureStatus === 'loading') {
-        return <LoadingSpinner />;
-    }
 
     if (userPicture.status === 'pending' || userInfo.status === 'pending')
         return <LoadingSpinner />;

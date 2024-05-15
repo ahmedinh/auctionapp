@@ -16,7 +16,9 @@ public class PaymentIntentController {
         this.stripeClient = stripeClient;
     }
     @PostMapping("/charge")
-    public Charge chargeCard(@RequestHeader(value="token") String token, @RequestHeader(value="amount") Double amount) throws Exception {
-        return this.stripeClient.chargeNewCard(token, amount);
+    public Charge chargeCard(@RequestHeader(value="token") String token,
+                             @RequestHeader(value="amount") Double amount,
+                             @RequestParam(value = "productId") Long productId) throws Exception {
+        return this.stripeClient.chargeNewCard(token, amount, productId);
     }
 }

@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS product
     return_zipcode      VARCHAR(255),
     return_country      VARCHAR(255),
     return_phone_number VARCHAR(255),
+    is_paid BOOLEAN,
     CONSTRAINT pk_product PRIMARY KEY (id)
 );
 
