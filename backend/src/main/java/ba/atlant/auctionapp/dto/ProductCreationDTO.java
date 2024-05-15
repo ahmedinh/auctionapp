@@ -1,6 +1,5 @@
 package ba.atlant.auctionapp.dto;
 
-import ba.atlant.auctionapp.model.Person;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,4 +26,10 @@ public class ProductCreationDTO {
     private String selectedSubcategory;
     @NotBlank(message = "Category cannot be null.")
     private String selectedCategory;
+    private String returnAddress;
+    private String returnEmail;
+    private String returnCity;
+    private String returnZipCode;
+    private String returnCountry;
+    private String returnPhoneNumber;
 }

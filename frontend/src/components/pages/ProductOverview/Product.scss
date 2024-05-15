@@ -1,11 +1,11 @@
 @import "../../utilities/Style.scss";
 
 .product-page {
-
     .notification-text {
         margin: 1.5rem 15rem 3rem 23.7rem;
         font-weight: $font-weight-bold;
     }
+    min-height: 100vh;
     .product {
         display: flex;
         flex-direction: row;
