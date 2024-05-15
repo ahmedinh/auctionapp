@@ -6,13 +6,14 @@ import '../seller/SellerTable.scss';
 import './Bids.scss';
 import HammerPicture from '../../../../assets/hammer.svg';
 import Payment from "../../payment/Payment";
-import { getUserId } from "../../../utilities/Common";
+import { getUser, getUserId } from "../../../utilities/Common";
 
 
 export default function Bids() {
     const navigate = useNavigate();
     const userId = getUserId();
     const [auctionEnded, setAuctionEnded] = useState({});
+    const userEmail = getUser().email;
 
     const { data, error, isError, isLoading, status } = useQuery({
         queryKey: ['get-user-bids', userId],
@@ -70,7 +71,7 @@ export default function Bids() {
                                 <td className="col1">${bid.maxBid.toFixed(2)}</td>
                                 <td className="col1">
                                     {bid.timeLeft === 'Time is up!' && bid.maxBid === bid.userPrice ? (
-                                        <Payment />
+                                        <Payment email={userEmail}/>
                                     ) : (bid.timeLeft === 'Time is up!' ? (
                                         <p>Auction ended</p>
                                     ) : (
