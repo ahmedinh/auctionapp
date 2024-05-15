@@ -136,10 +136,7 @@ public class ProductService {
     }
 
     public void deleteProduct(String productName) {
-        Optional<Product> optionalProduct = productRepository.findByName(productName);
-        if (optionalProduct.isEmpty())
-            throw new IllegalArgumentException("Product with provided name is not found.");
-        Product product = optionalProduct.get();
+        Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
         productRepository.delete(product);
     }
 }
