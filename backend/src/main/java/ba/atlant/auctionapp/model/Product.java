@@ -3,7 +3,6 @@ package ba.atlant.auctionapp.model;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
