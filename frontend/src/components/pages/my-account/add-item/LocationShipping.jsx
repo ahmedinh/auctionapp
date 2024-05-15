@@ -58,7 +58,8 @@ export default function LocationShipping() {
         mutationKey: ['adding-product-pictures'],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
-            alert('Pictures added successfully')
+            alert('Pictures added successfully');
+            navigate('/home/new-arrivals');
         },
         onError: (error) => {
             console.error('Error creating product:', error);
