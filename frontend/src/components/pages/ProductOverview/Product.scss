@@ -1,6 +1,10 @@
 @import "../../utilities/Style.scss";
 
 .product-page {
+    .notification-text {
+        margin: 1.5rem 15rem 3rem 23.7rem;
+        font-weight: $font-weight-bold;
+    }
     min-height: 100vh;
     .product {
         display: flex;
@@ -74,6 +78,31 @@
                     padding: 24px 32px 24px 32px;
                     border: 1px solid $color-grey;
                 }
+                .place-bid {
+                    .upper {
+                        display: flex;
+                        gap: 39px;
+                        height: 51px;
+                        input {
+                            width: 300px;
+                            border: 1px groove $color-white;
+                            padding-left: 30.2px;
+                        }
+                        button {
+                            border: none;
+                            background-color: #fff;
+                            font-weight: $font-weight-bold;
+                            line-height: 24px;
+                            cursor: pointer;
+                        }
+                    }
+                    p {
+                        margin: 5px;
+                        color: red;
+                        font-weight: $font-weight-bold;
+                    }
+                }
+
             }
 
             .information {

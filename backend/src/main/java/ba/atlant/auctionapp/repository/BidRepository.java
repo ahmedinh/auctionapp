@@ -38,4 +38,5 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
             """)
     List<BidProjection> getUserBids(@Param("userId") Long userId);
 
+    Optional<Bid> findTopByProductIdOrderByAmountDesc(Long productId);
 }

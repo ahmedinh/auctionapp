@@ -59,9 +59,8 @@ public class PersonService {
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
-        if (personRepository.existsByEmail(registerRequest.getEmail())) {
+        if (personRepository.existsByEmail(registerRequest.getEmail()))
             throw new EmailAlreadyUsedException("Email already in use");
-        }
         Person person = personRepository.save(new Person(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail(), passwordEncoder.encode(registerRequest.getPassword()), Role.ROLE_USER));
         return getAuthResponse(registerRequest, person);
     }
@@ -75,7 +74,8 @@ public class PersonService {
     }
 
     private AuthResponse getAuthResponse(AuthRequest authRequest, Person person) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         person.setPassword(null);
@@ -91,8 +91,8 @@ public class PersonService {
     }
 
     public ResponseEntity<PersonProjection> getCurrentUser(String authHeader) {
-        Integer userId = jwtUtils.getUserIdFromJwtToken(authHeader.substring(7));
-        personRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         PersonProjection personProjection = personRepository.getPersonInformation(Long.valueOf(userId.toString()));
         return ResponseEntity.ok(personProjection);
     }
