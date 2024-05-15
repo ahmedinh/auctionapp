@@ -12,7 +12,6 @@ export default function NavbarBlackLogged({ onLogout }) {
         removeSession();
         onLogout();
     }
-
     return (
         <nav className="navbar-black-logged">
             <div className="nav-logged-content">

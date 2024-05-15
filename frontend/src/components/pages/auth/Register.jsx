@@ -10,7 +10,6 @@ export default function Register() {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const { mutate: performRegistration, isLoading, isError, error, data } = useRegisterMutation();
 
     const handleSubmit = (event) => {
@@ -28,17 +27,17 @@ export default function Register() {
                         <div className="register-fields">
                             <div className="input-field">
                                 <p>First Name</p>
-                                <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                                <input type="text" placeholder='John' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.firstName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Last Name</p>
-                                <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                                <input type="text" placeholder='Doe' value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.lastName}</p>
                             </div>
                             <div className="input-field">
                                 <p>Enter Email</p>
-                                <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                                <input type="text" placeholder='user@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.email}</p>
                             </div>
                             <div className="input-field">
@@ -51,11 +50,11 @@ export default function Register() {
                             <button type="submit" className='main-button'>Register</button>
                             <div className="external-services">
                                 <div className='facebook-button'>
-                                    <img src={FacebookIcon} alt="FacebookIcon" />
+                                    <img src={FacebookIcon} alt="Facebook login icon" />
                                     Signup with Facebook
                                 </div>
                                 <div className='gmail-button'>
-                                    <img src={GmailIcon} alt="GmailIcon" />
+                                    <img src={GmailIcon} alt="Gmail login icon" />
                                     Signup with Gmail
                                 </div>
                             </div>

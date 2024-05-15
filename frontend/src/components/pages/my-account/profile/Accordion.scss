@@ -287,4 +287,8 @@
             cursor: pointer;
         }
     }
+    .error {
+        color: red;
+        font-weight: $font-weight-bold;
+    }
 }

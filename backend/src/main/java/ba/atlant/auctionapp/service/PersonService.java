@@ -4,13 +4,17 @@ import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.PersonDTO;
 import ba.atlant.auctionapp.enumeration.Role;
 import ba.atlant.auctionapp.exception.EmailAlreadyUsedException;
+import ba.atlant.auctionapp.model.CreditCard;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.projection.PersonProjection;
+import ba.atlant.auctionapp.repository.CreditCardRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.request.AuthRequest;
 import ba.atlant.auctionapp.request.LoginRequest;
 import ba.atlant.auctionapp.request.RegisterRequest;
 import ba.atlant.auctionapp.response.AuthResponse;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,10 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PersonService {
@@ -35,13 +36,15 @@ public class PersonService {
     final JwtUtils jwtUtils;
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CreditCardRepository creditCardRepository;
     private final S3Service s3Service;
 
-    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils, S3Service s3Service) {
+    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils, CreditCardRepository creditCardRepository, S3Service s3Service) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.creditCardRepository = creditCardRepository;
         this.s3Service = s3Service;
     }
 
@@ -56,16 +59,9 @@ public class PersonService {
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
-        if (personRepository.existsByEmail(registerRequest.getEmail())) {
+        if (personRepository.existsByEmail(registerRequest.getEmail()))
             throw new EmailAlreadyUsedException("Email already in use");
-        }
-        Person person = personRepository.save(new Person(
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                registerRequest.getEmail(),
-                passwordEncoder.encode(registerRequest.getPassword()),
-                Role.ROLE_USER
-        ));
+        Person person = personRepository.save(new Person(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail(), passwordEncoder.encode(registerRequest.getPassword()), Role.ROLE_USER));
         return getAuthResponse(registerRequest, person);
     }
 
@@ -89,34 +85,53 @@ public class PersonService {
     public Boolean existsByEmail(String email) {
         return personRepository.existsByEmail(email);
     }
+
     public Person getByEmail(String email) {
         return personRepository.findByEmail(email).orElse(null);
     }
 
-    Long getUserId(String authHeader) {
-        String token = authHeader.substring(7);
-        return Long.valueOf(jwtUtils.getUserIdFromJwtToken(token));
-    }
-
     public ResponseEntity<PersonProjection> getCurrentUser(String authHeader) {
-        Long userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(Long.valueOf(userId.toString()));
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         PersonProjection personProjection = personRepository.getPersonInformation(Long.valueOf(userId.toString()));
         return ResponseEntity.ok(personProjection);
+    }
+
+    private boolean isCreditCardEmpty (PersonDTO personDTO) {
+        return Strings.isEmpty(personDTO.getCardName()) &&
+               Strings.isEmpty(personDTO.getCardNumber()) &&
+               personDTO.getExpirationMonth() == null &&
+               personDTO.getExpirationYear() == null &&
+               personDTO.getCvc() == null;
+    }
+
+    private boolean isCreditCardComplete (PersonDTO personDTO) {
+        return personDTO.getCardName() != null &&
+               personDTO.getCardNumber() != null &&
+               personDTO.getExpirationMonth() != null &&
+               personDTO.getExpirationYear() != null &&
+               personDTO.getCvc() != null;
+    }
+
+    private void updateCreditCardInfo(PersonDTO personDTO, Person person) {
+        if (isCreditCardEmpty(personDTO)) {
+            Optional<CreditCard> optionalCreditCard = creditCardRepository.findByPerson(person);
+            optionalCreditCard.ifPresent(creditCardRepository::delete);
+            return;
+        }
+        if (isCreditCardComplete(personDTO)) {
+            CreditCard creditCard = new CreditCard(personDTO.getCardName(), personDTO.getCardNumber(), personDTO.getExpirationMonth(), personDTO.getExpirationYear(), personDTO.getCvc(), person);
+            creditCardRepository.save(creditCard);
+            return;
+        }
+        throw new IllegalArgumentException("Credit card data is not complete.");
     }
 
     @Transactional
     public ResponseEntity<PersonDTO> modifyCurrentUser(String authHeader, PersonDTO personDTO) {
         try {
-            Long userId = getUserId(authHeader);
-            Optional<Person> optionalPerson = personRepository.findById(userId);
-
-            if (optionalPerson.isEmpty())
-                throw new IllegalArgumentException("No user found with provided ID.");
-            Person person = optionalPerson.get();
-
+            Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+            Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
             person.setFirstName(personDTO.getFirstName());
             person.setLastName(personDTO.getLastName());
             if (personDTO.getBirthYear() != null && personDTO.getBirthMonth() != null && personDTO.getBirthDay() != null)
@@ -127,12 +142,7 @@ public class PersonService {
             person.setShippingCity(personDTO.getShippingCity());
             person.setState(personDTO.getShippingState());
             person.setCountry(personDTO.getShippingCountry());
-            person.setExpirationYear(personDTO.getExpirationYear());
-            person.setExpirationMonth(personDTO.getExpirationMonth());
-            person.setCardName(personDTO.getCardName());
-            person.setCVV(personDTO.getCvc());
-            person.setCardNumber(personDTO.getCardNumber());
-
+            updateCreditCardInfo(personDTO, person);
             personRepository.save(person);
             return ResponseEntity.ok(personDTO);
         } catch (Exception e) {
@@ -143,26 +153,20 @@ public class PersonService {
 
     @Transactional
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
-        Long userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(userId);
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
-        Person person = optionalPerson.get();
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
         s3Service.uploadFile(file.getOriginalFilename(), file);
-        person.setPictureUrl(String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),file.getOriginalFilename()));
+        person.setPictureUrl(s3Service.getBucketName(), s3Service.getRegion(), file.getOriginalFilename());
         personRepository.save(person);
         return ResponseEntity.ok(person);
     }
 
-    public ResponseEntity<Map<String,String>> getUserPicture(String authHeader) {
-        Long userId = getUserId(authHeader);
-        Optional<Person> optionalPerson = personRepository.findById(userId);
-        if (optionalPerson.isEmpty())
-            throw new IllegalArgumentException("No user found with provided ID.");
-        Person person = optionalPerson.get();
-        Map<String, String> map = new HashMap<>();
-        map.put("url", person.getPictureUrl());
-        return ResponseEntity.ok(map);
+    public ResponseEntity<Map<String, String>> getUserPicture(String authHeader) {
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Map<String, String> personPictureUrl = new HashMap<>();
+        personPictureUrl.put("url", person.getPictureUrl());
+        return ResponseEntity.ok(personPictureUrl);
     }
 }

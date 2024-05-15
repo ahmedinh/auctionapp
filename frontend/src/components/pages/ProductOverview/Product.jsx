@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import "./Product.scss"
+import React, { useState, useEffect } from "react";
+import "./Product.scss";
 import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
@@ -8,28 +8,25 @@ import AuctionCountdown from "./AuctionCountdown";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
-import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
+import { useProduct } from "../../../hooks/useProduct";
 
 export default function Product() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [stompClient, setStompClient] = useState(null);
     const [notification, setNotification] = useState('');
+    const [notificationColor, setNotificationColor] = useState('');
     let { productId } = useParams();
-    const [acceptedBid, setAcceptedBid] = useState(0);
     const [newBid, setNewBid] = useState('');
     const [errorBid, setErrorBid] = useState('');
-    const {
-        status, data, error, refetch
-    } = useQuery({
-        queryKey: ['product', productId],
-        queryFn: () => getProduct({ productId }),
-    })
-    const [mainImage, setMainImage] = useState(() => {
-        if (data && data.productPictureList.length > 0) {
-            return data.productPictureList[0];
+    const { status, data, error, refetch } = useProduct({ productId });
+    const [mainImage, setMainImage] = useState(null);
+
+    useEffect(() => {
+        if (data && data?.productPictureList.length > 0) {
+            setMainImage(data?.productPictureList[0]);
         }
-        return null;
-    });
+    }, [data]);
 
     useEffect(() => {
         const socket = new SockJS(`${apiUrl}/ws`);
@@ -40,11 +37,10 @@ export default function Product() {
                 const receivedMessage = JSON.parse(message.body);
                 if (receivedMessage.accepted === true) {
                     setNotification('Congrats! You are the highest bidder!');
-                    setAcceptedBid(1);
-                }
-                else if (receivedMessage.accepted === false) {
-                    setNotification('There are higher bids than yours. You could give a second try!')
-                    setAcceptedBid(2);
+                    setNotificationColor('#417505');
+                } else if (receivedMessage.accepted === false) {
+                    setNotification('There are higher bids than yours. You could give a second try!');
+                    setNotificationColor('#AB944E');
                 }
                 refetch();
             });
@@ -53,17 +49,20 @@ export default function Product() {
         setStompClient(client);
 
         return () => {
-            if (client.connected)
-                client.disconnect();
-        }
-    }, []);
+            if (client.connected) client.disconnect();
+        };
+    }, [apiUrl, refetch]);
 
-    if (status === 'pending') {
-        return <LoadingSpinner/>;
+    if (status === 'loading') {
+        return <LoadingSpinner />;
     }
 
     if (status === 'error') {
-        return <span>Error: {error.message}</span>
+        return <span>Error: {error?.message}</span>;
+    }
+
+    if (!data) {
+        return <LoadingSpinner/>;
     }
 
     const handleImageClick = (selectedImage) => {
@@ -78,22 +77,22 @@ export default function Product() {
                 userId: getUserId(),
                 productId: productId,
                 amount: parsedBid
-            }
+            };
             stompClient.send('/app/bid', {}, JSON.stringify(bidTry));
             setErrorBid('');
         } else {
             console.error('Invalid bid amount or WebSocket connection is not established');
             if (!bidPattern.test(newBid))
-                setErrorBid('Only numbers with max of 2 decimals are accepted.')
+                setErrorBid('Only numbers with max of 2 decimals are accepted.');
         }
-    }
+    };
 
-    const productImage = mainImage === null ? data?.productPictureList[0].url : mainImage?.url
+    const productImage = mainImage === null ? data?.productPictureList[0]?.url : mainImage?.url;
 
     return (
         <div className="product-page">
-            <BreadCrumbsMenu title={data.name} rightLink="shop/single-product" fontWeight={700} />
-            {acceptedBid === 1 ? <p className="notification-text" style={{ color: "#417505" }}>{notification}</p> : (acceptedBid === 2 ? <p className="notification-text" style={{ color: "#AB944E" }}>{notification}</p> : null)}
+            <BreadCrumbsMenu title={data?.name} rightLink="shop/single-product" fontWeight={700} />
+            <p className="notification-text" style={{ color: notificationColor }}>{notification}</p>
             <div className="product">
                 <div className="product-pictures">
                     <div className="main-image">
@@ -114,28 +113,26 @@ export default function Product() {
                 <div className="product-info">
                     <div className="basics">
                         <div className="headline">
-                            <p className="product-name">{data.name}</p>
-                            <p className="start-price">Starts from <span className="price">${data.startPrice}</span></p>
+                            <p className="product-name">{data?.name}</p>
+                            <p className="start-price">Starts from <span className="price">${data?.startPrice}</span></p>
                         </div>
                         <div className="bids">
-                            <p>Highest bid: <span className="price">${data.largestBid}</span></p>
-                            <p>Number of bids: <span className="price">{data.numberOfBids}</span></p>
-                            <p>Time left: <span className="price"><AuctionCountdown auctionEnd={data.auctionEnd} /></span></p>
+                            <p>Highest bid: <span className="price">${data?.largestBid}</span></p>
+                            <p>Number of bids: <span className="price">{data?.numberOfBids}</span></p>
+                            <p>Time left: <span className="price"><AuctionCountdown auctionEnd={data?.auctionEnd} /></span></p>
                         </div>
-                        {(getUserId() && getUserId() !== data.person.id) ? (
+                        {(getUserId() && getUserId() !== data?.person.id) ? (
                             <div className="place-bid">
                                 <div className="upper">
                                     <input type="text"
-                                        placeholder={'Enter $' + (data.numberOfBids === 0 ? data.startPrice : (data.largestBid > data.startPrice ? data.largestBid + 1 : data.startPrice + 1)) + ' or higher'}
+                                        placeholder={'Enter $' + (data?.largestBid >= data?.startPrice ? data?.largestBid + 1 : data?.startPrice) + ' or higher'}
                                         value={newBid}
                                         onChange={(e) => setNewBid(e.target.value)} />
                                     <button onClick={() => handleBid()}>PLACE BID</button>
                                 </div>
                                 {errorBid.length > 0 ? <p className="error-bid">{errorBid}</p> : null}
                             </div>
-                        ) : (
-                            null
-                        )}
+                        ) : null}
                     </div>
                     <div className="information">
                         <div className="tabs">
@@ -147,7 +144,7 @@ export default function Product() {
                             <hr />
                         </div>
                         <div className="tab-content">
-                            <p className="description">{data.description.replace(/\\n/g, '\n')}</p>
+                            <p className="description">{data?.description.replace(/\\n/g, '\n')}</p>
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useProducts = (fetchFunction, queryKeyPrefix) => {
-    const {
-        status,
-        error,
-        data,
-        isFetchingNextPage,
-        hasNextPage,
-        fetchNextPage,
-    } = useInfiniteQuery({
+    return useInfiniteQuery({
         queryKey: [queryKeyPrefix, "infinite"],
         getNextPageParam: (lastPage, pages) => {
             if (lastPage.last) return undefined;
@@ -16,13 +9,4 @@ export const useProducts = (fetchFunction, queryKeyPrefix) => {
         },
         queryFn: ({ pageParam = 0 }) => fetchFunction({ page: pageParam }),
     });
-
-    return {
-        status,
-        error,
-        data,
-        isFetchingNextPage,
-        hasNextPage,
-        fetchNextPage,
-    };
 };
