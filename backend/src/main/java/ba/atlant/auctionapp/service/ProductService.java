@@ -50,12 +50,12 @@ public class ProductService {
         try {
             if (productRepository.findByName(productCreationDTO.getName()).isPresent())
                 throw new IllegalArgumentException("Product with provided name already exists.");
-            SubCategory subCategory = subCategoryRepository.findByName(productCreationDTO.getSelectedSubcategory()).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
+            Category category = categoryRepository.findByName(productCreationDTO.getSelectedCategory()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given ID."));
+            SubCategory subCategory = subCategoryRepository.findByNameAndCategory(productCreationDTO.getSelectedSubcategory(), category).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given ID."));
             Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
             Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
-            Category category = categoryRepository.findByName(productCreationDTO.getSelectedCategory()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given ID."));
-            if (subCategory.getCategory().equals(category))
-                throw new ResourceNotFoundException("Category does not contain that subcategory.");
+            if (!subCategory.getCategory().equals(category))
+                throw new ResourceNotFoundException("Provided category does not contain provided subcategory.");
             Product product = new Product(productCreationDTO, person, subCategory);
             productRepository.save(product);
             return ResponseEntity.ok(product);

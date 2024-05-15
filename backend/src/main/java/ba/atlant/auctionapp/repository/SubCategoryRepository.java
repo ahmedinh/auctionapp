@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long>, PagingAndSortingRepository<SubCategory, Long> {
     Optional<SubCategory> findByName(String name);
 
+    Optional<SubCategory> findByNameAndCategory(String name, Category category);
+
     List<SubCategory> findSubCategoriesByCategory(Category category);
 
     @Query("""
