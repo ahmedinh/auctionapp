@@ -16,7 +16,6 @@ export default function LocationShipping() {
     const [country, setCountry] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
-    let [sendingData, setSendingData] = useState({});
 
     useEffect(() => {
         const user = getUser();
@@ -55,11 +54,12 @@ export default function LocationShipping() {
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Product added successfully');
+            clearSessionStorageProduct();
             navigate('/home/new-arrivals');
         },
         onError: (error) => {
             console.error('Error creating product:', error);
-            deleteProductMutation.mutate({ productName: productName });
+            deleteProductMutation.mutate({ productName });
         }
     })
 
@@ -89,7 +89,13 @@ export default function LocationShipping() {
                 auctionStart: startDate,
                 auctionEnd: endDate,
                 selectedSubcategory,
-                selectedCategory
+                selectedCategory,
+                returnAddress: address,
+                returnEmail: email,
+                returnCity: city,
+                returnZipCode: zipcode,
+                returnCountry: country,
+                returnPhoneNumber: phoneNumber
             };
             setProductName(productData.name);
 
