@@ -95,10 +95,21 @@ public class ProductService {
             int page, int size, Long categoryId, String sortField, String sortDirection) {
 
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
-        if (sortField.equalsIgnoreCase("auctionEnd"))
-            return ResponseEntity.ok(productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable));
-        else
-            return ResponseEntity.ok(productRepository.getProductsForCategory(categoryId, pageable));
+
+        boolean isAuctionEndSort = sortField.equalsIgnoreCase("auctionEnd");
+        boolean isAllCategories = categoryId.equals(0L);
+        Page<ProductProjection> products;
+
+        if (isAllCategories) {
+            products = isAuctionEndSort
+                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(pageable)
+                    : productRepository.getProductsForAllCategories(pageable);
+        } else {
+            products = isAuctionEndSort
+                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable)
+                    : productRepository.getProductsForCategory(categoryId, pageable);
+        }
+        return ResponseEntity.ok(products);
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
@@ -192,7 +203,7 @@ public class ProductService {
         if (subCategoryListWithMostUserBids.size() > 1) {
             List<ProductProjection> secondMostPopularProductsForSubCategory = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(1).getId());
             if (!secondMostPopularProductsForSubCategory.isEmpty())
-                recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(2));
+                recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(0));
         }
         return ResponseEntity.ok(recommendedProducts);
     }

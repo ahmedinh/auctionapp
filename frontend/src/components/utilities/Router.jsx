@@ -38,6 +38,7 @@ const Router = createBrowserRouter(
                 </Route>
                 <Route path="home">
                     <Route path="categories/:categoryId" element={<CategoryProducts />} />
+                    <Route path="categories/all" element={<CategoryProducts />} />
                     <Route path="about-us" element={<AboutUs />} />
                     <Route path="terms-and-conditions" element={<Terms />} />
                     <Route path="privacy-and-policy" element={<Privacy />} />

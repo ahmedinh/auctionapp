@@ -169,4 +169,11 @@ public class PersonService {
         personPictureUrl.put("url", person.getPictureUrl());
         return ResponseEntity.ok(personPictureUrl);
     }
+
+    public ResponseEntity<Map<String, String>> getUserPhoneNumber(Long userId) {
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        Map<String, String> personPhoneNumber = new HashMap<>();
+        personPhoneNumber.put("phone_number", person.getPhoneNumber());
+        return ResponseEntity.ok(personPhoneNumber);
+    }
 }

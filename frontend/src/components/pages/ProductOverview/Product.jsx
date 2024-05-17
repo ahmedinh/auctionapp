@@ -40,8 +40,15 @@ export default function Product() {
                     setNotification('Congrats! You are the highest bidder!');
                     setNotificationColor('#417505');
                 } else if (receivedMessage.accepted === false) {
-                    setNotification('There are higher bids than yours. You could give a second try!');
                     setNotificationColor('#AB944E');
+                    console.log(data?.numberOfBids);
+                    console.log(data?.startPrice);
+                    console.log(newBid);
+                    if (data?.numberOfBids < 1 && newBid < data?.startPrice) {
+                        setNotification('Bid cannot be lower than start price!');
+                    } else {
+                        setNotification('There are higher bids than yours. You could give a second try!');
+                    }
                 }
                 refetch();
             });
@@ -52,7 +59,7 @@ export default function Product() {
         return () => {
             if (client.connected) client.disconnect();
         };
-    }, [apiUrl, refetch]);
+    }, [apiUrl, refetch, data, data?.numberOfBids, setNotification, newBid]);
 
     if (status === 'loading') {
         return <LoadingSpinner />;

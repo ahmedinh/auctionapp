@@ -51,15 +51,17 @@
                     line-height: $line-height-large;
                 }
 
+                .error-message {
+                    display: block;
+                    color: red;
+                }
+
                 .register-fields {
                     display: flex;
                     flex-direction: column;
                     gap: 32px;
 
-                    .error-message {
-                        display: block;
-                        color: red;
-                    }
+
 
                     .input-field {
                         display: flex;

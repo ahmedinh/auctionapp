@@ -83,4 +83,10 @@ public class PersonController {
     public ResponseEntity<Map<String,String>> getUserPicture(@RequestHeader("Authorization") String authHeader) {
         return personService.getUserPicture(authHeader);
     }
+
+    @GetMapping(value = "/phone-number")
+    @Operation(summary = "Get phone number for user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<Map<String, String>> getUserPhoneNumber(@RequestParam("userId") Long userId) {
+        return personService.getUserPhoneNumber(userId);
+    }
 }

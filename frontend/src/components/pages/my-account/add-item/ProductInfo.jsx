@@ -142,6 +142,7 @@ export default function ProductInfo() {
     const handleFilesUpload = (files) => {
         const newFiles = Array.from(files);
         setUploadedImages([...uploadedImages, ...newFiles]);
+        fileInputRef.current.value = null; // Reset file input value
     };
 
     const handleFileInputChange = (event) => {
@@ -163,6 +164,7 @@ export default function ProductInfo() {
 
     const handleRemoveImage = (index) => {
         setUploadedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        fileInputRef.current.value = null; // Clear the file input value
     };
 
     const remainingImages = minImages - uploadedImages.length;
@@ -182,6 +184,7 @@ export default function ProductInfo() {
                     <div className="product-name">
                         <p>What do you sell?</p>
                         <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productName} onChange={handleProductNameChange} />
+                        {errors.name && <p className="error-message">{errors.name}</p>}
                     </div>
                     <div className="categories">
                         <Form.Select className="dropdown-select" onChange={handleCategoryChange} value={selectedCategory}>
@@ -197,10 +200,15 @@ export default function ProductInfo() {
                             ))}
                         </Form.Select>
                     </div>
+                    {errors.selectedCategory || errors.selectedSubcategory ? (<div className="category-errors">
+                        {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
+                        {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}
+                    </div>) : null}
                     <div className="description">
                         <p className="description-tag">Description</p>
                         <textarea name="" id="" value={description} onChange={handleDescriptionChange}></textarea>
                         <p className="number-of-words">{remainingWords} words ({remainingCharacters} characters) remaining</p>
+                        {errors.description && <p className="error-message">{errors.description}</p>}
                     </div>
                     <div
                         className="drag-drop-field"
@@ -242,14 +250,6 @@ export default function ProductInfo() {
                     </div>
                 </div>
             </div>
-            {Object.keys(errors).length !== 0 ? (
-                <div className="error-messages" style={{ display: 'block' }}>
-                    {errors.name && <p className="error-message">{errors.name}</p>}
-                    {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
-                    {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}
-                    {errors.description && <p className="error-message">{errors.description}</p>}
-                </div>
-            ) : null}
             <div className="buttons">
                 <button onClick={handleCancelClick} className="cancel">CANCEL</button>
                 <button onClick={handleNextClick} className="next">NEXT</button>

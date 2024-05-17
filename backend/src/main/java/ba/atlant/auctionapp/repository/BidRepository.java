@@ -30,6 +30,7 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
         FROM bid b
         JOIN product p ON b.product_id = p.id
         WHERE b.user_id = :userId
+        ORDER BY b.product_id
         """, nativeQuery = true)
     List<BidProjection> getUserBids(@Param("userId") Long userId);
 

@@ -36,7 +36,8 @@ public class WebSecurityConfiguration {
             "/api/product/user/active",
             "/api/product/user/sold",
             "/api/bid/user/all",
-            "/api/user/current"
+            "/api/user/current",
+            "/api/user/phone-number"
     };
 
     private static final String[] PROTECTED_POST = new String[] {

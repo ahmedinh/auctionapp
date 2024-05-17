@@ -42,11 +42,12 @@ export default function Register() {
                             </div>
                             <div className="input-field">
                                 <p>Password</p>
-                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <input type="password" placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} />
                                 <p className='error-message'>{error?.response?.data?.password}</p>
                             </div>
                         </div>
                         <div className="register-buttons">
+                            <p className='error-message'>{error?.response?.data?.error_message}</p>
                             <button type="submit" className='main-button'>Register</button>
                             <div className="external-services">
                                 <div className='facebook-button'>

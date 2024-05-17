@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import './LocationShipping.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
-import { clearSessionStorageProduct, getToken, getUser } from "../../../utilities/Common";
-import { useMutation } from "@tanstack/react-query";
+import { clearSessionStorageProduct, getUser, getUserId } from "../../../utilities/Common";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { addPicturesToProduct, createProduct, deleteProduct } from "../../../../api/productsApi";
+import { getUserPhoneNumber } from "../../../../api/userApi";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
@@ -16,6 +17,12 @@ export default function LocationShipping() {
     const [country, setCountry] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
+    const userId = getUserId();
+
+    const getUserNumber = useQuery({
+        queryKey: ['getUserData', userId],
+        queryFn: (userId) => getUserPhoneNumber({ userId })
+    })
 
     useEffect(() => {
         const user = getUser();
@@ -25,7 +32,7 @@ export default function LocationShipping() {
             setCity(user.shippingCity);
             setZipcode(user.zipCode);
             setCountry(user.country);
-            setPhoneNumber(user.phoneNumber);
+            setPhoneNumber(getUserNumber.data?.phone_number);
         }
     }, []);
 
@@ -39,7 +46,7 @@ export default function LocationShipping() {
     }
 
     const deleteProductMutation = useMutation({
-        mutationKey: ['delete-product-error'],
+        mutationKey: ['delete-product-error', userId],
         mutationFn: ({ productName }) => deleteProduct({ productName: productName }),
         onSuccess: () => {
             alert('Product deleted successfully')
@@ -50,7 +57,7 @@ export default function LocationShipping() {
     })
 
     const addPicturesMutation = useMutation({
-        mutationKey: ['adding-product-pictures'],
+        mutationKey: ['adding-product-pictures', userId],
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Product added successfully');
@@ -64,7 +71,7 @@ export default function LocationShipping() {
     })
 
     const createProductMutation = useMutation({
-        mutationKey: ['creation-of-product'],
+        mutationKey: ['creation-of-product', userId],
         mutationFn: (productData) => createProduct({ productData }),
         onSuccess: () => {
             addPicturesMutation.mutate({ uploadedImages, productName: productName });

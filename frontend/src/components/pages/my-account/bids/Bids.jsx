@@ -20,7 +20,7 @@ export default function Bids() {
     const handleProductRedirect = (productId) => {
         navigate(`/shop/product/${productId}`);
     }
-    const { data, error, isError, isLoading, status } = useBids();
+    const { data, error, isError, isLoading, status, refetch: refetchBids } = useBids();
 
     if (isLoading)
         return <LoadingSpinner />;
@@ -71,7 +71,7 @@ export default function Bids() {
                                 <td className="col1">${bid.maxBid.toFixed(2)}</td>
                                 <td className="col1">
                                     {bid.timeLeft === 'Time is up!' && bid.maxBid === bid.userPrice && !bid.isPaid ? (
-                                        <Payment email={userEmail} amount={bid.maxBid} productId={bid.productId} />
+                                        <Payment email={userEmail} amount={bid.maxBid} productId={bid.productId} refetchBids={refetchBids} />
                                     ) : (bid.timeLeft === 'Time is up!' && bid.isPaid ? (
                                         <p>Product bought</p>
                                     ) :(bid.timeLeft === 'Time is up!' ? (

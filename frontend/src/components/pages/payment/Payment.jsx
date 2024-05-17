@@ -3,7 +3,7 @@ import Stripe from "react-stripe-checkout";
 import StripeCheckout from "react-stripe-checkout";
 import axios from "axios";
 
-export default function Payment({ email, amount, productId }) {
+export default function Payment({ email, amount, productId, refetchBids }) {
     async function handleToken(token) {
         console.log(token);
         await axios
@@ -18,6 +18,7 @@ export default function Payment({ email, amount, productId }) {
             })
             .then(() => {
                 alert("Payment Success");
+                refetchBids();
             })
             .catch((error) => {
                 alert(error?.response?.data?.error_message);
