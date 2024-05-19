@@ -121,7 +121,7 @@ public class ProductService {
     }
 
     private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {
-        Sort sort = Sort.by("name").ascending();
+        Sort sort = Sort.by(sortField).ascending();
         if (sortDirection.equalsIgnoreCase("asc")) {
             sort = Sort.by(sortField).ascending();
         } else if (sortDirection.equalsIgnoreCase("desc")) {
