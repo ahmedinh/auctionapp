@@ -32,12 +32,6 @@ const MyProfile = () => {
                             <Icon icon="material-symbols:monetization-on" className="icon-styling" />
                             Bids
                         </NavLink>
-                        <NavLink to={myAccountRoute + 'wishlist'} className={({ isActive }) =>
-                            isActive ? "active-button-style" : "other-button"
-                        }>
-                            <Icon icon="mdi:heart-outline" className="icon-styling" />
-                            Wishlist
-                        </NavLink>
                         <NavLink to={myAccountRoute + 'settings'} className={({ isActive }) =>
                             isActive ? "active-button-style" : "other-button"
                         }>
