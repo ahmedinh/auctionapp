@@ -3,31 +3,37 @@ import './ProductInfo.scss';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
 import '../../../utilities/Style.scss';
-import { useQuery } from "@tanstack/react-query";
-import { fetchCategoriesWithSubCategories } from "../../../../api/categoriesApi";
 import { clearSessionStorageProduct } from "../../../utilities/Common";
+import { useCategoriesWithSubCategories } from "../../../../hooks/categoriesWithSubcategories";
 
 export default function ProductInfo() {
     const navigate = useNavigate();
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [productName, setProductName] = useState('');
-    const [selectedSubcategory, setSelectedSubcategory] = useState('');
-    const [description, setDescription] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
+    const [productInfo, setProductInfo] = useState({
+        name: '',
+        selectedCategory: '',
+        selectedSubcategory: '',
+        description: ''
+    });
     const fileInputRef = useRef(null);
     const maxWords = 100;
     const maxCharacters = 700;
     const minImages = 3;
     const [errors, setErrors] = useState({});
+    const categoriesWithSubcategories = useCategoriesWithSubCategories();
+
+    const handleOnChangeField = (fieldName, value) => {
+        setProductInfo(prev => ({
+            ...prev,
+            [fieldName]: value
+        }))
+    }
 
     useEffect(() => {
         const savedData = sessionStorage.getItem('productInfo');
         if (savedData) {
-            const { productName, selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
-            setProductName(productName || "");
-            setSelectedCategory(selectedCategory || "");
-            setSelectedSubcategory(selectedSubcategory || "");
-            setDescription(description || "");
+            const { name, selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
+            setProductInfo({ name, selectedCategory, selectedSubcategory, description });
 
             if (uploadedImages) {
                 setUploadedImages(uploadedImages.map(({ name, base64 }) => {
@@ -42,14 +48,6 @@ export default function ProductInfo() {
             }
         }
     }, []);
-
-
-    const {
-        data, status, error
-    } = useQuery({
-        queryKey: ['add-item-categories'],
-        queryFn: () => fetchCategoriesWithSubCategories()
-    })
 
     const handleCancelClick = () => {
         clearSessionStorageProduct();
@@ -68,19 +66,19 @@ export default function ProductInfo() {
     const validateInputs = () => {
         let errors = {};
 
-        if (!productName.trim()) {
+        if (!productInfo?.name.trim()) {
             errors.name = 'Product name cannot be empty';
         }
 
-        if (!selectedCategory.trim()) {
+        if (!productInfo?.selectedCategory.trim()) {
             errors.selectedCategory = 'Category must be chosen';
         }
 
-        if (!selectedSubcategory.trim()) {
+        if (!productInfo?.selectedSubcategory.trim()) {
             errors.selectedSubcategory = 'Subcategory must be chosen';
         }
 
-        if (!description.trim()) {
+        if (!productInfo?.description.trim()) {
             errors.description = 'Description cannot be empty';
         }
 
@@ -100,10 +98,7 @@ export default function ProductInfo() {
             }));
 
             const productData = {
-                productName,
-                selectedCategory,
-                selectedSubcategory,
-                description,
+                ...productInfo,
                 uploadedImages: base64ImagesWithNames
             };
 
@@ -112,26 +107,16 @@ export default function ProductInfo() {
         }
     };
 
-
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
-    };
-
-    const handleSubcategoryChange = (event) => {
-        setSelectedSubcategory(event.target.value);
-    };
-
-    const handleProductNameChange = (event) => {
-        setProductName(event.target.value);
-    };
-
     const handleDescriptionChange = (event) => {
         const inputText = event.target.value;
         const wordsCount = countWords(inputText);
         const charactersCount = inputText.length;
 
         if (wordsCount <= maxWords && charactersCount <= maxCharacters) {
-            setDescription(inputText);
+            setProductInfo(prev => ({
+                ...prev,
+                description: inputText
+            }));
         }
     };
 
@@ -142,6 +127,7 @@ export default function ProductInfo() {
     const handleFilesUpload = (files) => {
         const newFiles = Array.from(files);
         setUploadedImages([...uploadedImages, ...newFiles]);
+        fileInputRef.current.value = null;
     };
 
     const handleFileInputChange = (event) => {
@@ -163,17 +149,18 @@ export default function ProductInfo() {
 
     const handleRemoveImage = (index) => {
         setUploadedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        fileInputRef.current.value = null;
     };
 
     const remainingImages = minImages - uploadedImages.length;
 
-    const wordsCount = countWords(description);
-    const charactersCount = description.length;
+    const wordsCount = countWords(productInfo?.description);
+    const charactersCount = productInfo.description.length;
 
     const remainingWords = maxWords - wordsCount;
     const remainingCharacters = maxCharacters - charactersCount;
 
-    const subcategories = data?.find(category => category.name === selectedCategory)?.subCategoryProjectionList || [];
+    const subcategories = categoriesWithSubcategories.data?.find(category => category.name === productInfo?.selectedCategory)?.subCategoryProjectionList || [];
     return (
         <div className="product-info-form">
             <div className="upper-part">
@@ -181,26 +168,32 @@ export default function ProductInfo() {
                 <div className="form-fields">
                     <div className="product-name">
                         <p>What do you sell?</p>
-                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productName} onChange={handleProductNameChange} />
+                        <input type="text" name="" id="" placeholder="eg. Targeal 7.1 Surround Sound Gaming Headset for PS4" value={productInfo?.name} onChange={(e) => handleOnChangeField('name', e.target.value)} />
+                        {errors.name && <p className="error-message">{errors.name}</p>}
                     </div>
                     <div className="categories">
-                        <Form.Select className="dropdown-select" onChange={handleCategoryChange} value={selectedCategory}>
+                        <Form.Select className="dropdown-select" onChange={(e) => handleOnChangeField('selectedCategory', e.target.value)} value={productInfo?.selectedCategory}>
                             <option value="" disabled selected hidden>Select Category</option>
-                            {data?.map((category, index) => (
+                            {categoriesWithSubcategories.data?.map((category, index) => (
                                 <option>{category.name}</option>
                             ))}
                         </Form.Select>
-                        <Form.Select className="dropdown-select" onChange={handleSubcategoryChange} value={selectedSubcategory}>
+                        <Form.Select className="dropdown-select" onChange={(e) => handleOnChangeField('selectedSubcategory', e.target.value)} value={productInfo?.selectedSubcategory}>
                             <option value="" disabled selected hidden>Select Subcategory</option>
                             {subcategories.map((sub, index) => (
                                 <option key={index} value={sub.name}>{sub.name}</option>
                             ))}
                         </Form.Select>
                     </div>
+                    {errors.selectedCategory || errors.selectedSubcategory ? (<div className="category-errors">
+                        {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
+                        {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}
+                    </div>) : null}
                     <div className="description">
                         <p className="description-tag">Description</p>
-                        <textarea name="" id="" value={description} onChange={handleDescriptionChange}></textarea>
+                        <textarea name="" id="" value={productInfo?.description} onChange={handleDescriptionChange}></textarea>
                         <p className="number-of-words">{remainingWords} words ({remainingCharacters} characters) remaining</p>
+                        {errors.description && <p className="error-message">{errors.description}</p>}
                     </div>
                     <div
                         className="drag-drop-field"
@@ -242,14 +235,6 @@ export default function ProductInfo() {
                     </div>
                 </div>
             </div>
-            {Object.keys(errors) !== 0 ? (
-                <div className="error-messages">
-                    {errors.name && <p className="error-message">{errors.name}</p>}
-                    {errors.selectedCategory && <p className="error-message">{errors.selectedCategory}</p>}
-                    {errors.selectedSubcategory && <p className="error-message">{errors.selectedSubcategory}</p>}
-                    {errors.description && <p className="error-message">{errors.description}</p>}
-                </div>
-            ) : null}
             <div className="buttons">
                 <button onClick={handleCancelClick} className="cancel">CANCEL</button>
                 <button onClick={handleNextClick} className="next">NEXT</button>

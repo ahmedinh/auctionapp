@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { addPicturesToProduct, createProduct, deleteProduct } from "../api/productsApi";
 import { clearSessionStorageProduct } from "../components/utilities/Common";
-import { useNavigate } from "react-router-dom";
 
 export const useProductMutations = (navigate, productName, uploadedImages) => {
     const deleteProductMutation = useMutation({
@@ -40,5 +39,5 @@ export const useProductMutations = (navigate, productName, uploadedImages) => {
         }
     });
 
-    return { deleteProductMutation, addPicturesMutation, createProductMutation };
+    return { createProductMutation };
 };
