@@ -6,18 +6,26 @@ import { clearSessionStorageProduct } from "../../../utilities/Common";
 
 export default function ProductPrice() {
     const navigate = useNavigate();
-    const [price, setPrice] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [productPriceData, setProductPriceData] = useState();
     const [errors, setErrors] = useState({});
+
+    const handleOnChangeField = (fieldName, value) => {
+        setProductPriceData(prev => ({
+            ...prev,
+            [fieldName]: value
+        }))
+    }
 
     useEffect(() => {
         const savedData = sessionStorage.getItem('productPriceData');
         if (savedData) {
-            const { price, startDate, endDate } = JSON.parse(savedData);
-            setPrice(price || '');
-            setStartDate(startDate || '');
-            setEndDate(endDate || '');
+            const { startPrice, auctionStart, auctionEnd } = JSON.parse(savedData);
+            setProductPriceData(prev => ({
+                ...prev,
+                startPrice,
+                auctionStart,
+                auctionEnd
+            }));
         }
     }, []);
 
@@ -33,19 +41,16 @@ export default function ProductPrice() {
     const validateInputs = () => {
         let errors = {};
 
-        // Price validation
-        if (!price || price < 1) {
+        if (!productPriceData.startPrice || productPriceData.startPrice < 1) {
             errors.price = 'Price must be 1 dollar or greater';
         }
 
-        // Start date validation
         const today = new Date().toISOString().split('T')[0];
-        if (!startDate || startDate < today) {
+        if (!productPriceData.auctionStart || productPriceData.auctionStart < today) {
             errors.startDate = 'Start date cannot be in the past';
         }
 
-        // End date validation
-        if (!endDate || endDate <= startDate) {
+        if (!productPriceData.auctionEnd || productPriceData.auctionEnd <= productPriceData.auctionStart) {
             errors.endDate = 'End date must be after the start date';
         }
 
@@ -55,11 +60,6 @@ export default function ProductPrice() {
 
     const handleNext = () => {
         if (validateInputs()) {
-            const productPriceData = {
-                price,
-                startDate,
-                endDate
-            };
             sessionStorage.setItem('productPriceData', JSON.stringify(productPriceData));
             navigate('/my-account/add-item/location-shipping');
         }
@@ -80,10 +80,11 @@ export default function ProductPrice() {
                                 type="number"
                                 min="1"
                                 step="any"
-                                value={price}
-                                onChange={(e) => setPrice(parseFloat(e.target.value))}
+                                value={productPriceData?.startPrice}
+                                onChange={(e) => handleOnChangeField('startPrice', parseFloat(e.target.value))}
                             />
                         </div>
+                        {errors.price && <p className="error-message">{errors.price}</p>}
                     </div>
                     <div className="dates-and-text">
                         <div className="dates">
@@ -91,21 +92,20 @@ export default function ProductPrice() {
                                 <p className="product-add-paragraphs">Start date</p>
                                 <input
                                     type="date"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
+                                    value={productPriceData?.auctionStart}
+                                    onChange={(e) => handleOnChangeField('auctionStart', e.target.value)}
                                 />
                             </div>
                             <div className="end-date">
                                 <p className="product-add-paragraphs">End date</p>
                                 <input
                                     type="date"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
+                                    value={productPriceData?.auctionEnd}
+                                    onChange={(e) => handleOnChangeField('auctionEnd', e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="error-messages">
-                            {errors.price && <p className="error-message">{errors.price}</p>}
                             {errors.startDate && <p className="error-message">{errors.startDate}</p>}
                             {errors.endDate && <p className="error-message">{errors.endDate}</p>}
                         </div>
