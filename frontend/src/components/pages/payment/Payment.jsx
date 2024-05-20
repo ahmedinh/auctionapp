@@ -1,5 +1,4 @@
 import React from "react";
-import Stripe from "react-stripe-checkout";
 import StripeCheckout from "react-stripe-checkout";
 import axios from "axios";
 
@@ -26,12 +25,15 @@ export default function Payment({ email, amount, productId, refetchBids }) {
     }
 
     return (
-        <button className="payment">
-            <StripeCheckout
-                stripeKey="pk_test_51PDSFzP5kI1xofMU6sEdY2h6qzTVDpR9tkBKRbEUlY1cV7H6AmKQDuplplg1dX80tYpJicBuJs83F1FS4ci1ae4e007pNCyz4x"
-                token={handleToken}
-                email={email}
-            >PAY</StripeCheckout>
-        </button>
+        <StripeCheckout
+            stripeKey="pk_test_51PDSFzP5kI1xofMU6sEdY2h6qzTVDpR9tkBKRbEUlY1cV7H6AmKQDuplplg1dX80tYpJicBuJs83F1FS4ci1ae4e007pNCyz4x"
+            token={handleToken}
+            email={email}
+            amount={amount * 100}
+        >
+            <button className="payment">
+                PAY
+            </button>
+        </StripeCheckout>
     );
 }
