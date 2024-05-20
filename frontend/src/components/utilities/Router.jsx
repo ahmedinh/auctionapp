@@ -24,7 +24,7 @@ import LocationShipping from '../pages/my-account/add-item/LocationShipping';
 import Settings from '../pages/my-account/settings/Settings';
 import SellerTable from '../pages/my-account/seller/SellerTable';
 import Error from '../pages/error/Error';
-import { sellerActiveRoute, myProfileRoute, newArrivalsRoute } from './AppUrls';
+import { sellerActiveRoute, myProfileRoute } from './AppUrls';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,6 +38,7 @@ const Router = createBrowserRouter(
                 </Route>
                 <Route path="home">
                     <Route path="categories/:categoryId" element={<CategoryProducts />} />
+                    <Route path="categories/all" element={<CategoryProducts />} />
                     <Route path="about-us" element={<AboutUs />} />
                     <Route path="terms-and-conditions" element={<Terms />} />
                     <Route path="privacy-and-policy" element={<Privacy />} />
@@ -46,6 +47,7 @@ const Router = createBrowserRouter(
                 <Route path="shop">
                     <Route path="product/:productId" element={<Product />} />
                 </Route>
+
             </Route>
             <Route element={<ProtectedRoute />}>
                 <Route path="my-account" element={<MyProfile />}>
