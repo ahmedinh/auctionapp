@@ -9,6 +9,7 @@ import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.request.BidRequest;
+import ba.atlant.auctionapp.response.BidResponse;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class BidService {
         return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
-    private boolean isBidValid(BidRequest bidRequest, Product product) {
+    private BidResponse isBidValid(BidRequest bidRequest, Product product) {
         if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
@@ -47,21 +48,26 @@ public class BidService {
         boolean lowerThanHighestBid = optionalMaxBid.isPresent() && bidRequest.getAmount().compareTo(optionalMaxBid.get().getAmount().add(BigDecimal.valueOf(0.99))) < 1;
         boolean lowerThanStartPrice = optionalMaxBid.isEmpty() && bidRequest.getAmount().compareTo(product.getStartPrice()) < 0;
 
-        return !(lowerThanHighestBid || lowerThanStartPrice);
+        String message = "Congrats! You are the highest bidder!";
+        if (lowerThanHighestBid)
+            message = "There are higher bids than yours. You could give a second try!";
+        else if (lowerThanStartPrice)
+            message = "Bid cannot be lower than start price!";
+        return new BidResponse(!(lowerThanHighestBid || lowerThanStartPrice), message);
     }
 
-    public boolean isBidPlaced(BidRequest bidRequest) {
+    public BidResponse isBidPlaced(BidRequest bidRequest) {
         Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new ResourceNotFoundException("No product found with provided ID."));
         Person person = personRepository.findById(bidRequest.getUserId()).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        if (isBidValid(bidRequest, product)) {
+        BidResponse bidResponse = isBidValid(bidRequest,product);
+        if (bidResponse.isAccepted()) {
             Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(bidRequest.getUserId(),bidRequest.getProductId());
             Bid bid = optionalBid.orElseGet(Bid::new);
             bid.setAmount(bidRequest.getAmount());
             bid.setProduct(product);
             bid.setPerson(person);
             bidRepository.save(bid);
-            return true;
         }
-        return false;
+        return bidResponse;
     }
 }
