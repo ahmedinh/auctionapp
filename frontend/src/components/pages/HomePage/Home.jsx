@@ -5,6 +5,8 @@ import { useHighlight } from "../../../hooks/useHighlight";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
+import ProductCard from "./Products/ProductCard";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
 
