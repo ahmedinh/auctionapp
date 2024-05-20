@@ -155,7 +155,7 @@ public class PersonService {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         s3Service.deleteObject(person.getPictureUrl());
-        s3Service.uploadFile(file.getOriginalFilename(), file);
+        s3Service.uploadFile("user_" + userId + "/" + file.getOriginalFilename(), file);
         person.setPictureUrl(s3Service.getBucketName(), s3Service.getRegion(), file.getOriginalFilename());
         personRepository.save(person);
         return ResponseEntity.ok(person);
