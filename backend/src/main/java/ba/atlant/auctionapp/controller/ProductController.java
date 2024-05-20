@@ -10,6 +10,7 @@ import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -66,11 +67,15 @@ public class ProductController {
 
     @GetMapping("/all/category")
     @Operation(summary = "All products for category")
-    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(@RequestParam(defaultValue = "0") int page,
-                                                                          @RequestParam(defaultValue = "9") int size,
-                                                                          @RequestParam(defaultValue = "1") Long categoryId) {
-        return productService.getProductsForCategory(page, size, categoryId);
+    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            @RequestParam(defaultValue = "1") Long categoryId,
+            @RequestParam(defaultValue = "name") String sortField,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
+        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection);
     }
+
 
     @GetMapping("/all/sub-category")
     @Operation(summary = "All products for subcategory")
@@ -91,8 +96,10 @@ public class ProductController {
     @Operation(summary = "Products search")
     public ResponseEntity<Page<ProductProjection>> searchProducts(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "9") int size,
-                                                                  @RequestParam("query") String query){
-        return productService.searchProducts(page, size, query);
+                                                                  @RequestParam("query") String query,
+                                                                  @RequestParam(defaultValue = "name") String sortField,
+                                                                  @RequestParam(defaultValue = "asc") String sortDirection){
+        return productService.searchProducts(page, size, query, sortField, sortDirection);
     }
 
     @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

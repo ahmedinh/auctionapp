@@ -4,161 +4,168 @@
     display: flex;
     flex-direction: column;
     gap: 64px;
+    align-items: center;
 
-    .upper-part {
+    .content {
         display: flex;
-        gap: 119px;
-        margin: 34px 20% 0% 20%;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 1120px;
-
-        .categories {
-            width: 262px;
-
-            .categories-text {
-                height: 56px;
-                display: flex;
-                padding-left: 16px;
-                align-items: center;
-
-                p {
-                    color: $color-purple;
-                    margin: 0;
-                    padding: 0;
-                    font-size: $font-size-normal;
-                }
-            }
-
-            .list {
-                width: 261px;
-
-                ul {
-                    display: flex;
-                    flex-direction: column;
-                    color: $color-black;
-                    list-style-type: none;
-                    margin: 0;
-                    padding: 0;
-                }
-
-                li {
-                    position: relative;
-                    padding: 16px 0 16px 16px;
-
-                    ::after {
-                        content: "";
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        height: 1px;
-                        background-color: $color-grey;
-                    }
-                }
-
-                hr {
-                    color: $color-grey;
-                    height: 0px;
-                }
-            }
-        }
-
-        .highlight {
+        .upper-part {
             display: flex;
-            gap: 36px;
-            margin-top: 6rem;
-            margin-bottom: 11rem;
-
-            img {
-                width: 357px;
-                height: 420px;
-                object-fit: contain;
-            }
-
-            .left-side {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                gap: 3rem;
-                width: 346px;
-
-                .product-about {
+            gap: 119px;
+            justify-content: space-between;
+            width: 1120px;
+    
+            .categories {
+                width: 262px;
+    
+                .categories-text {
+                    height: 56px;
                     display: flex;
-                    flex-direction: column;
-                    gap: 16px;
-
+                    padding-left: 16px;
+                    align-items: center;
+    
                     p {
+                        color: $color-purple;
                         margin: 0;
                         padding: 0;
-                        font-weight: $font-weight-semibold;
                         font-size: $font-size-normal;
                     }
-
-                    .product-name {
+                }
+    
+                .list {
+                    width: 261px;
+    
+                    ul {
+                        display: flex;
+                        flex-direction: column;
                         color: $color-black;
+                        list-style-type: none;
+                        margin: 0;
+                        padding: 0;
                     }
-
-                    .product-price {
-                        color: $color-purple;
+    
+                    li {
+                        position: relative;
+                        padding: 16px 0 16px 16px;
+    
+                        ::after {
+                            content: "";
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            height: 1px;
+                            background-color: $color-grey;
+                        }
                     }
-
-                    .product-description {
+    
+                    hr {
                         color: $color-grey;
-                        font-weight: $font-weight-normal;
+                        height: 0px;
                     }
                 }
-
-                .bid-now {
-                    button {
+            }
+    
+            .highlight {
+                display: flex;
+                gap: 36px;
+                margin-top: 6rem;
+                margin-bottom: 11rem;
+    
+                img {
+                    width: 357px;
+                    height: 420px;
+                    object-fit: contain;
+                }
+    
+                .left-side {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    gap: 3rem;
+                    width: 346px;
+    
+                    .product-about {
                         display: flex;
+                        flex-direction: column;
                         gap: 16px;
-                        justify-content: center;
-                        padding: 12px 24px 12px 24px;
-                        border: 2px solid $color-black;
-                        background-color: #fff;
-                        font-weight: $font-weight-bold;
-                        cursor: pointer;
-
-                        &:hover {
-                            border-color: $color-purple;
+    
+                        p {
+                            margin: 0;
+                            padding: 0;
+                            font-weight: $font-weight-semibold;
+                            font-size: $font-size-normal;
+                        }
+    
+                        .product-name {
+                            color: $color-black;
+                        }
+    
+                        .product-price {
+                            color: $color-purple;
+                        }
+    
+                        .product-description {
+                            color: $color-grey;
+                            font-weight: $font-weight-normal;
+                        }
+                    }
+    
+                    .bid-now {
+                        button {
+                            display: flex;
+                            gap: 16px;
+                            justify-content: center;
+                            padding: 12px 24px 12px 24px;
+                            border: 2px solid $color-black;
+                            background-color: #fff;
+                            font-weight: $font-weight-bold;
+                            cursor: pointer;
+    
+                            &:hover {
+                                border-color: $color-purple;
+                            }
                         }
                     }
                 }
             }
         }
-    }
-
-    .bottom {
-        margin: 0 20% 10% 20%;
-        display: flex;
-        flex-direction: column;
-        gap: 32px;
-
-        .menu-bar {
+    
+        .bottom {
+            margin: 0 20% 10% 20%;
             display: flex;
-            gap: 64px;
-            align-items: flex-end;
-            line-height: $line-height-large;
-
-            .link {
-                text-decoration: none;
-                color: $color-black;
-                font-size: 20px;
+            flex-direction: column;
+            gap: 32px;
+    
+            .menu-bar {
+                display: flex;
+                gap: 64px;
+                align-items: flex-end;
+                line-height: $line-height-large;
+    
+                .link {
+                    text-decoration: none;
+                    color: $color-black;
+                    font-size: 20px;
+                }
+    
+                .active {
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-large;
+                    letter-spacing: 0.84px;
+                }
             }
-
-            .active {
-                font-weight: $font-weight-semibold;
-                font-size: $font-size-large;
-                letter-spacing: 0.84px;
+    
+            hr {
+                width: 100%;
+                color: $color-grey;
+                border-style: inset;
+                border-width: 1px;
+                margin: 0;
             }
-        }
-
-        hr {
-            width: 100%;
-            color: $color-grey;
-            border-style: inset;
-            border-width: 1px;
-            margin: 0;
         }
     }
 }

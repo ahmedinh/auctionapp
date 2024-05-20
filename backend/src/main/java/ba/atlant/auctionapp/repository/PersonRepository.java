@@ -41,5 +41,4 @@ public interface PersonRepository extends JpaRepository<Person, Long>, PagingAnd
             WHERE p.id = :userId
             """)
     PersonProjection getPersonInformation(@Param("userId") Long userId);
-
 }

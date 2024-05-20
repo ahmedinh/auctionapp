@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useBasicSearch } from "../../../hooks/useBasicSearch";
 import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
 import { useThresholdSearch } from "../../../hooks/useThresholdSearch";
+import { useBasicSearch } from '../../../hooks/useBasicSearch';
 import "./BasicSearch.scss";
 import { homePageRoute } from "../../utilities/AppUrls";
 
@@ -13,17 +13,27 @@ export default function BasicSearch() {
     const query = searchParams.get("query");
     const [currentPageTitle, setCurrentPageTitle] = useState(homePageRoute + `search-results-for-${query}`)
 
+    const [sortField, setSortField] = useState('name');
+    const [sortDirection, setSortDirection] = useState('asc');
+
     const {
         data: basicSearchResults,
         status,
         error,
         hasNextPage,
         fetchNextPage,
-        isFetchingNextPage
-    } = useBasicSearch(query);
+        isFetchingNextPage,
+        refetch
+    } = useBasicSearch(query, sortField, sortDirection);
+    
     const {
         data: thresholdSearchResults
     } = useThresholdSearch(query);
+
+    const handleSortChange = (field, direction) => {
+        setSortField(field);
+        setSortDirection(direction);
+    };
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -42,7 +52,7 @@ export default function BasicSearch() {
                     </p>
                 ) : ""}
             </div>
-            <div className="menu-a" >
+            <div className="menu-a">
                 <Breadcrumbs locationLink={currentPageTitle} />
             </div>
             <MainSearchPage
@@ -52,8 +62,8 @@ export default function BasicSearch() {
                 hasNextPage={hasNextPage}
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
+                onSortChange={handleSortChange} // Pass the sorting handler to MainSearchPage
             />
-
         </div>
     );
 }

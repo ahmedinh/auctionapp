@@ -4,7 +4,7 @@ import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
-import AuctionCountdown from "./AuctionCountdown";
+import { AuctionCountdown } from "./AuctionCountdown";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
@@ -62,7 +62,7 @@ export default function Product() {
     }
 
     if (!data) {
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
 
     const handleImageClick = (selectedImage) => {

@@ -9,7 +9,6 @@ const CountdownTimer = ({ targetDate }) => {
             const endDate = new Date(targetDate);
 
             now.setHours(now.getHours() + 2);
-
             const timeDiff = endDate - now;
 
             if (timeDiff > 0) {

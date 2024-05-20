@@ -7,6 +7,7 @@ export default function NavbarBlackLogged({ onLogout }) {
     const user = getUser();
     const firstName = user?.firstName;
     const lastName = user?.lastName;
+
     const handleLogout = (event) => {
         removeSession();
         onLogout();

@@ -4,12 +4,13 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     .menu-a {
-        display: flex;
-        margin-left: 23rem;
         margin-top: 1rem;
+        display: flex;
         align-items: center;
+        width: 1120px;
     }
 
     .did-you-mean {

@@ -12,6 +12,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,6 @@ public class ProductService {
     private final JwtUtils jwtUtils;
 
     public ProductService(ProductRepository productRepository, SubCategoryRepository subCategoryRepository, ProductPictureRepository productPictureRepository, PersonRepository personRepository, CategoryRepository categoryRepository, BidRepository bidRepository, JwtUtils jwtUtils, S3Service s3Service) {
-
         this.productRepository = productRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.productPictureRepository = productPictureRepository;
@@ -89,9 +90,14 @@ public class ProductService {
             return ResponseEntity.ok(new ProductDTO(product, productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
-    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(int page, int size, Long categoryId) {
-        Page<ProductProjection> productProjectionPage = productRepository.getProductsForCategory(categoryId, PageRequest.of(page,size));
-        return ResponseEntity.ok(productProjectionPage);
+    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(
+            int page, int size, Long categoryId, String sortField, String sortDirection) {
+
+        Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
+        if (sortField.equalsIgnoreCase("auctionEnd"))
+            return ResponseEntity.ok(productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable));
+        else
+            return ResponseEntity.ok(productRepository.getProductsForCategory(categoryId, pageable));
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
@@ -105,8 +111,24 @@ public class ProductService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<Page<ProductProjection>> searchProducts(int page, int size, String query) {
-        return ResponseEntity.ok(productRepository.searchProducts(query, PageRequest.of(page,size)));
+    public ResponseEntity<Page<ProductProjection>> searchProducts(
+            int page, int size, String query, String sortField, String sortDirection) {
+        Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
+        if (sortField.equalsIgnoreCase("auctionEnd"))
+            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, pageable));
+        else
+            return ResponseEntity.ok(productRepository.searchProducts(query, pageable));
+    }
+
+    private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {
+        Sort sort = Sort.by(sortField).ascending();
+        if (sortDirection.equalsIgnoreCase("asc")) {
+            sort = Sort.by(sortField).ascending();
+        } else if (sortDirection.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        }
+
+        return PageRequest.of(page, size, sort);
     }
 
     @Transactional
@@ -140,6 +162,10 @@ public class ProductService {
         Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
         List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
         if (pictures != null && !pictures.isEmpty()) {
+            for (ProductPicture productPicture : pictures) {
+                s3Service.deleteObject(productPicture.getUrl());
+            }
+            s3Service.deleteObject(String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),productName));
             productPictureRepository.deleteAll(pictures);
         }
         productRepository.delete(product);

@@ -1,11 +1,13 @@
-import React from "react";
-import { getProductsForCategory } from "../../../api/productsApi";
+import React, { useState, useEffect } from "react";
 import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
 import { useParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
 
 export default function CategoryProducts() {
-    const { categoryId } = useParams();
+    const { categoryId: urlCategoryId } = useParams();
+    const categoryId = urlCategoryId ? urlCategoryId : 0;
+    const [sortField, setSortField] = useState('name');
+    const [sortDirection, setSortDirection] = useState('asc');
 
     const {
         data,
@@ -14,16 +16,25 @@ export default function CategoryProducts() {
         hasNextPage,
         isFetchingNextPage,
         status,
-    } = useCategoryProducts(getProductsForCategory, 9, categoryId);
+        refetch
+    } = useCategoryProducts(categoryId, sortField, sortDirection);
+
+    const handleSortChange = (field, direction) => {
+        setSortField(field);
+        setSortDirection(direction);
+    };
 
     return (
-        <MainSearchPage
-            productsData={data}
-            productsStatus={status}
-            productsError={error}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-        />
+        <div className="search-page-full">
+            <MainSearchPage
+                productsData={data}
+                productsStatus={status}
+                productsError={error}
+                hasNextPage={hasNextPage}
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                onSortChange={handleSortChange}
+            />
+        </div>
     );
 }

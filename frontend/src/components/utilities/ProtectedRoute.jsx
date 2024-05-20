@@ -1,22 +1,26 @@
 import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { isUserAuthorized, validToken } from "./Common";
+import { isUserAuthorized, validToken, removeSession } from "./Common";
 import Layout from "./Layout";
+import Error from '../pages/error/Error';
 
 const ProtectedRoute = () => {
     const navigate = useNavigate();
-    const isAuthenticated = isUserAuthorized() && validToken();
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            return navigate('/login', { replace: true });
-        }
-    }, [isAuthenticated, navigate]);
+        const authenticated = isUserAuthorized() && validToken();
 
-    return (
-        <Layout >
+        if (!authenticated) {
+            removeSession();
+            navigate('/not-found', { replace: true });
+        }
+    }, [navigate]);
+
+    const authenticated = isUserAuthorized() && validToken();
+    return authenticated ? (
+        <Layout>
             <Outlet />
         </Layout>
-    );
+    ) : <Error/>;
 };
 export default ProtectedRoute;

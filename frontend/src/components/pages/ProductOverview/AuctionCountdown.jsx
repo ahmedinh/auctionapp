@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AuctionCountdown = ({ auctionEnd }) => {
+export const AuctionCountdown = ({ auctionEnd }) => {
     const calculateTimeLeft = () => {
         const auctionEndDate = new Date(auctionEnd);
         const now = new Date();
@@ -34,4 +34,3 @@ const AuctionCountdown = ({ auctionEnd }) => {
         </>
     );
 };
-export default AuctionCountdown;
