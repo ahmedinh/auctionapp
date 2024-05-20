@@ -59,4 +59,6 @@ public class Bid {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+
 }

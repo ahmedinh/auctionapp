@@ -28,7 +28,7 @@ export const clearSessionStorageProduct = () => {
 export const getUserId = () => {
     const user = getUser();
     return user ? user.id : null;
-}
+};
 
 export const validToken = () => {
     const token = getToken();
@@ -37,7 +37,7 @@ export const validToken = () => {
     }
     const exp = jwtDecode(token).exp;
     return Date.now() < exp * 1000;
-}
+};
 
 export const isUserAuthorized = () => {
     const token = localStorage.getItem("token");
@@ -74,7 +74,7 @@ export function isDateValid(day, month, year) {
     }
 
     return true;
-}
+};
 
 export const validateExpirationDate = (expirationMonth, expirationYear) => {
     const currentDate = new Date();

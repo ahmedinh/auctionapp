@@ -23,7 +23,7 @@ export default function Bids() {
     const { data, error, isError, isLoading, status, refetch: refetchBids } = useBids();
 
     if (isLoading)
-        return <LoadingSpinner />;
+        return <LoadingSpinner/>;
 
     const tableHeaders = ["Name", "Time left", "Your bid", "No. bids", "Highest bid", ""];
 
@@ -42,7 +42,6 @@ export default function Bids() {
             </div>
         );
     }
-    console.log(data)
 
     return (
         <div className="table-view">

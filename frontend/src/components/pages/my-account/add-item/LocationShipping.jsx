@@ -6,16 +6,11 @@ import { clearSessionStorageProduct, getUser, getUserId } from "../../../utiliti
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addPicturesToProduct, createProduct, deleteProduct } from "../../../../api/productsApi";
 import { getUserPhoneNumber } from "../../../../api/userApi";
+import { useProductMutations } from "../../../../hooks/productCreateMutations";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
     const [productName, setProductName] = useState('');
-    const [address, setAddress] = useState('');
-    const [email, setEmail] = useState('');
-    const [city, setCity] = useState('');
-    const [zipcode, setZipcode] = useState('');
-    const [country, setCountry] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
     const userId = getUserId();
 
@@ -23,16 +18,28 @@ export default function LocationShipping() {
         queryKey: ['getUserData', userId],
         queryFn: (userId) => getUserPhoneNumber({ userId })
     })
+    const [product, setProduct] = useState();
+    const { createProductMutation } = useProductMutations(navigate, productName, uploadedImages);
+
+    const handleOnChangeField = (fieldName, value) => {
+        setProduct(prev => ({
+            ...prev,
+            [fieldName]: value
+        }))
+    }
 
     useEffect(() => {
         const user = getUser();
         if (user) {
-            setAddress(user.shippingAddress);
-            setEmail(user.email);
-            setCity(user.shippingCity);
-            setZipcode(user.zipCode);
-            setCountry(user.country);
-            setPhoneNumber(getUserNumber.data?.phone_number);
+            setProduct(prev => ({
+                ...prev,
+                returnAddress: user.shippingAddress,
+                returnEmail: user.email,
+                returnCity: user.shippingCity,
+                returnZipCode: user.zipCode,
+                returnCountry: user.country,
+                returnPhoneNumber: user.phoneNumber
+            }));
         }
     }, []);
 
@@ -45,69 +52,20 @@ export default function LocationShipping() {
         navigate('/my-account/add-item/product-price');
     }
 
-    const deleteProductMutation = useMutation({
-        mutationKey: ['delete-product-error', userId],
-        mutationFn: ({ productName }) => deleteProduct({ productName: productName }),
-        onSuccess: () => {
-            alert('Product deleted successfully')
-        },
-        onError: (error) => {
-            console.error('Error deleting product:', error);
-        }
-    })
-
-    const addPicturesMutation = useMutation({
-        mutationKey: ['adding-product-pictures', userId],
-        mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
-        onSuccess: () => {
-            alert('Product added successfully');
-            clearSessionStorageProduct();
-            navigate('/home/new-arrivals');
-        },
-        onError: (error) => {
-            console.error('Error creating product:', error);
-            deleteProductMutation.mutate({ productName });
-        }
-    })
-
-    const createProductMutation = useMutation({
-        mutationKey: ['creation-of-product', userId],
-        mutationFn: (productData) => createProduct({ productData }),
-        onSuccess: () => {
-            addPicturesMutation.mutate({ uploadedImages, productName: productName });
-        },
-        onError: (error) => {
-            console.error('Error creating product:', error);
-        }
-    });
-
     const handleDone = () => {
         const savedData = sessionStorage.getItem('productInfo');
         const savedPriceData = sessionStorage.getItem('productPriceData');
 
         if (savedData && savedPriceData) {
-            const { productName, selectedCategory, selectedSubcategory, description, uploadedImages } = JSON.parse(savedData);
-            const { price, startDate, endDate } = JSON.parse(savedPriceData);
-
             const productData = {
-                name: productName,
-                description,
-                startPrice: price,
-                auctionStart: startDate,
-                auctionEnd: endDate,
-                selectedSubcategory,
-                selectedCategory,
-                returnAddress: address,
-                returnEmail: email,
-                returnCity: city,
-                returnZipCode: zipcode,
-                returnCountry: country,
-                returnPhoneNumber: phoneNumber
+                ...JSON.parse(savedData),
+                ...JSON.parse(savedPriceData),
+                ...product
             };
             setProductName(productData.name);
 
-            if (uploadedImages) {
-                setUploadedImages(uploadedImages.map(({ name, base64 }) => {
+            if (productData.uploadedImages) {
+                setUploadedImages(productData.uploadedImages.map(({ name, base64 }) => {
                     const arr = base64.split(','), mime = arr[0].match(/:(.*?);/)[1];
                     const bstr = atob(arr[1]);
                     let n = bstr.length, u8arr = new Uint8Array(n);
@@ -117,7 +75,6 @@ export default function LocationShipping() {
                     return new File([u8arr], name, { type: mime });
                 }));
             }
-
             createProductMutation.mutate(productData);
         } else {
             console.error('Missing product or price data');
@@ -136,8 +93,8 @@ export default function LocationShipping() {
                         <input
                             type="text"
                             placeholder="123 Main Street"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
+                            value={product?.returnAddress || ''}
+                            onChange={(e) => handleOnChangeField('returnAddress', e.target.value)}
                         />
                     </div>
                     <div className="email">
@@ -147,8 +104,8 @@ export default function LocationShipping() {
                         <input
                             type="text"
                             placeholder="user@domain.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={product?.returnEmail || ''}
+                            onChange={(e) => handleOnChangeField('returnEmail', e.target.value)}
                         />
                     </div>
                     <div className="city-zip">
@@ -159,8 +116,8 @@ export default function LocationShipping() {
                             <input
                                 type="text"
                                 placeholder="eg. Madrid"
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
+                                value={product?.returnCity || ''}
+                                onChange={(e) => handleOnChangeField('returnCity', e.target.value)}
                             />
                         </div>
                         <div className="zip-code">
@@ -170,8 +127,8 @@ export default function LocationShipping() {
                             <input
                                 type="text"
                                 placeholder="XXXXXXX"
-                                value={zipcode}
-                                onChange={(e) => setZipcode(e.target.value)}
+                                value={product?.returnZipCode || ''}
+                                onChange={(e) => handleOnChangeField('returnZipCode', e.target.value)}
                             />
                         </div>
                     </div>
@@ -180,8 +137,8 @@ export default function LocationShipping() {
                         <input
                             type="text"
                             placeholder="eg. Spain"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
+                            value={product?.returnCountry}
+                            onChange={(e) => handleOnChangeField('returnCountry', e.target.value)}
                         />
                     </div>
                     <div className="phone-number">
@@ -190,8 +147,8 @@ export default function LocationShipping() {
                             <input
                                 type="text"
                                 placeholder="+32534231564"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                value={product?.returnPhoneNumber || ''}
+                                onChange={(e) => handleOnChangeField('returnPhoneNumber', e.target.value)}
                             />
                             <button className="not-verified">Not verified</button>
                         </div>
