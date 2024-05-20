@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
 
 export default function CategoryProducts() {
-    const { categoryId } = useParams();
+    const { categoryId: urlCategoryId } = useParams();
+    const categoryId = urlCategoryId ? urlCategoryId : 0;
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
 
