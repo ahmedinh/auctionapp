@@ -43,6 +43,8 @@ export default function ProductPrice() {
 
         if (!productPriceData.startPrice || productPriceData.startPrice < 1) {
             errors.price = 'Price must be 1 dollar or greater';
+        } else if (!/^[0-9]+(\.[0-9]{1,2})?$/.test(productPriceData.startPrice)) {
+            errors.price = 'Price can only be a number with up to 2 decimal places';
         }
 
         const today = new Date().toISOString().split('T')[0];
