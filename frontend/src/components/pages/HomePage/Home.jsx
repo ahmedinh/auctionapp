@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";
@@ -13,9 +13,17 @@ const Home = () => {
     const navigate = useNavigate();
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    const { status: recommendedStatus, error: recommendedError, data: recommendedData } = useRecommendedProducts();
+    const { status: recommendedStatus, error: recommendedError, data: recommendedData, refetch: refetchRecommendedProducts } = useRecommendedProducts();
+
+    useEffect(() => {
+        if (recommendedData)
+            refetchRecommendedProducts();
+    });
 
     if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
+        return <LoadingSpinner />;
+    }
+    if (categoriesStatus === 'loading' || highlightStatus === 'loading' || recommendedStatus === 'loading') {
         return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
@@ -43,7 +51,7 @@ const Home = () => {
                                         <li><NavLink to={homePageRoute + `categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
                                     </React.Fragment>
                                 ))}
-                                <li><NavLink to="/categories" style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
+                                <li><NavLink to={homePageRoute + `categories/all`} style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
                             </ul>
                         </div>
                     </div>
