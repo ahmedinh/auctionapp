@@ -30,9 +30,9 @@ const Router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
             <Route element={<Layout />}>
-                <Route index element={<Navigate replace to={newArrivalsRoute} />} />
+                <Route index element={<Navigate replace to="/home/new-arrivals" />} />
                 <Route path="home" element={<Home />}>
-                    <Route index element={<Navigate replace to={newArrivalsRoute} />} />
+                    <Route index element={<Navigate replace to="/home/new-arrivals" />} />
                     <Route path="new-arrivals" element={<NewArrivals />} />
                     <Route path="last-chance" element={<LastChance />} />
                 </Route>
