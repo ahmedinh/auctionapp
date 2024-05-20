@@ -8,7 +8,6 @@ import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
 import ProductCard from "./Products/ProductCard";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
-import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
 
 const Home = () => {
     const navigate = useNavigate();
