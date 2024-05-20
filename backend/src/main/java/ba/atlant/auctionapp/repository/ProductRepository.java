@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
@@ -144,4 +145,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             AND COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) > 0
             """)
     List<ProductUserProjection> getSoldUserProducts(@Param("userId") Long userId);
+
+    Optional<Product> findByName(String name);
 }

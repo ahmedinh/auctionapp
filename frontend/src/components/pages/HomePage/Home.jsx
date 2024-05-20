@@ -2,12 +2,13 @@ import React from "react";
 import "./Home.scss";
 import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 
 const Home = () => {
+    const navigate = useNavigate();
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
     if (categoriesStatus === 'pending' || highlightStatus === 'pending') {
@@ -45,7 +46,7 @@ const Home = () => {
                             <p className="product-description">{highlightData?.description.replace(/\\n/g, ' ')}</p>
                         </div>
                         <div className="bid-now">
-                            <button type="button">BID NOW <Icon icon="akar-icons:chevron-right" /></button>
+                            <button type="button" onClick={() => navigate(`/shop/product/${highlightData.id}`)}>BID NOW <Icon icon="akar-icons:chevron-right" /></button>
                         </div>
                     </div>
                     <img src={highlightData?.productPictureList[0].url} alt="HighlightPicture" />

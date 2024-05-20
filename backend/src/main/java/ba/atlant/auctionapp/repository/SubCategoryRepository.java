@@ -10,9 +10,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long>, PagingAndSortingRepository<SubCategory, Long> {
+    Optional<SubCategory> findByName(String name);
+
+    Optional<SubCategory> findByNameAndCategory(String name, Category category);
+
     List<SubCategory> findSubCategoriesByCategory(Category category);
 
     @Query("""

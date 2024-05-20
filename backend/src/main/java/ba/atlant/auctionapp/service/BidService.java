@@ -9,13 +9,12 @@ import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.request.BidRequest;
-import com.google.gson.stream.JsonToken;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +35,11 @@ public class BidService {
     public ResponseEntity<List<BidProjection>> getUserBids(String token) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok(bidRepository.getUserBids(Long.valueOf(userId)));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId));
     }
 
     private boolean isBidValid(BidRequest bidRequest, Product product) {
-        if (product.getAuctionEnd().isBefore(LocalDateTime.now()))
+        if (product.getAuctionEnd().isBefore(LocalDate.now()))
             throw new IllegalArgumentException("Auction has ended for this product");
 
         Optional<Bid> optionalMaxBid = bidRepository.findTopByProductIdOrderByAmountDesc(bidRequest.getProductId());

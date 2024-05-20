@@ -2,7 +2,6 @@ import React from "react";
 import Breadcrumbs from "./Breadcrumbs";
 import { common } from "../../messages/Text";
 import "./BreadCrumbsMenu.scss";
-import { Outlet } from "react-router";
 
 const BreadCrumbsMenu = ({ title, rightLink, fontWeight = 400 }) => {
     const formatTitle = (path) => {

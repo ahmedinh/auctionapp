@@ -115,10 +115,17 @@
                         width: 92px;
                         height: 92px;
                     }
-
-                    p {
-                        margin: 0;
-                        font-weight: $font-weight-normal;
+                    button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border: none;
+                        background-color: #fff;
+                        font-size: $font-size-normal;
+                        padding: 16px 32px 16px 32px;
+                        font-size: $font-size-normal;
+                        font-weight: $font-weight-bold;
+                        cursor: pointer;
                     }
 
                 }

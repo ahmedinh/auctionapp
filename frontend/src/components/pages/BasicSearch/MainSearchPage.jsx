@@ -33,45 +33,47 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
 
     return (
         <div className="search-page">
-            <div className="all-filters">
-                <div className="product-categories">
-                    <p className="product-categories headline">PRODUCT CATEGORIES</p>
-                    {categoriesData?.map((item, i) => (
-                        <div className="item">
-                            <div className="title" onClick={() => toggle(i)}>
-                                <p>{item.name}</p>
-                                <span>{selected === i ? '-' : '+'}</span>
+            <div className="content">
+                <div className="all-filters">
+                    <div className="product-categories">
+                        <p className="product-categories headline">PRODUCT CATEGORIES</p>
+                        {categoriesData?.map((item, i) => (
+                            <div className="item">
+                                <div className="title" onClick={() => toggle(i)}>
+                                    <p>{item.name}</p>
+                                    <span>{selected === i ? '-' : '+'}</span>
+                                </div>
+                                <div
+                                    className={selected === i ? 'subcategories-show' : 'subcategories'}>
+                                    {item.subCategoryProjectionList.map((item2, i) => (
+                                        <div className="subitem">
+                                            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+                                            <p className="subcategory">{item2.name} ({item2.noOfProducts})</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <div
-                                className={selected === i ? 'subcategories-show' : 'subcategories'}>
-                                {item.subCategoryProjectionList.map((item2, i) => (
-                                    <div className="subitem">
-                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                                        <p className="subcategory">{item2.name} ({item2.noOfProducts})</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="products-part">
-                {productsStatus === 'loading' && <p>Loading...</p>}
-                <div className="products-content">
-                    <div className="products-gridview">
-                        {productsData?.pages.map((page, i) => (
-                            <React.Fragment key={i}>
-                                {page.content.map(product => (
-                                    <ProductCard key={product.id} product={product} />
-                                ))}
-                            </React.Fragment>
                         ))}
                     </div>
-                    {hasNextPage && (
-                        <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-                            {isFetchingNextPage ? 'Loading...' : 'Explore More'}
-                        </button>
-                    )}
+                </div>
+                <div className="products-part">
+                    {productsStatus === 'loading' && <p>Loading...</p>}
+                    <div className="products-content">
+                        <div className="products-gridview">
+                            {productsData?.pages.map((page, i) => (
+                                <React.Fragment key={i}>
+                                    {page.content.map(product => (
+                                        <ProductCard key={product.id} product={product} />
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                        {hasNextPage && (
+                            <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                                {isFetchingNextPage ? 'Loading...' : 'Explore More'}
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

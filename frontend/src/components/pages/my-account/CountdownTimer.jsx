@@ -7,6 +7,9 @@ const CountdownTimer = ({ targetDate }) => {
         const interval = setInterval(() => {
             const now = new Date();
             const endDate = new Date(targetDate);
+
+            now.setHours(now.getHours() + 2);
+
             const timeDiff = endDate - now;
 
             if (timeDiff > 0) {
@@ -14,17 +17,13 @@ const CountdownTimer = ({ targetDate }) => {
                 const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
                 const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
 
-                let display = '';
-                if (days >= 5) {
-                    display = `${days} days`;
-                } else if (days < 5 && days > 0) {
-                    display = `${hours + (days * 24)} hours`;
-                } else if (hours > 0) {
-                    display = `${hours} hours`;
-                } else if (minutes > 0) {
-                    display = `${minutes} minutes`;
+                if (days > 0) {
+                    setTimeLeft(`${days} days`);
+                } else if (hours > 0 || minutes > 0) {
+                    setTimeLeft(`${hours} hours and ${minutes} minutes`);
+                } else {
+                    setTimeLeft('Today');
                 }
-                setTimeLeft(display);
             } else {
                 clearInterval(interval);
                 setTimeLeft('Time\'s up!');

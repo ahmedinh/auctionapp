@@ -13,6 +13,20 @@ $font-size-large: 24px;
 $line-height-large: 36px;
 $line-height-normal: 24px;
 
+.product-add-h5 {
+    margin: 0;
+    font-size: $font-size-large;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 1rem;
+    margin-top: 23px;
+}
+
+.product-add-paragraphs {
+    margin: 0;
+    font-weight: $font-weight-semibold;
+    font-size: $font-weight-normal;
+}
+
 .icon-styling {
     height: 24px;
     width: 24px;

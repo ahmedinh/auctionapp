@@ -149,7 +149,7 @@ const AccordionExpandIcon = () => {
                     <Typography className='headline-text'>Card information (Optional)</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div className="full-page">
+                    <div className="full-content">
                         <div className="all-fields">
                             <div className="name-on-card">
                                 <p>

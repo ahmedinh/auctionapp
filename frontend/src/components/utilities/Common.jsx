@@ -17,7 +17,13 @@ export const getUser = () => {
 
 export const getToken = () => {
     return localStorage.getItem('token') || null;
-}
+};
+
+export const clearSessionStorageProduct = () => {
+    sessionStorage.removeItem('productInfo')
+    sessionStorage.removeItem('productPriceData')
+    sessionStorage.removeItem('locationShipping')
+};
 
 export const getUserId = () => {
     const user = getUser();

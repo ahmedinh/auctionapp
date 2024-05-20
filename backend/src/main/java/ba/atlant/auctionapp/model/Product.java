@@ -1,14 +1,16 @@
 package ba.atlant.auctionapp.model;
 
+import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.enumeration.Color;
 import ba.atlant.auctionapp.enumeration.Size;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -33,25 +35,21 @@ public class Product {
     @Column(name = "start_price")
     private BigDecimal startPrice;
 
-    @NotBlank(message = "Time of creation cannot be blank.")
     @NotNull(message = "Time of creation cannot be null.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @NotBlank(message = "Auction start date cannot be blank.")
     @NotNull(message = "Auction start date cannot be null.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime auctionStart;
+    private LocalDate auctionStart;
 
-    @NotBlank(message = "Auction end date cannot be blank.")
     @NotNull(message = "Auction end date cannot be null.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime auctionEnd;
+    private LocalDate auctionEnd;
 
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private Size size;
 
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private Color color;
 
     @ManyToOne
@@ -62,15 +60,45 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)
     private Person person;
 
+    @Column(name = "return_address")
+    private String returnAddress;
+    @Column(name = "return_email")
+    private String returnEmail;
+    @Column(name = "return_city")
+    private String returnCity;
+    @Column(name = "return_zipcode")
+    private String returnZipCode;
+    @Column(name = "return_country")
+    private String returnCountry;
+    @Column(name = "return_phone_number")
+    private String returnPhoneNumber;
+
     public Product() {
+    }
+
+    public Product(ProductCreationDTO productCreationDTO, Person person, SubCategory subCategory) {
+        setName(productCreationDTO.getName());
+        setDescription(productCreationDTO.getDescription());
+        setAuctionStart(productCreationDTO.getAuctionStart());
+        setAuctionEnd(productCreationDTO.getAuctionEnd());
+        setCreatedAt(LocalDateTime.now());
+        setPerson(person);
+        setSubCategory(subCategory);
+        setStartPrice(productCreationDTO.getStartPrice());
+        setReturnAddress(productCreationDTO.getReturnAddress());
+        setReturnEmail(productCreationDTO.getReturnEmail());
+        setReturnCity(productCreationDTO.getReturnCountry());
+        setReturnZipCode(productCreationDTO.getReturnZipCode());
+        setReturnCountry(productCreationDTO.getReturnCountry());
+        setReturnPhoneNumber(productCreationDTO.getReturnPhoneNumber());
     }
 
     public Product(String name,
                    String description,
                    BigDecimal startPrice,
                    LocalDateTime createdAt,
-                   LocalDateTime auctionStart,
-                   LocalDateTime auctionEnd,
+                   LocalDate auctionStart,
+                   LocalDate auctionEnd,
                    Size size,
                    Color color,
                    SubCategory subCategory,
@@ -123,19 +151,19 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getAuctionStart() {
+    public LocalDate getAuctionStart() {
         return auctionStart;
     }
 
-    public void setAuctionStart(LocalDateTime auctionStart) {
+    public void setAuctionStart(LocalDate auctionStart) {
         this.auctionStart = auctionStart;
     }
 
-    public LocalDateTime getAuctionEnd() {
+    public LocalDate getAuctionEnd() {
         return auctionEnd;
     }
 
-    public void setAuctionEnd(LocalDateTime auctionEnd) {
+    public void setAuctionEnd(LocalDate auctionEnd) {
         this.auctionEnd = auctionEnd;
     }
 
@@ -167,7 +195,55 @@ public class Product {
         return person;
     }
 
-    public void setUser(Person person) {
+    public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getReturnAddress() {
+        return returnAddress;
+    }
+
+    public void setReturnAddress(String returnAddress) {
+        this.returnAddress = returnAddress;
+    }
+
+    public String getReturnEmail() {
+        return returnEmail;
+    }
+
+    public void setReturnEmail(String returnEmail) {
+        this.returnEmail = returnEmail;
+    }
+
+    public String getReturnCity() {
+        return returnCity;
+    }
+
+    public void setReturnCity(String returnCity) {
+        this.returnCity = returnCity;
+    }
+
+    public String getReturnZipCode() {
+        return returnZipCode;
+    }
+
+    public void setReturnZipCode(String returnZipCode) {
+        this.returnZipCode = returnZipCode;
+    }
+
+    public String getReturnCountry() {
+        return returnCountry;
+    }
+
+    public void setReturnCountry(String returnCountry) {
+        this.returnCountry = returnCountry;
+    }
+
+    public String getReturnPhoneNumber() {
+        return returnPhoneNumber;
+    }
+
+    public void setReturnPhoneNumber(String returnPhoneNumber) {
+        this.returnPhoneNumber = returnPhoneNumber;
     }
 }

@@ -67,3 +67,44 @@ export async function getSoldUserProducts({ userId }) {
         }
     }).then(res => res.data);
 }
+
+export async function createProduct({ productData }) {
+    const userToken = getToken();
+    console.log(productData);
+    return axios.post(`${apiUrl}/api/product`, productData, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    }).then(res => res.data);
+}
+
+export async function addPicturesToProduct({ productPictures, productName }) {
+    const userToken = getToken();
+    const formData = new FormData();
+
+    productPictures.forEach((file) => {
+        formData.append('files', file);
+        console.log(file);
+    });
+
+    return axios.post(`${apiUrl}/api/product/add-picture`, formData, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }, params: {
+            productName
+        }
+    }).then(res => res.data);
+}
+
+export async function deleteProduct({ productName }) {
+    const userToken = getToken();
+    console.log(productName);
+    return axios.delete(`${apiUrl}/api/product/delete`, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        },
+        params: {
+            productName
+        }
+    }).then(res => res.data);
+}

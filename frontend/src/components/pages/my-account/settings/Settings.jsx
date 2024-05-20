@@ -35,7 +35,7 @@ export default function Settings() {
                         </div>
                         <div className="phone">
                             <p>Phone</p>
-                            {(user.phoneNumber != null && user.phoneNumber != '') ? <p className="user-number">{user.phoneNumber}</p> : <p className="no-user-number">No number available</p>}
+                            {(user.phoneNumber != null && user.phoneNumber !== '') ? <p className="user-number">{user.phoneNumber}</p> : <p className="no-user-number">No number available</p>}
                         </div>
                     </div>
                 </div>

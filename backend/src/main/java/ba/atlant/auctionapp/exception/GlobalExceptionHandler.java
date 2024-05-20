@@ -43,6 +43,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getReturnMap(e.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(Exception e) {
+        return new ResponseEntity<>(getReturnMap(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<Map<String, String>> handleIOException(Exception e) {
         return new ResponseEntity<>(getReturnMap(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
