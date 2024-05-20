@@ -4,13 +4,12 @@ import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
 import { useQuery } from "@tanstack/react-query";
+import { AuctionCountdown } from "./AuctionCountdown";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
 import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
 import { useProduct } from "../../../hooks/useProduct";
-import { Timelapse } from "@mui/icons-material";
-import { AuctionCountdown } from './AuctionCountdown';
 
 export default function Product() {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -40,15 +39,8 @@ export default function Product() {
                     setNotification('Congrats! You are the highest bidder!');
                     setNotificationColor('#417505');
                 } else if (receivedMessage.accepted === false) {
+                    setNotification('There are higher bids than yours. You could give a second try!');
                     setNotificationColor('#AB944E');
-                    console.log(data?.numberOfBids);
-                    console.log(data?.startPrice);
-                    console.log(newBid);
-                    if (data?.numberOfBids < 1 && newBid < data?.startPrice) {
-                        setNotification('Bid cannot be lower than start price!');
-                    } else {
-                        setNotification('There are higher bids than yours. You could give a second try!');
-                    }
                 }
                 refetch();
             });
@@ -59,7 +51,7 @@ export default function Product() {
         return () => {
             if (client.connected) client.disconnect();
         };
-    }, [apiUrl, refetch, data, data?.numberOfBids, setNotification, newBid]);
+    }, [apiUrl, refetch]);
 
     if (status === 'loading') {
         return <LoadingSpinner />;
@@ -96,8 +88,6 @@ export default function Product() {
     };
 
     const productImage = mainImage === null ? data?.productPictureList[0]?.url : mainImage?.url;
-    const timeLeft = AuctionCountdown(data?.auctionEnd);
-    console.log(timeLeft);
 
     return (
         <div className="product-page">
@@ -129,15 +119,15 @@ export default function Product() {
                         <div className="bids">
                             <p>Highest bid: <span className="price">${data?.largestBid}</span></p>
                             <p>Number of bids: <span className="price">{data?.numberOfBids}</span></p>
-                            <p>Time left: <span className="price">{timeLeft}</span></p>
+                            <p>Time left: <span className="price"><AuctionCountdown auctionEnd={data?.auctionEnd} /></span></p>
                         </div>
-                        {(getUserId() && getUserId() !== data?.person.id && timeLeft !== 'Time is up!') ? (
+                        {(getUserId() && getUserId() !== data?.person.id) ? (
                             <div className="place-bid">
                                 <div className="upper">
                                     <input type="text"
-                                           placeholder={'Enter $' + (data?.largestBid >= data?.startPrice ? data?.largestBid + 1 : data?.startPrice) + ' or higher'}
-                                           value={newBid}
-                                           onChange={(e) => setNewBid(e.target.value)} />
+                                        placeholder={'Enter $' + (data?.largestBid >= data?.startPrice ? data?.largestBid + 1 : data?.startPrice) + ' or higher'}
+                                        value={newBid}
+                                        onChange={(e) => setNewBid(e.target.value)} />
                                     <button onClick={() => handleBid()}>PLACE BID</button>
                                 </div>
                                 {errorBid.length > 0 ? <p className="error-bid">{errorBid}</p> : null}
