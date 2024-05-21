@@ -10,14 +10,11 @@ import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilitie
 
 const Home = () => {
     const navigate = useNavigate();
-    const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
-    const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    const { status: recommendedStatus, error: recommendedError, data: recommendedData } = useRecommendedProducts();
+    const { status: categoriesStatus, error: categoriesError, data: categoriesData, isLoading: isLoadingCategories } = useCategories();
+    const { status: highlightStatus, error: highlightError, data: highlightData, isLoading: isLoadingHighlight } = useHighlight();
+    const { status: recommendedStatus, error: recommendedError, data: recommendedData, isLoading: isLoadingRecommended } = useRecommendedProducts();
 
-    if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
-        return <LoadingSpinner />;
-    }
-    if (categoriesStatus === 'loading' || highlightStatus === 'loading' || recommendedStatus === 'loading') {
+    if (isLoadingCategories || isLoadingHighlight || isLoadingRecommended) {
         return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
