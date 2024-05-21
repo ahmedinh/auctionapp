@@ -74,7 +74,6 @@ const AccordionExpandIcon = () => {
 
         if (Object.keys(newErrors).length === 0) {
             updateUserInfo(person);
-            queryClient.invalidateQueries('get-user-info', userId);
         }
     }
 
