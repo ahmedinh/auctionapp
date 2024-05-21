@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./Home.scss";
 import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";
@@ -6,14 +6,13 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
-import ProductCard from "./Products/ProductCard";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 
 const Home = () => {
     const navigate = useNavigate();
     const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    const { status: recommendedStatus, error: recommendedError, data: recommendedData, refetch: refetchRecommendedProducts } = useRecommendedProducts();
+    const { status: recommendedStatus, error: recommendedError, data: recommendedData } = useRecommendedProducts();
 
     if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
         return <LoadingSpinner />;
