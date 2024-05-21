@@ -147,15 +147,38 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             """)
     Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
 
-    @Query("""
-            SELECT p.name as name
-            FROM Product p
-            WHERE calculate_levenshtein(LOWER(:query), LOWER(p.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(p.name)) > :minThreshold ORDER BY calculate_levenshtein(LOWER(:query), LOWER(p.name)) ASC
-            LIMIT 1
-            """)
+    @Query(value = """
+    SELECT suggestion.name
+    FROM (
+        SELECT p.name AS name, calculate_levenshtein(LOWER(:query), LOWER(p.name)) AS dist
+        FROM product p
+        INNER JOIN sub_category s ON p.subcategory_id = s.id
+        INNER JOIN category c ON s.category_id = c.id
+        WHERE calculate_levenshtein(LOWER(:query), LOWER(p.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(p.name)) > :minThreshold
+        UNION
+        SELECT CONCAT(c.name, ' ', s.name) AS name, calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) AS dist
+        FROM product p
+        INNER JOIN sub_category s ON p.subcategory_id = s.id
+        INNER JOIN category c ON s.category_id = c.id
+        WHERE calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) > :minThreshold
+        UNION
+        SELECT s.name AS name, calculate_levenshtein(LOWER(:query), LOWER(s.name)) AS dist
+        FROM product p
+        INNER JOIN sub_category s ON p.subcategory_id = s.id
+        WHERE calculate_levenshtein(LOWER(:query), LOWER(s.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(s.name)) > :minThreshold
+        UNION
+        SELECT c.name AS name, calculate_levenshtein(LOWER(:query), LOWER(c.name)) AS dist
+        FROM product p
+        INNER JOIN sub_category s ON p.subcategory_id = s.id
+        INNER JOIN category c ON s.category_id = c.id
+        WHERE calculate_levenshtein(LOWER(:query), LOWER(c.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(c.name)) > :minThreshold
+    ) AS suggestion
+    ORDER BY suggestion.dist ASC
+    LIMIT 1
+    """, nativeQuery = true)
     String getSuggestion(@Param("query") String query, @Param("maxThreshold") Integer maxThreshold, @Param("minThreshold") Integer minThreshold);
 
-    @Query("""
+    @Query(value = """
             SELECT p.id as id,
             p.name as name,
             p.description as description,
@@ -173,12 +196,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
             OR LOWER(p.description) LIKE CONCAT('%', LOWER(:query), '%')
-            OR LOWER(s.name) LIKE CONCAT('%', LOWER(:query), '%')
-            OR LOWER(c.name) LIKE CONCAT('%', LOWER(:query), '%'))
+            OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
+            OR LOWER(s.name) LIKE LOWER(:query)
+            OR LOWER(c.name) LIKE LOWER(:query))
             """)
     Page<ProductProjection> searchProducts(@Param("query") String query, Pageable pageable);
 
-    @Query("""
+    @Query(value = """
             SELECT p.id as id,
             p.name as name,
             p.description as description,
@@ -196,8 +220,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
             OR LOWER(p.description) LIKE CONCAT('%', LOWER(:query), '%')
-            OR LOWER(s.name) LIKE CONCAT('%', LOWER(:query), '%')
-            OR LOWER(c.name) LIKE CONCAT('%', LOWER(:query), '%'))
+            OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
+            OR LOWER(s.name) LIKE LOWER(:query)
+            OR LOWER(c.name) LIKE LOWER(:query))
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
     Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query, Pageable pageable);
