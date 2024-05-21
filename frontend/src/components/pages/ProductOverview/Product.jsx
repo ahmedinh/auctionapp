@@ -3,7 +3,7 @@ import "./Product.scss";
 import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
 import { getToken, getUser, getUserId } from "../../utilities/Common";
@@ -22,6 +22,8 @@ export default function Product() {
     const [errorBid, setErrorBid] = useState('');
     const { status, data, error, refetch } = useProduct({ productId });
     const [mainImage, setMainImage] = useState(null);
+    const queryClient = useQueryClient();
+    const userId = getUserId();
 
     useEffect(() => {
         if (data && data?.productPictureList.length > 0) {
@@ -38,6 +40,7 @@ export default function Product() {
                 const receivedMessage = JSON.parse(message.body);
                 setNotification(receivedMessage.message);
                 if (receivedMessage.accepted === true) {
+                    queryClient.invalidateQueries('recommended-products', userId);
                     setNotificationColor('#417505');
                 } else if (receivedMessage.accepted === false) {
                     setNotificationColor('#AB944E');

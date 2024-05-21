@@ -6,24 +6,15 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
-import ProductCard from "./Products/ProductCard";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 
 const Home = () => {
     const navigate = useNavigate();
-    const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
-    const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    const { status: recommendedStatus, error: recommendedError, data: recommendedData, refetch: refetchRecommendedProducts } = useRecommendedProducts();
+    const { status: categoriesStatus, error: categoriesError, data: categoriesData, isLoading: isLoadingCategories } = useCategories();
+    const { status: highlightStatus, error: highlightError, data: highlightData, isLoading: isLoadingHighlight } = useHighlight();
+    const { status: recommendedStatus, error: recommendedError, data: recommendedData, isLoading: isLoadingRecommended } = useRecommendedProducts();
 
-    useEffect(() => {
-        if (recommendedData)
-            refetchRecommendedProducts();
-    });
-
-    if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
-        return <LoadingSpinner />;
-    }
-    if (categoriesStatus === 'loading' || highlightStatus === 'loading' || recommendedStatus === 'loading') {
+    if (isLoadingCategories || isLoadingHighlight || isLoadingRecommended) {
         return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
