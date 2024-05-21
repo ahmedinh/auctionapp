@@ -5,7 +5,7 @@ import { getRecommendedProducts } from '../api/productsApi';
 export function useRecommendedProducts() {
     const userId = getUserId();
     return useQuery({
-        queryKey: ['recommended-producs', userId],
+        queryKey: ['recommended-products', userId],
         queryFn: () => getRecommendedProducts(userId)
     });
 }

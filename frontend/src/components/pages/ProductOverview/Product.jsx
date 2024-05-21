@@ -39,7 +39,7 @@ export default function Product() {
                 const receivedMessage = JSON.parse(message.body);
                 if (receivedMessage.accepted === true) {
                     setNotification('Congrats! You are the highest bidder!');
-                    queryClient.invalidateQueries('recommended-producs', userId);
+                    queryClient.invalidateQueries('recommended-products', userId);
                     setNotificationColor('#417505');
                 } else if (receivedMessage.accepted === false) {
                     setNotification('There are higher bids than yours. You could give a second try!');
