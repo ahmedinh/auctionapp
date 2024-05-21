@@ -3,7 +3,7 @@ import "./Product.scss";
 import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuctionCountdown } from "./AuctionCountdown";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
@@ -21,6 +21,8 @@ export default function Product() {
     const [errorBid, setErrorBid] = useState('');
     const { status, data, error, refetch } = useProduct({ productId });
     const [mainImage, setMainImage] = useState(null);
+    const queryClient = useQueryClient();
+    const userId = getUserId();
 
     useEffect(() => {
         if (data && data?.productPictureList.length > 0) {
@@ -37,6 +39,7 @@ export default function Product() {
                 const receivedMessage = JSON.parse(message.body);
                 if (receivedMessage.accepted === true) {
                     setNotification('Congrats! You are the highest bidder!');
+                    queryClient.invalidateQueries('recommended-products', userId);
                     setNotificationColor('#417505');
                 } else if (receivedMessage.accepted === false) {
                     setNotification('There are higher bids than yours. You could give a second try!');

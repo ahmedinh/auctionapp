@@ -11,6 +11,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 4rem;
         width: 1120px;
         .upper-part {
             display: flex;
@@ -129,6 +130,43 @@
                                 border-color: $color-purple;
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        .recommended {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 2rem;
+
+            .headline {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                .featured-products {
+                    margin: 0;
+                    font-weight: $font-weight-semibold;
+                    font-size: $font-size-large;
+                    line-height: 36px;
+                    letter-spacing: 0.84px;
+                }
+                hr {
+                    margin: 0;
+                }
+
+            }
+            .products {
+                display: flex;
+                justify-content: space-between;
+                gap: 24px;
+                .product {
+                    display: flex;
+                    flex-direction: column;
+                    img {
+                        height: 475px;
+                        width: 356px;
                     }
                 }
             }

@@ -7,6 +7,7 @@ import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
+import ba.atlant.auctionapp.projection.SubCategoryProjection;
 import ba.atlant.auctionapp.repository.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -94,10 +95,21 @@ public class ProductService {
             int page, int size, Long categoryId, String sortField, String sortDirection) {
 
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
-        if (sortField.equalsIgnoreCase("auctionEnd"))
-            return ResponseEntity.ok(productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable));
-        else
-            return ResponseEntity.ok(productRepository.getProductsForCategory(categoryId, pageable));
+
+        boolean isAuctionEndSort = sortField.equalsIgnoreCase("auctionEnd");
+        boolean isAllCategories = categoryId.equals(0L);
+        Page<ProductProjection> products;
+
+        if (isAllCategories) {
+            products = isAuctionEndSort
+                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(pageable)
+                    : productRepository.getProductsForAllCategories(pageable);
+        } else {
+            products = isAuctionEndSort
+                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable)
+                    : productRepository.getProductsForCategory(categoryId, pageable);
+        }
+        return ResponseEntity.ok(products);
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
@@ -121,7 +133,7 @@ public class ProductService {
     }
 
     private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {
-        Sort sort = Sort.by(sortField).ascending();
+        Sort sort = Sort.by("name").ascending();
         if (sortDirection.equalsIgnoreCase("asc")) {
             sort = Sort.by(sortField).ascending();
         } else if (sortDirection.equalsIgnoreCase("desc")) {
@@ -169,5 +181,30 @@ public class ProductService {
             productPictureRepository.deleteAll(pictures);
         }
         productRepository.delete(product);
+    }
+
+    public ResponseEntity<List<ProductProjection>> getRecommendedProducts(Long userId) {
+        if (userId == null || bidRepository.getUserBids(userId).isEmpty()) {
+            return ResponseEntity.ok(productRepository.getDefaultRecommendedProducts());
+        }
+        List<SubCategoryProjection> subCategoryListWithMostUserBids = subCategoryRepository.getSubCategoriesByMostUserBids(userId);
+        List<ProductProjection> mostPopularProductsForUser = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(0).getId());
+
+        List<ProductProjection> recommendedProducts = productRepository.getDefaultRecommendedProducts().subList(0,3);
+
+        // Add first two products from mostPopularProductsForUser if available
+        if (!mostPopularProductsForUser.isEmpty()) {
+            recommendedProducts.set(0, mostPopularProductsForUser.get(0));
+            if (mostPopularProductsForUser.size() >= 2)
+                recommendedProducts.set(1, mostPopularProductsForUser.get(1));
+        }
+
+        // Add third product from secondMostPopularProductsForUser if available
+        if (subCategoryListWithMostUserBids.size() > 1) {
+            List<ProductProjection> secondMostPopularProductsForSubCategory = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(1).getId());
+            if (!secondMostPopularProductsForSubCategory.isEmpty())
+                recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(0));
+        }
+        return ResponseEntity.ok(recommendedProducts);
     }
 }

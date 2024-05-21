@@ -126,4 +126,10 @@ public class ProductController {
     public void deleteProduct(@RequestParam("productName") String productName) {
         productService.deleteProduct(productName);
     }
+
+    @GetMapping(value = "/recommended")
+    @Operation(summary = "Fetch recommended products for users")
+    public ResponseEntity<List<ProductProjection>> getRecommendedProducts(@Nullable @RequestParam(value = "userId") Long userId) {
+        return productService.getRecommendedProducts(userId);
+    }
 }

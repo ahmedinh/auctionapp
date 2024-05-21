@@ -5,13 +5,16 @@ import { useHighlight } from "../../../hooks/useHighlight";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute } from "../../utilities/AppUrls";
 
 const Home = () => {
     const navigate = useNavigate();
-    const { status: categoriesStatus, error: categoriesError, data: categoriesData } = useCategories();
-    const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
-    if (categoriesStatus === 'pending' || highlightStatus === 'pending') {
+    const { status: categoriesStatus, error: categoriesError, data: categoriesData, isLoading: isLoadingCategories } = useCategories();
+    const { status: highlightStatus, error: highlightError, data: highlightData, isLoading: isLoadingHighlight } = useHighlight();
+    const { status: recommendedStatus, error: recommendedError, data: recommendedData, isLoading: isLoadingRecommended } = useRecommendedProducts();
+
+    if (isLoadingCategories || isLoadingHighlight || isLoadingRecommended) {
         return <LoadingSpinner />;
     }
     if (categoriesStatus === 'error') {
@@ -20,6 +23,10 @@ const Home = () => {
     if (highlightStatus === 'error') {
         return <span>Error: {highlightError.message}</span>;
     }
+    if (recommendedStatus === 'error') {
+        return <span>Error: {recommendedError.message}</span>;
+    }
+
     return (
         <div className="page">
             <div className="content">
@@ -35,7 +42,7 @@ const Home = () => {
                                         <li><NavLink to={homePageRoute + `categories/${category.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>{category.name}</NavLink></li>
                                     </React.Fragment>
                                 ))}
-                                <li><NavLink to="/categories" style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
+                                <li><NavLink to={homePageRoute + `categories/all`} style={{ textDecoration: 'none', color: 'inherit' }}>All Categories</NavLink></li>
                             </ul>
                         </div>
                     </div>
@@ -51,6 +58,23 @@ const Home = () => {
                             </div>
                         </div>
                         <img src={highlightData?.productPictureList[0].url} alt="HighlightPicture" />
+                    </div>
+                </div>
+                <div className="recommended">
+                    <div className="headline">
+                        <h5 className="featured-products">Featured products</h5>
+                        <hr />
+                    </div>
+                    <div className="products">
+                        {recommendedData?.map(product => (
+                            <div className="product" key={product.id}>
+                                <NavLink to={`/shop/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <img src={product.url} alt={product.name} className='picture' />
+                                    <h5>{product.name}</h5>
+                                </NavLink>
+                                <p>Start from <span className="price">${product.startPrice.toFixed(2)}</span></p>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="bottom">
