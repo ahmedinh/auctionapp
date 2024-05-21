@@ -22,16 +22,6 @@
         cursor: pointer;
     }
 
-    .error-message {
-        margin: 0;
-        font-weight: $font-weight-bold;
-        color: red;
-    }
-
-    button {
-        cursor: pointer;
-    }
-
     .upper-part {
         display: flex;
         flex-direction: column;
@@ -82,6 +72,7 @@
                     padding-left: 21px;
                     border: 2px solid $color-white;
                 }
+
             }
 
             .description {

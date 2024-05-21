@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from 'react';
-
-export const AuctionCountdown = ({ auctionEnd }) => {
+export const AuctionCountdown = (auctionEnd) => {
     const calculateTimeLeft = () => {
         const auctionEndDate = new Date(auctionEnd);
         const now = new Date();
         const difference = auctionEndDate - now;
 
-        let timeLeft = {};
-
-        if (difference > 0) {
-            timeLeft = {
-                weeks: Math.floor(difference / (1000 * 60 * 60 * 24 * 7)),
-                days: Math.floor((difference / (1000 * 60 * 60 * 24)) % 7),
-            };
+        if (difference <= 0) {
+            return "Time is up!";
         }
 
-        return timeLeft;
+        return {
+            weeks: Math.floor(difference / (1000 * 60 * 60 * 24 * 7)),
+            days: Math.floor((difference / (1000 * 60 * 60 * 24)) % 7),
+        };
     };
 
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const timeLeft = calculateTimeLeft();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setTimeLeft(calculateTimeLeft());
-        }, 1000);
+    if (timeLeft === "Time is up!") {
+        return "Time is up!";
+    }
 
-        return () => clearTimeout(timer);
-    });
-
-    return (
-        <>
-            {timeLeft.weeks || 0} weeks {timeLeft.days || 0} days remaining
-        </>
-    );
+    return `${timeLeft.weeks || 0} weeks ${timeLeft.days || 0} days remaining`;
 };

@@ -11,7 +11,8 @@ import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
 import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
 import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
-import { isDateValid, validateExpirationDate } from '../../../utilities/Common';
+import { getUserId, isDateValid, validateExpirationDate } from '../../../utilities/Common';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -20,6 +21,8 @@ const AccordionExpandIcon = () => {
     const [errors, setErrors] = useState({});
     const userInfo = useUserInfoGet();
     const userPicture = useUserPictureGet();
+    const userId = getUserId();
+    const queryClient = useQueryClient();
 
     const { mutate: updateUserInfo } = useChangeUserInfo();
     const { mutate: updateUserPicture } = useChangeUserPicture();
@@ -44,13 +47,26 @@ const AccordionExpandIcon = () => {
             newErrors.date = 'Invalid date';
         }
 
-        if ([payload.cardName, payload.cardNumber, payload.expirationMonth, payload.expirationYear, payload.cvc].some(field => !field)) {
-            newErrors.card = 'All card fields must be filled';
-        } else {
-            if (!/^\d{13,19}$/.test(payload.cardNumber)) {
-                newErrors.card = 'Card number must be between 13 and 19 digits and contain only numbers';
-            } else if (!validateExpirationDate(payload.expirationMonth, payload.expirationYear)) {
-                newErrors.card = 'Invalid expiration date';
+        const cardFields = [
+            payload.cardName,
+            payload.cardNumber,
+            payload.expirationMonth,
+            payload.expirationYear,
+            payload.cvc
+        ];
+
+        const cardFieldsFilled = cardFields.some(field => field);
+        const cardFieldsEmpty = cardFields.every(field => !field);
+
+        if (cardFieldsFilled && !cardFieldsEmpty) {
+            if (cardFields.some(field => !field)) {
+                newErrors.card = 'All card fields must be filled';
+            } else {
+                if (!/^\d{13,19}$/.test(payload.cardNumber)) {
+                    newErrors.card = 'Card number must be between 13 and 19 digits and contain only numbers';
+                } else if (!validateExpirationDate(payload.expirationMonth, payload.expirationYear)) {
+                    newErrors.card = 'Invalid expiration date';
+                }
             }
         }
 
@@ -91,7 +107,7 @@ const AccordionExpandIcon = () => {
                 <AccordionDetails>
                     <div className="user-section">
                         <div className="picture-section">
-                            <img src={userPicture.data?.url ? userPicture.data?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' />
+                            <img src={userPicture.data?.url ? userPicture.data?.url : ProfilePicture} alt="profile-pic.png" className='profile-picture' onClick={() => fileInputRef.current.click()} />
                             <input
                                 type="file"
                                 style={{ display: 'none' }}

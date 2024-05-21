@@ -12,6 +12,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BidResponse {
-    private BigDecimal amount;
     private boolean accepted;
+    private String message;
 }

@@ -18,24 +18,20 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
 
     List<Bid> findAllByPerson(Person person);
 
-    @Query("""
-            SELECT b.product.id as productId,
-            b.product.name as productName,
-            pp.url as productPictureUrl,
-            b.product.auctionEnd as auctionEnd,
-            b.amount as userPrice,
-            COUNT(bb.id) as noOfBids,
-            MAX(bb.amount) as maxBid
-            FROM Bid b
-            JOIN ProductPicture pp ON pp.id = (
-                SELECT MIN(pp2.id)
-                FROM ProductPicture pp2
-                WHERE pp2.product.id = b.product.id
-            )
-            LEFT JOIN Bid bb ON bb.product.id = b.product.id
-            WHERE b.person.id = :userId
-            GROUP BY b.product.id, b.product.name, pp.url, b.product.auctionEnd, b.amount
-            """)
+    @Query(value = """
+        SELECT b.product_id as productId,
+        p.name as productName,
+        (SELECT pp.url FROM product_picture pp WHERE pp.id = (SELECT MIN(pp2.id) FROM product_picture pp2 WHERE pp2.product_id = p.id)) as productPictureUrl,
+        b.amount as userPrice,
+        (SELECT COUNT(bb.id) FROM bid bb WHERE bb.product_id = p.id) as noOfBids,
+        (SELECT MAX(bb.amount) FROM bid bb WHERE bb.product_id = p.id) as maxBid,
+        get_time_left(p.auction_end) as timeLeft,
+        p.is_paid AS isPaid
+        FROM bid b
+        JOIN product p ON b.product_id = p.id
+        WHERE b.user_id = :userId
+        ORDER BY b.product_id
+        """, nativeQuery = true)
     List<BidProjection> getUserBids(@Param("userId") Long userId);
 
     Optional<Bid> findTopByProductIdOrderByAmountDesc(Long productId);

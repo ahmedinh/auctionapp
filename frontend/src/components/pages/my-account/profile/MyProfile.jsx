@@ -32,12 +32,6 @@ const MyProfile = () => {
                             <Icon icon="material-symbols:monetization-on" className="icon-styling" />
                             Bids
                         </NavLink>
-                        <NavLink to={myAccountRoute + 'settings'} className={({ isActive }) =>
-                            isActive ? "active-button-style" : "other-button"
-                        }>
-                            <Icon icon="fluent:settings-48-regular" className="icon-styling" />
-                            Settings
-                        </NavLink>
                     </div>
                     <NavLink to='/my-account/add-item/product-info' className="add-item-button">
                         <Icon icon="akar-icons:plus" className="icon-styling" />

@@ -72,6 +72,8 @@ public class Product {
     private String returnCountry;
     @Column(name = "return_phone_number")
     private String returnPhoneNumber;
+    @Column(name = "is_paid")
+    private boolean isPaid;
 
     public Product() {
     }
@@ -245,5 +247,13 @@ public class Product {
 
     public void setReturnPhoneNumber(String returnPhoneNumber) {
         this.returnPhoneNumber = returnPhoneNumber;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }

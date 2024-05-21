@@ -2,7 +2,6 @@ import React from 'react';
 import { getUser, getToken } from '../../../utilities/Common';
 import TableView from '../TableView';
 import CartPicture from '../../../../assets/cart.png';
-import CountdownTimer from '../CountdownTimer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSellerProducts } from '../../../../hooks/useSellerProducts';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
@@ -31,7 +30,7 @@ export default function SellerTable() {
                 <p>{product.name}</p>
                 <p className="product-id">#{product.id}</p>
             </td>
-            <td className="col1"><CountdownTimer targetDate={product.auctionEnd} /></td>
+            <td className="col1">{product.timeLeft}</td>
             <td className="col1">${product.startPrice.toFixed(2)}</td>
             <td className="col1">{product.noOfBids}</td>
             <td className="col1">${product.maxBid.toFixed(2)}</td>

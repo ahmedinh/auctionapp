@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import './LocationShipping.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
-import { clearSessionStorageProduct, getUser } from "../../../utilities/Common";
+import { clearSessionStorageProduct } from "../../../utilities/Common";
 import { useProductMutations } from "../../../../hooks/productCreateMutations";
+import { useUserInfoGet } from "../../../../hooks/useUserInfoGet";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
     const [productName, setProductName] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
+    const userInfo = useUserInfoGet();
     const [product, setProduct] = useState();
     const { createProductMutation } = useProductMutations(navigate, productName, uploadedImages);
 
@@ -20,19 +22,18 @@ export default function LocationShipping() {
     }
 
     useEffect(() => {
-        const user = getUser();
-        if (user) {
+        if (userInfo.data) {
             setProduct(prev => ({
                 ...prev,
-                returnAddress: user.shippingAddress,
-                returnEmail: user.email,
-                returnCity: user.shippingCity,
-                returnZipCode: user.zipCode,
-                returnCountry: user.country,
-                returnPhoneNumber: user.phoneNumber
+                returnAddress: userInfo.data.shippingAddress,
+                returnEmail: userInfo.data.email,
+                returnCity: userInfo.data.shippingCity,
+                returnZipCode: userInfo.data.shippingZipCode,
+                returnCountry: userInfo.data.shippingCountry,
+                returnPhoneNumber: userInfo.data.phoneNumber
             }));
         }
-    }, []);
+    }, [userInfo.data]);
 
     const handleCancel = () => {
         clearSessionStorageProduct();
@@ -42,7 +43,6 @@ export default function LocationShipping() {
     const handleBack = () => {
         navigate('/my-account/add-item/product-price');
     }
-
 
     const handleDone = () => {
         const savedData = sessionStorage.getItem('productInfo');

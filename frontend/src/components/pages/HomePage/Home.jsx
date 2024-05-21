@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import { useCategories } from "../../../hooks/useCategories";
 import { useHighlight } from "../../../hooks/useHighlight";

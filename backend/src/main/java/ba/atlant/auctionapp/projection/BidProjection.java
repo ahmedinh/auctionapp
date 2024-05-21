@@ -11,4 +11,6 @@ public interface BidProjection {
     BigDecimal getUserPrice();
     Integer getNoOfBids();
     BigDecimal getMaxBid();
+    String getTimeLeft();
+    boolean getIsPaid();
 }
