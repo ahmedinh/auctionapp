@@ -1,8 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPicturesToProduct, createProduct, deleteProduct } from "../api/productsApi";
 import { clearSessionStorageProduct } from "../components/utilities/Common";
 
 export const useProductMutations = (navigate, productName, uploadedImages) => {
+    const queryClient = useQueryClient();
     const deleteProductMutation = useMutation({
         mutationKey: ['delete-product-error'],
         mutationFn: ({ productName }) => deleteProduct({ productName: productName }),
@@ -19,6 +20,8 @@ export const useProductMutations = (navigate, productName, uploadedImages) => {
         mutationFn: ({ uploadedImages, productName }) => addPicturesToProduct({ productPictures: uploadedImages, productName: productName }),
         onSuccess: () => {
             alert('Product added successfully');
+            queryClient.invalidateQueries("newArrivals","infinite")
+            queryClient.invalidateQueries("lastChance","infinite")
             clearSessionStorageProduct();
             navigate('/home/new-arrivals');
         },

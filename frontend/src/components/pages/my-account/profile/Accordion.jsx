@@ -11,7 +11,8 @@ import { useUserPictureGet } from '../../../../hooks/useUserPictureGet';
 import { useChangeUserInfo } from '../../../../hooks/useChangeUserInfo';
 import { useChangeUserPicture } from '../../../../hooks/useChangeUserPicture';
 import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
-import { isDateValid, validateExpirationDate } from '../../../utilities/Common';
+import { getUserId, isDateValid, validateExpirationDate } from '../../../utilities/Common';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AccordionExpandIcon = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -20,6 +21,8 @@ const AccordionExpandIcon = () => {
     const [errors, setErrors] = useState({});
     const userInfo = useUserInfoGet();
     const userPicture = useUserPictureGet();
+    const userId = getUserId();
+    const queryClient = useQueryClient();
 
     const { mutate: updateUserInfo } = useChangeUserInfo();
     const { mutate: updateUserPicture } = useChangeUserPicture();
@@ -71,6 +74,7 @@ const AccordionExpandIcon = () => {
 
         if (Object.keys(newErrors).length === 0) {
             updateUserInfo(person);
+            queryClient.invalidateQueries('get-user-info', userId);
         }
     }
 

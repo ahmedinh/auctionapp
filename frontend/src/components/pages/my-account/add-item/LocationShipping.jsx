@@ -2,22 +2,15 @@ import React, { useEffect, useState } from "react";
 import './LocationShipping.scss';
 import '../../../utilities/Style.scss';
 import { useNavigate } from "react-router-dom";
-import { clearSessionStorageProduct, getUser, getUserId } from "../../../utilities/Common";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { addPicturesToProduct, createProduct, deleteProduct } from "../../../../api/productsApi";
-import { getUserPhoneNumber } from "../../../../api/userApi";
+import { clearSessionStorageProduct } from "../../../utilities/Common";
 import { useProductMutations } from "../../../../hooks/productCreateMutations";
+import { useUserInfoGet } from "../../../../hooks/useUserInfoGet";
 
 export default function LocationShipping() {
     const navigate = useNavigate();
     const [productName, setProductName] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
-    const userId = getUserId();
-
-    const getUserNumber = useQuery({
-        queryKey: ['getUserData', userId],
-        queryFn: (userId) => getUserPhoneNumber({ userId })
-    })
+    const userInfo = useUserInfoGet();
     const [product, setProduct] = useState();
     const { createProductMutation } = useProductMutations(navigate, productName, uploadedImages);
 
@@ -29,19 +22,18 @@ export default function LocationShipping() {
     }
 
     useEffect(() => {
-        const user = getUser();
-        if (user) {
+        if (userInfo.data) {
             setProduct(prev => ({
                 ...prev,
-                returnAddress: user.shippingAddress,
-                returnEmail: user.email,
-                returnCity: user.shippingCity,
-                returnZipCode: user.zipCode,
-                returnCountry: user.country,
-                returnPhoneNumber: user.phoneNumber
+                returnAddress: userInfo.data.shippingAddress,
+                returnEmail: userInfo.data.email,
+                returnCity: userInfo.data.shippingCity,
+                returnZipCode: userInfo.data.shippingZipCode,
+                returnCountry: userInfo.data.shippingCountry,
+                returnPhoneNumber: userInfo.data.phoneNumber
             }));
         }
-    }, []);
+    }, [userInfo.data]);
 
     const handleCancel = () => {
         clearSessionStorageProduct();
