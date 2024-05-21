@@ -15,11 +15,6 @@ const Home = () => {
     const { status: highlightStatus, error: highlightError, data: highlightData } = useHighlight();
     const { status: recommendedStatus, error: recommendedError, data: recommendedData, refetch: refetchRecommendedProducts } = useRecommendedProducts();
 
-    useEffect(() => {
-        if (recommendedData)
-            refetchRecommendedProducts();
-    });
-
     if (categoriesStatus === 'pending' || highlightStatus === 'pending' || recommendedStatus === 'pending') {
         return <LoadingSpinner />;
     }
