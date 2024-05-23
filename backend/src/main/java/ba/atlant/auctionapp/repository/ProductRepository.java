@@ -148,35 +148,48 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
 
     @Query(value = """
-    SELECT suggestion.name
-    FROM (
-        SELECT p.name AS name, calculate_levenshtein(LOWER(:query), LOWER(p.name)) AS dist
+    WITH product_words AS (
+        SELECT p.name AS original_name, unnest(string_to_array(LOWER(p.name), ' ')) AS word
         FROM product p
         INNER JOIN sub_category s ON p.subcategory_id = s.id
         INNER JOIN category c ON s.category_id = c.id
-        WHERE calculate_levenshtein(LOWER(:query), LOWER(p.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(p.name)) > :minThreshold
-        UNION
-        SELECT CONCAT(c.name, ' ', s.name) AS name, calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) AS dist
-        FROM product p
-        INNER JOIN sub_category s ON p.subcategory_id = s.id
+    ),
+    category_subcategory AS (
+        SELECT CONCAT(LOWER(c.name), ' ', LOWER(s.name)) AS combined_name
+        FROM sub_category s
         INNER JOIN category c ON s.category_id = c.id
-        WHERE calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(CONCAT(c.name, ' ', s.name))) > :minThreshold
-        UNION
-        SELECT s.name AS name, calculate_levenshtein(LOWER(:query), LOWER(s.name)) AS dist
-        FROM product p
-        INNER JOIN sub_category s ON p.subcategory_id = s.id
-        WHERE calculate_levenshtein(LOWER(:query), LOWER(s.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(s.name)) > :minThreshold
-        UNION
-        SELECT c.name AS name, calculate_levenshtein(LOWER(:query), LOWER(c.name)) AS dist
-        FROM product p
-        INNER JOIN sub_category s ON p.subcategory_id = s.id
-        INNER JOIN category c ON s.category_id = c.id
-        WHERE calculate_levenshtein(LOWER(:query), LOWER(c.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(c.name)) > :minThreshold
-    ) AS suggestion
-    ORDER BY suggestion.dist ASC
+    ),
+    subcategory_words AS (
+        SELECT LOWER(s.name) AS word
+        FROM sub_category s
+    ),
+    category_words AS (
+        SELECT LOWER(c.name) AS word
+        FROM category c
+    ),
+    all_words AS (
+        SELECT original_name AS source, word, 1 AS priority FROM product_words
+        UNION ALL
+        SELECT combined_name AS source, combined_name AS word, 
+            CASE WHEN array_length(string_to_array(LOWER(:query), ' '), 1) = 2 THEN 0 ELSE 2 END AS priority 
+        FROM category_subcategory
+        UNION ALL
+        SELECT s.word AS source, s.word AS word, 1 AS priority FROM subcategory_words s
+        UNION ALL
+        SELECT c.word AS source, c.word AS word, 1 AS priority FROM category_words c
+    ),
+    distances AS (
+        SELECT source, word, calculate_levenshtein(LOWER(:query), word) AS dist, priority
+        FROM all_words
+        WHERE calculate_levenshtein(LOWER(:query), word) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), word) > :minThreshold
+    )
+    SELECT word
+    FROM distances
+    ORDER BY priority ASC, dist ASC
     LIMIT 1
     """, nativeQuery = true)
     String getSuggestion(@Param("query") String query, @Param("maxThreshold") Integer maxThreshold, @Param("minThreshold") Integer minThreshold);
+
 
     @Query(value = """
             SELECT p.id as id,
