@@ -147,15 +147,51 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             """)
     Page<ProductProjection> getProductsForSubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
 
-    @Query("""
-            SELECT p.name as name
-            FROM Product p
-            WHERE calculate_levenshtein(LOWER(:query), LOWER(p.name)) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), LOWER(p.name)) > :minThreshold ORDER BY calculate_levenshtein(LOWER(:query), LOWER(p.name)) ASC
-            LIMIT 1
-            """)
+    @Query(value = """
+    WITH product_words AS (
+        SELECT p.name AS original_name, unnest(string_to_array(LOWER(p.name), ' ')) AS word
+        FROM product p
+        INNER JOIN sub_category s ON p.subcategory_id = s.id
+        INNER JOIN category c ON s.category_id = c.id
+    ),
+    category_subcategory AS (
+        SELECT CONCAT(LOWER(c.name), ' ', LOWER(s.name)) AS combined_name
+        FROM sub_category s
+        INNER JOIN category c ON s.category_id = c.id
+    ),
+    subcategory_words AS (
+        SELECT LOWER(s.name) AS word
+        FROM sub_category s
+    ),
+    category_words AS (
+        SELECT LOWER(c.name) AS word
+        FROM category c
+    ),
+    all_words AS (
+        SELECT original_name AS source, word, 1 AS priority FROM product_words
+        UNION ALL
+        SELECT combined_name AS source, combined_name AS word, 
+            CASE WHEN array_length(string_to_array(LOWER(:query), ' '), 1) = 2 THEN 0 ELSE 2 END AS priority 
+        FROM category_subcategory
+        UNION ALL
+        SELECT s.word AS source, s.word AS word, 1 AS priority FROM subcategory_words s
+        UNION ALL
+        SELECT c.word AS source, c.word AS word, 1 AS priority FROM category_words c
+    ),
+    distances AS (
+        SELECT source, word, calculate_levenshtein(LOWER(:query), word) AS dist, priority
+        FROM all_words
+        WHERE calculate_levenshtein(LOWER(:query), word) <= :maxThreshold AND calculate_levenshtein(LOWER(:query), word) > :minThreshold
+    )
+    SELECT word
+    FROM distances
+    ORDER BY priority ASC, dist ASC
+    LIMIT 1
+    """, nativeQuery = true)
     String getSuggestion(@Param("query") String query, @Param("maxThreshold") Integer maxThreshold, @Param("minThreshold") Integer minThreshold);
 
-    @Query("""
+
+    @Query(value = """
             SELECT p.id as id,
             p.name as name,
             p.description as description,
@@ -167,14 +203,19 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.color as color,
             i.url as url
             FROM Product p
-            INNER JOIN ProductPicture i
-            ON p.id = i.product.id
+            INNER JOIN ProductPicture i ON p.id = i.product.id
+            INNER JOIN SubCategory s ON p.subCategory.id = s.id
+            INNER JOIN Category c ON s.category.id = c.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
+            AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
+            OR LOWER(p.description) LIKE CONCAT('%', LOWER(:query), '%')
+            OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
+            OR LOWER(s.name) LIKE LOWER(:query)
+            OR LOWER(c.name) LIKE LOWER(:query))
             """)
     Page<ProductProjection> searchProducts(@Param("query") String query, Pageable pageable);
 
-    @Query("""
+    @Query(value = """
             SELECT p.id as id,
             p.name as name,
             p.description as description,
@@ -186,10 +227,15 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.color as color,
             i.url as url
             FROM Product p
-            INNER JOIN ProductPicture i
-            ON p.id = i.product.id
+            INNER JOIN ProductPicture i ON p.id = i.product.id
+            INNER JOIN SubCategory s ON p.subCategory.id = s.id
+            INNER JOIN Category c ON s.category.id = c.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
+            AND (LOWER(p.name) LIKE CONCAT('%', LOWER(:query), '%')
+            OR LOWER(p.description) LIKE CONCAT('%', LOWER(:query), '%')
+            OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
+            OR LOWER(s.name) LIKE LOWER(:query)
+            OR LOWER(c.name) LIKE LOWER(:query))
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
     Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query, Pageable pageable);

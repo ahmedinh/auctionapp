@@ -147,13 +147,16 @@ public class ProductService {
     public ResponseEntity<List<ProductPicture>> addProductPictures(MultipartFile[] files, String productName) throws IOException {
         Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
         List<ProductPicture> productPictureList = new ArrayList<>();
+        int counter = 1;
         for (MultipartFile file : files) {
-            s3Service.uploadFile(productName + "/" + file.getOriginalFilename(), file);
+            String pictureDefault = "picture_" + counter;
+            s3Service.uploadFile(productName + "/" + pictureDefault + "/" + file.getOriginalFilename(), file);
             productPictureList.add(new ProductPicture(
-                    productName + "/" + file.getOriginalFilename(),
-                    String.format("https://%s.s3.%s.amazonaws.com/%s/%s",s3Service.getBucketName(),s3Service.getRegion(),productName,file.getOriginalFilename()),
+                    productName + "/" + pictureDefault + "/" + file.getOriginalFilename(),
+                    String.format("https://%s.s3.%s.amazonaws.com/%s/%s/%s",s3Service.getBucketName(),s3Service.getRegion(),productName,pictureDefault,file.getOriginalFilename()),
                     product
             ));
+            counter++;
         }
         productPictureRepository.saveAll(productPictureList);
         return ResponseEntity.ok(productPictureList);
@@ -174,10 +177,8 @@ public class ProductService {
         Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
         List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
         if (pictures != null && !pictures.isEmpty()) {
-            for (ProductPicture productPicture : pictures) {
-                s3Service.deleteObject(productPicture.getUrl());
-            }
-            s3Service.deleteObject(String.format("https://%s.s3.%s.amazonaws.com/%s",s3Service.getBucketName(),s3Service.getRegion(),productName));
+            for (ProductPicture productPicture : pictures)
+                s3Service.deleteObject(productPicture.getName());
             productPictureRepository.deleteAll(pictures);
         }
         productRepository.delete(product);
