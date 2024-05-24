@@ -173,13 +173,6 @@ public class PersonService {
         return ResponseEntity.ok(personPictureUrl);
     }
 
-    public ResponseEntity<Map<String, String>> getUserPhoneNumber(Long userId) {
-        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        Map<String, String> personPhoneNumber = new HashMap<>();
-        personPhoneNumber.put("phone_number", person.getPhoneNumber());
-        return ResponseEntity.ok(personPhoneNumber);
-    }
-
     @Transactional
     public ResponseEntity<Person> deactivateUserAccount(String authHeader) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));

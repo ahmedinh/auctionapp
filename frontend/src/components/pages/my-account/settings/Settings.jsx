@@ -2,10 +2,12 @@ import React from "react";
 import './Settings.scss';
 import { getUser } from "../../../utilities/Common";
 import { useDeactivateUser } from "../../../../hooks/deactivateUserMutation";
+import { useUserInfoGet } from "../../../../hooks/useUserInfoGet";
 
 export default function Settings() {
     const user = getUser();
     const { mutate: deactivateUser } = useDeactivateUser();
+    const userInfo = useUserInfoGet();
     const handleDeactivate = () => {
         deactivateUser();
     }
@@ -40,7 +42,7 @@ export default function Settings() {
                         </div>
                         <div className="phone">
                             <p>Phone</p>
-                            {(user.phoneNumber != null && user.phoneNumber !== '') ? <p className="user-number">{user.phoneNumber}</p> : <p className="no-user-number">No number available</p>}
+                            {(userInfo?.data?.phoneNumber != null && userInfo?.data?.phoneNumber !== '') ? <p className="user-number">{userInfo?.data?.phoneNumber}</p> : <p className="no-user-number">No number available</p>}
                         </div>
                     </div>
                 </div>
