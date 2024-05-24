@@ -199,7 +199,7 @@ public class Person {
         this.role = role;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return active;
     }
 

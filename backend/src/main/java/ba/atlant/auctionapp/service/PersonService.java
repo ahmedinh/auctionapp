@@ -16,6 +16,7 @@ import ba.atlant.auctionapp.response.AuthResponse;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,6 +70,9 @@ public class PersonService {
         Person person = personRepository.findByEmail(loginRequest.getEmail()).orElse(null);
         if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword())) {
             throw new BadCredentialsException("Wrong email or password");
+        }
+        if (!person.isActive()) {
+            throw new AuthorizationServiceException("User account is deactivated.");
         }
         return getAuthResponse(loginRequest, person);
     }
@@ -174,5 +178,14 @@ public class PersonService {
         Map<String, String> personPhoneNumber = new HashMap<>();
         personPhoneNumber.put("phone_number", person.getPhoneNumber());
         return ResponseEntity.ok(personPhoneNumber);
+    }
+
+    @Transactional
+    public ResponseEntity<Person> deactivateUserAccount(String authHeader) {
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
+        person.setActive(false);
+        personRepository.save(person);
+        return ResponseEntity.ok(person);
     }
 }

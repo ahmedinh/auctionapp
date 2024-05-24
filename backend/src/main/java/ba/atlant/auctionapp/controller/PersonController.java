@@ -89,4 +89,10 @@ public class PersonController {
     public ResponseEntity<Map<String, String>> getUserPhoneNumber(@RequestParam("userId") Long userId) {
         return personService.getUserPhoneNumber(userId);
     }
+
+    @PatchMapping(value = "/deactivate")
+    @Operation(summary = "User activation of account", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity deactivateUserAccount(@RequestHeader("Authorization") String authHeader) {
+        return personService.deactivateUserAccount(authHeader);
+    }
 }

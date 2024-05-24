@@ -50,6 +50,10 @@ public class WebSecurityConfiguration {
             "/api/bid/user/place-bid"
     };
 
+    private static final String[] PROTECTED_PATCH = new String[] {
+            "/api/bid/user/deactivate"
+    };
+
     public WebSecurityConfiguration(PersonDetailsService personDetailsService, JwtEntryPoint authEntryPointJwt) {
         this.personDetailsService = personDetailsService;
         this.authEntryPointJwt = authEntryPointJwt;
@@ -83,6 +87,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers(GET, PROTECTED_GET).hasAuthority(ROLE_USER.name())
                 .requestMatchers(POST, PROTECTED_POST).hasAuthority(ROLE_USER.name())
                 .requestMatchers(PUT, PROTECTED_PUT).hasAuthority(ROLE_USER.name())
+                .requestMatchers(PATCH, PROTECTED_PATCH).hasAuthority(ROLE_USER.name())
                 .requestMatchers("/**").permitAll()
                 .anyRequest().permitAll().and().authenticationManager(authenticationManager);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
