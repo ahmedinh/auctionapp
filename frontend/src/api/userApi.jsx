@@ -61,3 +61,12 @@ export async function getUserPhoneNumber() {
         }
     }).then(res => res.data);
 }
+
+export async function deactivateUserAccount() {
+    const userToken = getToken();
+    return axios.patch(`${apiUrl}/api/user/deactivate`, {}, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    }).then(res => res.data);
+}

@@ -1,9 +1,14 @@
 import React from "react";
 import './Settings.scss';
 import { getUser } from "../../../utilities/Common";
+import { useDeactivateUser } from "../../../../hooks/deactivateUserMutation";
 
 export default function Settings() {
     const user = getUser();
+    const { mutate: deactivateUser } = useDeactivateUser();
+    const handleDeactivate = () => {
+        deactivateUser();
+    }
     return (
         <div className="full-settings-page">
             <div className="upper">
@@ -45,7 +50,7 @@ export default function Settings() {
                     <p className="acc">Account</p>
                     <div className="deactivation">
                         <p className="question">Do you want to deactivate account?</p>
-                        <button>DEACTIVATE</button>
+                        <button onClick={handleDeactivate}>DEACTIVATE</button>
                     </div>
                 </div>
             </div>

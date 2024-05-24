@@ -62,7 +62,7 @@ export default function BasicSearch() {
                 hasNextPage={hasNextPage}
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
-                onSortChange={handleSortChange} // Pass the sorting handler to MainSearchPage
+                onSortChange={handleSortChange}
             />
         </div>
     );
