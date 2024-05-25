@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import { useRecommendedProducts } from "../../../hooks/useRecommendedProducts";
 import { homePageRoute, lastChanceRoute, newArrivalsRoute, shopPageRoute } from "../../utilities/AppUrls";
+import RelatedProducts from "../ProductOverview/RelatedProducts";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -60,23 +61,7 @@ const Home = () => {
                         <img src={highlightData?.productPictureList[0].url} alt="HighlightPicture" />
                     </div>
                 </div>
-                <div className="recommended">
-                    <div className="headline">
-                        <h5 className="featured-products">Featured products</h5>
-                        <hr />
-                    </div>
-                    <div className="products">
-                        {recommendedData?.map(product => (
-                            <div className="product" key={product.id}>
-                                <NavLink to={`/shop/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                    <img src={product.url} alt={product.name} className='picture' />
-                                    <h5>{product.name}</h5>
-                                </NavLink>
-                                <p>Start from <span className="price">${product.startPrice.toFixed(2)}</span></p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <RelatedProducts productData={recommendedData} headline='Featured products' justifyContent='flex-start'/>
                 <div className="bottom">
                     <div className="menu-bar">
                         <NavLink to={newArrivalsRoute} className="link" activeClassName="active">
