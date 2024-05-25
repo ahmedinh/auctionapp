@@ -97,6 +97,7 @@ public class Person {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.pictureUrl = "https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png";
     }
 
     public Long getId() {

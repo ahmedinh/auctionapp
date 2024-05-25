@@ -208,4 +208,9 @@ public class ProductService {
         }
         return ResponseEntity.ok(recommendedProducts);
     }
+
+    public ResponseEntity<List<ProductProjection>> getSimilarProducts(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with provided ID."));
+        return ResponseEntity.ok(productRepository.getSimilarProducts(productId, product.getSubCategory().getCategory().getId()));
+    }
 }

@@ -40,7 +40,7 @@ public class ProductDTO {
         this.auctionStart = product.getAuctionStart();
         this.auctionEnd = product.getAuctionEnd();
         this.subCategory = product.getSubCategory();
-        this.person = product.getUser();
+        this.person = product.getPerson();
         this.productPictureList = productPictureList;
     }
 }

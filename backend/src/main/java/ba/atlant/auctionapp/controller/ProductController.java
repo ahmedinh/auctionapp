@@ -132,4 +132,10 @@ public class ProductController {
     public ResponseEntity<List<ProductProjection>> getRecommendedProducts(@Nullable @RequestParam(value = "userId") Long userId) {
         return productService.getRecommendedProducts(userId);
     }
+
+    @GetMapping(value = "/similar")
+    @Operation(summary = "Fetch similar products to the current product that is currently opened")
+    public ResponseEntity<List<ProductProjection>> getSimilarProducts(@RequestParam(value = "productId") Long productId) {
+        return productService.getSimilarProducts(productId);
+    }
 }
