@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS bid
     amount     DECIMAL                                 NOT NULL,
     user_id    BIGINT                                  NOT NULL,
     product_id BIGINT                                  NOT NULL,
+    bid_timestamp TIMESTAMP WITHOUT TIME ZONE          NOT NULL,
     CONSTRAINT pk_bid PRIMARY KEY (id)
 );
 
