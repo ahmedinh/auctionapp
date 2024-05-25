@@ -14,151 +14,158 @@
         .notification-text {
             font-weight: $font-weight-bold;
             display: none;
+            margin: 0;
         }
 
-        .product {
+        .below-notification {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 117px;
-
-            .product-pictures {
-                width: 453px;
-
-                .main-image {
-                    width: 100%;
-                    height: auto;
-                    margin-bottom: 5rem;
-                    display: flex;
-                    justify-content: center;
-
-                    img {
-                        max-width: 400px;
-                        max-height: 400px;
-                    }
-                }
-
-                .preview-pictures {
-                    display: flex;
-                    padding: 0;
-                    margin: 0;
-                    margin-left: 1.5rem;
-                    overflow: auto;
-                    justify-content: flex-start;
-                    gap: 8px;
-
-                    img {
-                        width: 18%;
-                        cursor: pointer;
-                    }
-                }
-            }
-
-            .product-info {
+            flex-direction: column;
+            gap: 128px;
+            .product {
                 display: flex;
-                flex-direction: column;
-                gap: 64px;
+                flex-direction: row;
+                justify-content: center;
+                gap: 117px;
 
-                .basics {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 32px;
+                .product-pictures {
+                    width: 453px;
 
-                    .headline {
+                    .main-image {
+                        width: 100%;
+                        height: auto;
+                        margin-bottom: 5rem;
                         display: flex;
-                        flex-direction: column;
-                        gap: 16px;
+                        justify-content: center;
 
-                        .product-name {
-                            font-weight: $font-weight-semibold;
-                            color: $color-black;
-                        }
-
-                        .start-price {
-                            font-weight: 300;
-                            color: $color-purple;
+                        img {
+                            max-width: 400px;
+                            max-height: 400px;
                         }
                     }
 
-                    .bids {
+                    .preview-pictures {
                         display: flex;
-                        width: fit-content;
-                        flex-direction: column;
-                        gap: 16px;
-                        padding: 24px 32px 24px 32px;
-                        border: 1px solid $color-grey;
-                    }
+                        padding: 0;
+                        margin: 0;
+                        margin-left: 1.5rem;
+                        overflow: auto;
+                        justify-content: flex-start;
+                        gap: 8px;
 
-                    .place-bid {
-                        .upper {
-                            display: flex;
-                            gap: 39px;
-                            height: 51px;
-
-                            input {
-                                width: 300px;
-                                border: 1px groove $color-white;
-                                padding-left: 30.2px;
-                            }
-
-                            button {
-                                border: none;
-                                background-color: #fff;
-                                font-weight: $font-weight-bold;
-                                line-height: 24px;
-                                cursor: pointer;
-                            }
-                        }
-
-                        p {
-                            margin: 5px;
-                            color: red;
-                            font-weight: $font-weight-bold;
+                        img {
+                            width: 18%;
+                            cursor: pointer;
                         }
                     }
-
                 }
 
-                .information {
+                .product-info {
                     display: flex;
                     flex-direction: column;
-                    gap: 32px;
+                    gap: 64px;
 
-                    .tabs {
+                    .basics {
                         display: flex;
                         flex-direction: column;
-                        gap: 16px;
+                        gap: 32px;
 
-                        .inner {
+                        .headline {
                             display: flex;
-                            text-align: left;
-                            margin-left: 20px;
-                            font-weight: $font-weight-bold;
-                            color: $color-purple;
-                            font-size: $font-size-normal;
+                            flex-direction: column;
+                            gap: 16px;
+
+                            .product-name {
+                                font-weight: $font-weight-semibold;
+                                color: $color-black;
+                            }
+
+                            .start-price {
+                                font-weight: 300;
+                                color: $color-purple;
+                            }
                         }
 
-                        hr {
-                            width: 100%;
-                            margin: 0;
+                        .bids {
+                            display: flex;
+                            width: fit-content;
+                            flex-direction: column;
+                            gap: 16px;
+                            padding: 24px 32px 24px 32px;
+                            border: 1px solid $color-grey;
                         }
+
+                        .place-bid {
+                            .upper {
+                                display: flex;
+                                gap: 39px;
+                                height: 51px;
+
+                                input {
+                                    width: 300px;
+                                    border: 1px groove $color-white;
+                                    padding-left: 30.2px;
+                                }
+
+                                button {
+                                    border: none;
+                                    background-color: #fff;
+                                    font-weight: $font-weight-bold;
+                                    line-height: 24px;
+                                    cursor: pointer;
+                                }
+                            }
+
+                            p {
+                                margin: 5px;
+                                color: red;
+                                font-weight: $font-weight-bold;
+                            }
+                        }
+
                     }
 
-                    .tab-content {
-                        width: 548px;
+                    .information {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 32px;
 
-                        .description {
-                            font-style: italic;
-                            white-space: pre-wrap;
-                            font-weight: $font-weight-normal;
-                            line-height: $line-height-normal;
+                        .tabs {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 16px;
+
+                            .inner {
+                                display: flex;
+                                text-align: left;
+                                margin-left: 20px;
+                                font-weight: $font-weight-bold;
+                                color: $color-purple;
+                                font-size: $font-size-normal;
+                            }
+
+                            hr {
+                                width: 100%;
+                                margin: 0;
+                            }
+                        }
+
+                        .tab-content {
+                            width: 548px;
+
+                            .description {
+                                font-style: italic;
+                                white-space: pre-wrap;
+                                font-weight: $font-weight-normal;
+                                line-height: $line-height-normal;
+                            }
                         }
                     }
                 }
             }
-        }
-        .related-or-bidders {
-            margin-bottom: 8rem;
+
+            .related-or-bidders {
+                margin-bottom: 8rem;
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 @import '../../utilities/Style.scss';
 
-.bidders-content {
+.bidders-frame {
     .headline {
         .bidders-text {
             display: flex;
@@ -8,6 +8,75 @@
             font-size: 24px;
             margin-top: 0;
             margin-bottom: 1rem;
+            border-bottom: 1px solid $color-white;
+            padding-bottom: 1rem;
+        }
+    }
+
+    .explore-more-button {
+        width: 207px;
+        height: 56px;
+        font-weight: $font-weight-bold;
+        color: #fff;
+        border: none;
+        background-color: $color-purple;
+        cursor: pointer;
+    }
+
+    .bidders-content {
+        margin-top: 128px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        .bidders-table {
+            img {
+                width: 4rem;
+                height: 4rem;
+                border-radius: 50%;
+            }
+            width: 100%;
+            border: 1px solid $color-white;
+            text-align: left;
+            border-collapse: separate;
+            border-spacing: 24px;
+            thead {
+                tr {
+                    .col1 {
+                        width: 60%;
+                    }
+
+                    .col3,
+                    .col4 {
+                        width: 15%;
+                    }
+
+                }
+            }
+            .bidder {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                gap: 1rem;
+                p {
+                    font-weight: $font-weight-bold;
+                    line-height: 24px;
+                    font-size: 16px;
+                }
+            }
+            .bid-date {
+                font-weight: $font-weight-bold;
+            }
+            
+            .first-bid {
+                color: #417505;
+                font-weight: $font-weight-bold;
+            }
+            
+            .other-bid {
+                color: #9B9B9B;
+                font-weight: $font-weight-bold;
+            }
         }
     }
 }

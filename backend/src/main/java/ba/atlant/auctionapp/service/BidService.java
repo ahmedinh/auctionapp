@@ -13,7 +13,6 @@ import ba.atlant.auctionapp.request.BidRequest;
 import ba.atlant.auctionapp.response.BidResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AuthorizationServiceException;
