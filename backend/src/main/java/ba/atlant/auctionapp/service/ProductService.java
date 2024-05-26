@@ -92,7 +92,7 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForCategory(
-            int page, int size, Long categoryId, String sortField, String sortDirection) {
+            int page, int size, Long categoryId, String sortField, String sortDirection, List<Long> subCategoryIds) {
 
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
 
@@ -102,12 +102,12 @@ public class ProductService {
 
         if (isAllCategories) {
             products = isAuctionEndSort
-                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(pageable)
-                    : productRepository.getProductsForAllCategories(pageable);
+                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(subCategoryIds, pageable)
+                    : productRepository.getProductsForAllCategories(subCategoryIds, pageable);
         } else {
             products = isAuctionEndSort
-                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, pageable)
-                    : productRepository.getProductsForCategory(categoryId, pageable);
+                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, subCategoryIds, pageable)
+                    : productRepository.getProductsForCategory(categoryId, subCategoryIds, pageable);
         }
         return ResponseEntity.ok(products);
     }
@@ -207,5 +207,9 @@ public class ProductService {
                 recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(0));
         }
         return ResponseEntity.ok(recommendedProducts);
+    }
+
+    public ResponseEntity filterProducts(List<Long> subCategoryIds) {
+        return ResponseEntity.ok("Nisticaaa");
     }
 }

@@ -12,14 +12,18 @@
         width: 1120px;
         margin-bottom: 4rem;
         justify-content: space-between;
+
         .all-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
             .product-categories {
                 display: flex;
                 flex-direction: column;
                 width: 214px;
                 padding: 24px;
-                border: 1px solid $color-grey;
-    
+                border: 1px solid $color-white;
+
                 &.headline {
                     color: $color-purple;
                     white-space: nowrap;
@@ -28,59 +32,59 @@
                     margin-bottom: 24px;
                     border: none;
                 }
-    
+
                 .item {
                     display: flex;
                     flex-direction: column;
                     gap: 24px;
-    
+
                     .title {
                         display: flex;
                         justify-content: space-between;
                         cursor: pointer;
-    
+
                         p {
                             padding: 0;
                             margin: 0;
                         }
                     }
-    
+
                     .subcategories,
                     .subcategories-show {
                         display: flex;
                         flex-direction: column;
                         gap: 24px;
                     }
-    
+
                     .subcategories {
                         max-height: 0;
                         overflow: hidden;
                         transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-    
+
                         &.show {
                             height: auto;
                             max-height: 9999;
                             transition: all 0.5s cubic-bezier(1, 0, 1, 0);
                         }
-    
+
                     }
-    
+
                     .subitem {
                         display: flex;
                         gap: 8px;
                     }
-    
+
                     .subcategories-show {
                         margin: 0px 0px 24px 0px;
                     }
-    
+
                     p.subcategory {
                         margin: 0;
                         color: $color-grey;
                     }
-    
+
                 }
-    
+
                 ul,
                 li {
                     list-style-type: none;
@@ -88,11 +92,47 @@
                     margin: 0;
                 }
             }
+
+            .price-filter {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                padding: 24px 24px 32px 24px;
+                border: 1px solid $color-white;
+                .price-range-text {
+                    margin: 0;
+                }
+                .numbers {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 3rem;
+                    input {
+                        border: 1px solid $color-grey;
+                        height: 46px;
+                        padding: 0;
+                        color: $color-grey;
+                        text-align: center;
+                        width: 88px;
+                    }
+                }
+                .spinner {
+                    .multi-range-slider {
+                        box-shadow: none;
+                        border: none;
+                    }
+                    .bar-inner {
+                        background-color: $color-purple;
+                    }
+                }
+            }
         }
+
         .products-part {
             display: flex;
             flex-direction: column;
             gap: 27px;
+
             .sorting-grid-list {
                 .dropdown-select {
                     font-family: 'Lato', sans-serif;
@@ -104,6 +144,7 @@
                     border: 2px solid $color-white;
                 }
             }
+
             .products-content {
                 display: flex;
                 flex-direction: column;
@@ -118,7 +159,7 @@
                     justify-content: space-between;
                     row-gap: 40px;
                 }
-    
+
                 .explore-more-button {
                     width: 207px;
                     height: 56px;

@@ -72,8 +72,9 @@ public class ProductController {
             @RequestParam(defaultValue = "9") int size,
             @RequestParam(defaultValue = "1") Long categoryId,
             @RequestParam(defaultValue = "name") String sortField,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
-        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection);
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @Nullable @RequestParam List<Long> subCategoryIds) {
+        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIds);
     }
 
 
@@ -131,5 +132,11 @@ public class ProductController {
     @Operation(summary = "Fetch recommended products for users")
     public ResponseEntity<List<ProductProjection>> getRecommendedProducts(@Nullable @RequestParam(value = "userId") Long userId) {
         return productService.getRecommendedProducts(userId);
+    }
+
+    @GetMapping("/filter")
+    @Operation(summary = "Fetch filtered products by subcategories")
+    public ResponseEntity filterProducts(@RequestBody List<Long> subCategoryIds) {
+        return productService.filterProducts(subCategoryIds);
     }
 }
