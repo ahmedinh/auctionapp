@@ -10,8 +10,8 @@ import MultiRangeSlider from "multi-range-slider-react";
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState(null);
-    const [minValue, setMinValue] = useState(25);
-    const [maxValue, setMaxValue] = useState(75);
+    const [minValue, setMinValue] = useState(0);
+    const [maxValue, setMaxValue] = useState(1000);
     const [expandedCategories, setExpandedCategories] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('');
     const navigate = useNavigate();
