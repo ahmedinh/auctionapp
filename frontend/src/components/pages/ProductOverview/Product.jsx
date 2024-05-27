@@ -96,60 +96,64 @@ export default function Product() {
 
     return (
         <div className="product-page">
-            <BreadCrumbsMenu title={data?.name} rightLink="shop/single-product" fontWeight={700} />
-            <p className="notification-text" style={{ color: notificationColor }}>{notification}</p>
-            <div className="product">
-                <div className="product-pictures">
-                    <div className="main-image">
-                        <img src={productImage} alt="" className="main-picture" />
-                    </div>
-                    <div className="preview-pictures">
-                        {data?.productPictureList.map((img) => (
-                            <img
-                                key={img.id}
-                                src={img.url}
-                                alt=""
-                                className="preview-picture"
-                                onClick={() => handleImageClick(img)}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="product-info">
-                    <div className="basics">
-                        <div className="headline">
-                            <p className="product-name">{data?.name}</p>
-                            <p className="start-price">Starts from <span className="price">${data?.startPrice}</span></p>
+            <div className="product-page-content">
+                <BreadCrumbsMenu title={data?.name} rightLink="shop/single-product" fontWeight={700} />
+                {notification && (
+                    <p className="notification-text" style={{ color: notificationColor, display: 'block' }}>{notification}</p>
+                )}
+                <div className="product">
+                    <div className="product-pictures">
+                        <div className="main-image">
+                            <img src={productImage} alt="" className="main-picture" />
                         </div>
-                        <div className="bids">
-                            <p>Highest bid: <span className="price">${data?.largestBid}</span></p>
-                            <p>Number of bids: <span className="price">{data?.numberOfBids}</span></p>
-                            <p>Time left: <span className="price">{timeLeft}</span></p>
+                        <div className="preview-pictures">
+                            {data?.productPictureList.map((img) => (
+                                <img
+                                    key={img.id}
+                                    src={img.url}
+                                    alt=""
+                                    className="preview-picture"
+                                    onClick={() => handleImageClick(img)}
+                                />
+                            ))}
                         </div>
-                        {(getUserId() && getUserId() !== data?.person.id && timeLeft !== 'Time is up!') ? (
-                            <div className="place-bid">
-                                <div className="upper">
-                                    <input type="text"
-                                        placeholder={'Enter $' + (data?.largestBid >= data?.startPrice ? data?.largestBid + 1 : data?.startPrice) + ' or higher'}
-                                        value={newBid}
-                                        onChange={(e) => setNewBid(e.target.value)} />
-                                    <button onClick={() => handleBid()}>PLACE BID</button>
-                                </div>
-                                {errorBid.length > 0 ? <p className="error-bid">{errorBid}</p> : null}
+                    </div>
+                    <div className="product-info">
+                        <div className="basics">
+                            <div className="headline">
+                                <p className="product-name">{data?.name}</p>
+                                <p className="start-price">Starts from <span className="price">${data?.startPrice}</span></p>
                             </div>
-                        ) : null}
-                    </div>
-                    <div className="information">
-                        <div className="tabs">
-                            <div className="inner">
-                                <div className="active">
-                                    Details
-                                </div>
+                            <div className="bids">
+                                <p>Highest bid: <span className="price">${data?.largestBid}</span></p>
+                                <p>Number of bids: <span className="price">{data?.numberOfBids}</span></p>
+                                <p>Time left: <span className="price">{timeLeft}</span></p>
                             </div>
-                            <hr />
+                            {(getUserId() && getUserId() !== data?.person.id && timeLeft !== 'Time is up!') ? (
+                                <div className="place-bid">
+                                    <div className="upper">
+                                        <input type="text"
+                                            placeholder={'Enter $' + (data?.largestBid >= data?.startPrice ? data?.largestBid + 1 : data?.startPrice) + ' or higher'}
+                                            value={newBid}
+                                            onChange={(e) => setNewBid(e.target.value)} />
+                                        <button onClick={() => handleBid()}>PLACE BID</button>
+                                    </div>
+                                    {errorBid.length > 0 ? <p className="error-bid">{errorBid}</p> : null}
+                                </div>
+                            ) : null}
                         </div>
-                        <div className="tab-content">
-                            <p className="description">{data?.description.replace(/\\n/g, '\n')}</p>
+                        <div className="information">
+                            <div className="tabs">
+                                <div className="inner">
+                                    <div className="active">
+                                        Details
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                            <div className="tab-content">
+                                <p className="description">{data?.description.replace(/\\n/g, '\n')}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

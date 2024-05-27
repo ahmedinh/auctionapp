@@ -190,7 +190,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     """, nativeQuery = true)
     String getSuggestion(@Param("query") String query, @Param("maxThreshold") Integer maxThreshold, @Param("minThreshold") Integer minThreshold);
 
-
     @Query(value = """
             SELECT p.id as id,
             p.name as name,
