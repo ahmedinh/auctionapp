@@ -68,7 +68,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
 
     const handleCategoryClick = (i, categoryId) => {
         toggle(i);
-        navigate(`/home/categories/${categoryId}`)
+        navigate(`/shop/categories/${categoryId}`)
     }
 
     if (categoriesStatus === 'pending' || productsStatus === 'pending') {

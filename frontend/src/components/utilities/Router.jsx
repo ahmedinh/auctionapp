@@ -37,14 +37,15 @@ const Router = createBrowserRouter(
                     <Route path="last-chance" element={<LastChance />} />
                 </Route>
                 <Route path="home">
-                    <Route path="categories/:categoryId" element={<CategoryProducts />} />
-                    <Route path="categories/all" element={<CategoryProducts />} />
                     <Route path="about-us" element={<AboutUs />} />
                     <Route path="terms-and-conditions" element={<Terms />} />
                     <Route path="privacy-and-policy" element={<Privacy />} />
                     <Route path="search" element={<BasicSearch />} />
                 </Route>
                 <Route path="shop">
+                    <Route index element={<Navigate replace to="/shop/categories/all" />} />
+                    <Route path="categories/all" element={<CategoryProducts />} />
+                    <Route path="categories/:categoryId" element={<CategoryProducts />} />
                     <Route path="product/:productId" element={<Product />} />
                 </Route>
 
