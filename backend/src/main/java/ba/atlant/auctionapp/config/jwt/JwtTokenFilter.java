@@ -33,6 +33,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     throw new UsernameNotFoundException("Email address not found");
                 }
                 Person person = personService.getByEmail(email);
+                if (!person.isActive()) {
+                    SecurityContextHolder.getContext().setAuthentication(null);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 PersonDetails userDetails = PersonDetails.build(person);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());

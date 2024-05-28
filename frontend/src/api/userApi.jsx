@@ -49,13 +49,9 @@ export async function getUserBids() {
     }).then(res => res.data);
 }
 
-export async function getUserPhoneNumber() {
-    const userId = getUserId();
+export async function deactivateUserAccount() {
     const userToken = getToken();
-    return axios.get(`${apiUrl}/api/user/phone-number`, {
-        params: {
-            userId
-        },
+    return axios.patch(`${apiUrl}/api/user/deactivate`, {}, {
         headers: {
             'Authorization': `Bearer ${userToken}`
         }
