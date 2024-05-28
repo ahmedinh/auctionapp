@@ -44,7 +44,7 @@ export default function BasicSearch() {
     return (
         <div className="search-page-full">
             <div className="did-you-mean">
-                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name ? (
+                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name ? (
                     <p className="paragraph">Did you mean?&nbsp;
                         <a onClick={handleClick} className="navlink">
                             {thresholdSearchResults?.name}

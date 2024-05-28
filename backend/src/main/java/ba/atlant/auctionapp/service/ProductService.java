@@ -118,7 +118,7 @@ public class ProductService {
     }
 
     public ResponseEntity<Map<String, String>> getSuggestion(String query, Integer threshold) {
-        String suggestion = productRepository.getSuggestion(query, threshold, 0);
+        String suggestion = productRepository.getSuggestion(query, threshold, -1);
         Map<String, String> response = Collections.singletonMap("name", suggestion);
         return ResponseEntity.ok(response);
     }
