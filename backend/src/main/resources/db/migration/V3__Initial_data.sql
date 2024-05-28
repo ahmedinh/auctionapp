@@ -1,8 +1,8 @@
 -- Insertion of person
-INSERT INTO person (first_name, last_name, birth_date, country, email, password, role, active)
-VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true),
-       ('Niko', 'Nikic', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic2@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true),
-       ('John', 'Doe', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic3@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true);
+INSERT INTO person (first_name, last_name, birth_date, country, email, password, role, active, picture_url)
+VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png'),
+       ('Niko', 'Nikic', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic2@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png'),
+       ('John', 'Doe', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic3@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png');
 
 -- Insertion of categories
 INSERT INTO category (name) VALUES

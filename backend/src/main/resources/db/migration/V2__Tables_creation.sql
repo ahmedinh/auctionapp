@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS person
     country          VARCHAR(255),
     role             VARCHAR(255),
     active           BOOLEAN                                 NOT NULL,
+    picture_url VARCHAR(2000),
     CONSTRAINT pk_person PRIMARY KEY (id)
 );
 

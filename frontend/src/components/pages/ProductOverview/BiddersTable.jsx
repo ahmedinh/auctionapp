@@ -9,6 +9,18 @@ export default function BiddersTable({ productId }) {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-GB', options);
     };
+    if (!productBidders.data || productBidders.data?.pages[0].empty) {
+        return (
+            <div className="bidders-frame">
+                <div className="headline">
+                    <h5 className='bidders-text'>Bidders</h5>
+                </div>
+                <div className="bidders-content">
+                    <h2>This product has no bids</h2>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className="bidders-frame">
             <div className="headline">
