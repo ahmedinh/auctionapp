@@ -50,9 +50,8 @@ public class S3Service {
         return s3client.getRegionName();
     }
 
-    public void deleteObject(String filePath) {
-        if (filePath != null) {
-            String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+    public void deleteObject(String fileName) {
+        if (fileName != null) {
             final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucketName, fileName);
             s3client.deleteObject(deleteObjectRequest);
         }
