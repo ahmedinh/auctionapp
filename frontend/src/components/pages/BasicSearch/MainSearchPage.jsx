@@ -4,14 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
 import Form from 'react-bootstrap/Form';
-import { sortProducts } from "../../utilities/Common";
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import { Icon } from '@iconify/react';
+import DollarSign from '../../../assets/dollar-sign-2.png';
 
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
     const [sortCriteria, setSortCriteria] = useState('');
+    const [view, setView] = useState('grid');
     const navigate = useNavigate();
 
     const {
@@ -75,6 +77,14 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         return <LoadingSpinner />;
     }
 
+    const handleGridView = () => {
+        setView('grid');
+    }
+
+    const handleListView = () => {
+        setView('list');
+    }
+
     return (
         <div className="search-page">
             <div className="content">
@@ -110,13 +120,35 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                             <option value='START_PRICE_LOW_TO_HIGH'>Price: Low to High</option>
                             <option value='START_PRICE_HIGH_TO_LOW'>Price: High to Low</option>
                         </Form.Select>
+                        <div className="view-switch">
+                            <button onClick={handleGridView} className={view === 'grid' ? 'grid-button-active' : 'grid-button'}><Icon icon="mdi-light:grid" className="grid-icon" />Grid</button>
+                            <button onClick={handleListView} className={view === 'list' ? 'list-button-active' : 'list-button'}><Icon icon="mdi-light:menu" className="list-icon" />List</button>
+                        </div>
                     </div>
                     <div className="products-content">
-                        <div className="products-gridview">
+                        {view === 'grid' ? (<div className="products-gridview">
                             {productsData?.pages.flatMap(page => page.content).map(product => (
                                 <ProductCard key={product.id} product={product} height="350px" width="262px" />
                             ))}
-                        </div>
+                        </div>) : (<div className="products-listview">
+                            {productsData?.pages.flatMap(page => page.content).map(product => (
+                                <div className="product-in-list">
+                                    <img src={product.url} alt="" srcset="" />
+                                    <div className="product-list-content">
+                                        <div className="headline-and-description">
+                                            <h5 className="product-list-headline">{product.name}</h5>
+                                            <p className="product-list-description">{product.description}</p>
+                                        </div>
+                                        <p className="start-price">
+                                            Start from ${product.startPrice.toFixed(2)}
+                                        </p>
+                                        <button className="bid-button">
+                                            Bid <img src={DollarSign} alt="" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>)}
                         {hasNextPage && (
                             <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
                                 {isFetchingNextPage ? 'Loading...' : 'Explore More'}
