@@ -126,26 +126,12 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                     </div>
                     <div className="products-content">
                         {view === views.GRID ? (<div className="products-gridview">
-                            {productsData?.pages.flatMap(page => page.content).map(product => (
-                                <ProductCard key={product.id} product={product} height="350px" width="262px" />
+                            {productDataFlatMap.map(product => (
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={true} />
                             ))}
                         </div>) : (<div className="products-listview">
                             {productDataFlatMap.map(product => (
-                                <div className="product-in-list">
-                                    <img src={product.url} alt="" srcset="" />
-                                    <div className="product-list-content">
-                                        <div className="headline-and-description">
-                                            <h5 className="product-list-headline">{product.name}</h5>
-                                            <p className="product-list-description">{product.description}</p>
-                                        </div>
-                                        <p className="start-price">
-                                            Start from ${product.startPrice.toFixed(2)}
-                                        </p>
-                                        <button className="bid-button">
-                                            Bid <img src={DollarSign} alt="" />
-                                        </button>
-                                    </div>
-                                </div>
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={false} />
                             ))}
                         </div>)}
                         {hasNextPage && (
