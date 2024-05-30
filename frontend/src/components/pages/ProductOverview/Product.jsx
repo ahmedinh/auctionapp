@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./Product.scss";
-import { getProduct } from "../../../api/productsApi";
 import { useParams } from "react-router-dom";
 import BreadCrumbsMenu from "../../utilities/BreadCrumbsMenu";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
-import { getToken, getUser, getUserId } from "../../utilities/Common";
+import { getUserId } from "../../utilities/Common";
 import LoadingSpinner from '../../utilities/loading-spinner/LoadingSpinner';
 import { useProduct } from "../../../hooks/useProduct";
-import { Timelapse } from "@mui/icons-material";
 import { AuctionCountdown } from './AuctionCountdown';
 
 export default function Product() {

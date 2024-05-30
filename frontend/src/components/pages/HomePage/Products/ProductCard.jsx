@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import "./ProductCard.scss";
-import { shopPageRoute } from '../../../utilities/AppUrls';
 
 const ProductCard = ({ product, width, height }) => {
     return (

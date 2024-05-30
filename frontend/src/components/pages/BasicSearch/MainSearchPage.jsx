@@ -16,6 +16,11 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
 
+    const views = {
+        GRID: 'grid',
+        LIST: 'list'
+    }
+
     const {
         status: categoriesStatus,
         data: categoriesData,
@@ -77,13 +82,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         return <LoadingSpinner />;
     }
 
-    const handleGridView = () => {
-        setView('grid');
-    }
-
-    const handleListView = () => {
-        setView('list');
-    }
+    const productDataFlatMap = productsData?.pages.flatMap(page => page.content);
 
     return (
         <div className="search-page">
@@ -121,17 +120,17 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                             <option value='START_PRICE_HIGH_TO_LOW'>Price: High to Low</option>
                         </Form.Select>
                         <div className="view-switch">
-                            <button onClick={handleGridView} className={view === 'grid' ? 'grid-button-active' : 'grid-button'}><Icon icon="mdi-light:grid" className="grid-icon" />Grid</button>
-                            <button onClick={handleListView} className={view === 'list' ? 'list-button-active' : 'list-button'}><Icon icon="mdi-light:menu" className="list-icon" />List</button>
+                            <button onClick={() => setView(views.GRID)} className={view === 'grid' ? 'grid-button-active' : 'grid-button'}><Icon icon="mdi-light:grid" className="grid-icon" />Grid</button>
+                            <button onClick={() => setView(views.LIST)} className={view === 'list' ? 'list-button-active' : 'list-button'}><Icon icon="mdi-light:menu" className="list-icon" />List</button>
                         </div>
                     </div>
                     <div className="products-content">
-                        {view === 'grid' ? (<div className="products-gridview">
+                        {view === views.GRID ? (<div className="products-gridview">
                             {productsData?.pages.flatMap(page => page.content).map(product => (
                                 <ProductCard key={product.id} product={product} height="350px" width="262px" />
                             ))}
                         </div>) : (<div className="products-listview">
-                            {productsData?.pages.flatMap(page => page.content).map(product => (
+                            {productDataFlatMap.map(product => (
                                 <div className="product-in-list">
                                     <img src={product.url} alt="" srcset="" />
                                     <div className="product-list-content">
