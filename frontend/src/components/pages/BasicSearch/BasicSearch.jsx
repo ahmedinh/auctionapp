@@ -41,10 +41,12 @@ export default function BasicSearch() {
         setSearchParams({ query: name });
     };
 
+    const displaySuggestion = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name;
+
     return (
         <div className="search-page-full">
             <div className="did-you-mean">
-                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name ? (
+                {displaySuggestion ? (
                     <p className="paragraph">Did you mean?&nbsp;
                         <a onClick={handleClick} className="navlink">
                             {thresholdSearchResults?.name}
