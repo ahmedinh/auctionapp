@@ -64,7 +64,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -82,7 +83,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -100,7 +102,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -119,7 +122,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -138,7 +142,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -200,7 +205,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
             INNER JOIN SubCategory s ON p.subCategory.id = s.id
@@ -224,7 +230,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
             INNER JOIN SubCategory s ON p.subCategory.id = s.id
