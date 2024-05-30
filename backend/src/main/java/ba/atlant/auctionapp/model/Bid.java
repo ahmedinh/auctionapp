@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Represents a bid in an auction system.
@@ -28,6 +29,9 @@ public class Bid {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column(name = "bid_timestamp", nullable = false)
+    private LocalDateTime bidTimeStamp;
 
     public Bid() {
     }
@@ -60,5 +64,11 @@ public class Bid {
         this.product = product;
     }
 
+    public LocalDateTime getBidTimeStamp() {
+        return bidTimeStamp;
+    }
 
+    public void setBidTimeStamp(LocalDateTime bidTimeStamp) {
+        this.bidTimeStamp = bidTimeStamp;
+    }
 }

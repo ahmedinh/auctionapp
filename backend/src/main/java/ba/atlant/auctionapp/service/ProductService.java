@@ -118,7 +118,7 @@ public class ProductService {
     }
 
     public ResponseEntity<Map<String, String>> getSuggestion(String query, Integer threshold) {
-        String suggestion = productRepository.getSuggestion(query, threshold, 0);
+        String suggestion = productRepository.getSuggestion(query, threshold, -1);
         Map<String, String> response = Collections.singletonMap("name", suggestion);
         return ResponseEntity.ok(response);
     }
@@ -207,5 +207,10 @@ public class ProductService {
                 recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(0));
         }
         return ResponseEntity.ok(recommendedProducts);
+    }
+
+    public ResponseEntity<List<ProductProjection>> getSimilarProducts(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with provided ID."));
+        return ResponseEntity.ok(productRepository.getSimilarProducts(productId, product.getSubCategory().getCategory().getId()));
     }
 }

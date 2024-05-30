@@ -36,6 +36,7 @@ public class WebSecurityConfiguration {
             "/api/product/user/active",
             "/api/product/user/sold",
             "/api/bid/user/all",
+            "/api/bid/product/all",
             "/api/user/current"
     };
 

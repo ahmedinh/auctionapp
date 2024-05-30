@@ -5,17 +5,22 @@ import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.BidProjection;
+import ba.atlant.auctionapp.projection.BidTableProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
 import ba.atlant.auctionapp.repository.ProductRepository;
 import ba.atlant.auctionapp.request.BidRequest;
 import ba.atlant.auctionapp.response.BidResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,10 +69,20 @@ public class BidService {
             Optional<Bid> optionalBid = bidRepository.findByPersonIdAndProductId(bidRequest.getUserId(),bidRequest.getProductId());
             Bid bid = optionalBid.orElseGet(Bid::new);
             bid.setAmount(bidRequest.getAmount());
+            bid.setBidTimeStamp(LocalDateTime.now());
             bid.setProduct(product);
             bid.setPerson(person);
             bidRepository.save(bid);
         }
         return bidResponse;
+    }
+
+    public ResponseEntity<Page<BidTableProjection>> getProductBids(String token, Long productId, int page, int size) {
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
+        Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
+        if (!product.getPerson().getId().equals(person.getId()))
+            throw new AuthorizationServiceException("Provided person is not the owner of the product.");
+        return ResponseEntity.ok(bidRepository.getBidsByProductId(productId, PageRequest.of(page, size)));
     }
 }

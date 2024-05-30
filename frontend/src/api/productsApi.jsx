@@ -98,7 +98,6 @@ export async function addPicturesToProduct({ productPictures, productName }) {
 
 export async function deleteProduct({ productName }) {
     const userToken = getToken();
-    console.log(productName);
     return axios.delete(`${apiUrl}/api/product/delete`, {
         headers: {
             'Authorization': `Bearer ${userToken}`
@@ -115,4 +114,25 @@ export async function getRecommendedProducts(userId) {
             userId
         }
     }).then(res => res.data);
+}
+
+export async function getSimilarProducts(productId) {
+    return axios.get(`${apiUrl}/api/product/similar`, {
+        params: {
+            productId
+        }
+    }).then(res => res.data);
+}
+
+export async function getProductBids({ productId, page }) {
+    const userToken = getToken();
+    return axios.get(`${apiUrl}/api/bid/product/all`, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        },
+        params: {
+            productId,
+            page
+        }
+    }).then(res => res.data)
 }

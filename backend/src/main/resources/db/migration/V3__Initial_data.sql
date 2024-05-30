@@ -1,8 +1,8 @@
 -- Insertion of person
-INSERT INTO person (first_name, last_name, birth_date, country, email, password, role, active)
-VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true),
-       ('Niko', 'Nikic', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic2@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true),
-       ('John', 'Doe', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic3@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true);
+INSERT INTO person (first_name, last_name, birth_date, country, email, password, role, active, picture_url)
+VALUES ('Ahmedin', 'Hasanovic', '2000-02-22', 'Bosna I Hercegovina', 'ahmedinhasanovic2000@gmail.com', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png'),
+       ('Niko', 'Nikic', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic2@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png'),
+       ('John', 'Doe', '2000-02-22', 'Bosna I Hercegovina', 'ahasanovic3@etf.unsa.ba', '$2a$12$1qbXh50N3q78lZpa4gQ0OOAy37h0F6LuwjVuV/zIp2ejN1YpfYvUe', 'ROLE_USER', true, 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png');
 
 -- Insertion of categories
 INSERT INTO category (name) VALUES
@@ -121,10 +121,10 @@ INSERT INTO product_picture (name, url, product_id) VALUES
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic1.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic1.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic2.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic2.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R')),
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic3.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic3.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R'));
-insert into bid (amount, user_id, product_id)
-values (71.00, 2, 2),
-       (72.00, 2, 3),
-       (533.00, 2, 19),
-       (534.00, 3, 19),
-       (73.00, 2, 4),
-       (75.00, 3, 4);
+insert into bid (amount, user_id, product_id, bid_timestamp)
+values (71.00, 2, 2, '2024-05-05T01:00:00.000'),
+       (72.00, 2, 3, '2024-05-05T01:00:00.000'),
+       (533.00, 2, 19, '2024-05-05T01:00:00.000'),
+       (534.00, 3, 19, '2024-05-05T01:15:00.000'),
+       (73.00, 2, 4, '2024-05-05T01:15:00.000'),
+       (75.00, 3, 4, '2024-05-05T01:20:00.000');

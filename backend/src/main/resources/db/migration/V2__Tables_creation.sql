@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS bid
     amount     DECIMAL                                 NOT NULL,
     user_id    BIGINT                                  NOT NULL,
     product_id BIGINT                                  NOT NULL,
+    bid_timestamp TIMESTAMP WITHOUT TIME ZONE          NOT NULL,
     CONSTRAINT pk_bid PRIMARY KEY (id)
 );
 
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS person
     country          VARCHAR(255),
     role             VARCHAR(255),
     active           BOOLEAN                                 NOT NULL,
+    picture_url VARCHAR(2000),
     CONSTRAINT pk_person PRIMARY KEY (id)
 );
 

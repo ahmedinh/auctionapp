@@ -193,7 +193,7 @@ public class Product {
         this.subCategory = subCategory;
     }
 
-    public Person getUser() {
+    public Person getPerson() {
         return person;
     }
 
