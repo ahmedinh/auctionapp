@@ -11,7 +11,9 @@
         display: flex;
         width: 1120px;
         margin-bottom: 4rem;
+        gap: 24px;
         justify-content: space-between;
+
         .all-filters {
             .product-categories {
                 display: flex;
@@ -19,7 +21,7 @@
                 width: 214px;
                 padding: 24px;
                 border: 1px solid $color-grey;
-    
+
                 &.headline {
                     color: $color-purple;
                     white-space: nowrap;
@@ -28,59 +30,59 @@
                     margin-bottom: 24px;
                     border: none;
                 }
-    
+
                 .item {
                     display: flex;
                     flex-direction: column;
                     gap: 24px;
-    
+
                     .title {
                         display: flex;
                         justify-content: space-between;
                         cursor: pointer;
-    
+
                         p {
                             padding: 0;
                             margin: 0;
                         }
                     }
-    
+
                     .subcategories,
                     .subcategories-show {
                         display: flex;
                         flex-direction: column;
                         gap: 24px;
                     }
-    
+
                     .subcategories {
                         max-height: 0;
                         overflow: hidden;
                         transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-    
+
                         &.show {
                             height: auto;
                             max-height: 9999;
                             transition: all 0.5s cubic-bezier(1, 0, 1, 0);
                         }
-    
+
                     }
-    
+
                     .subitem {
                         display: flex;
                         gap: 8px;
                     }
-    
+
                     .subcategories-show {
                         margin: 0px 0px 24px 0px;
                     }
-    
+
                     p.subcategory {
                         margin: 0;
                         color: $color-grey;
                     }
-    
+
                 }
-    
+
                 ul,
                 li {
                     list-style-type: none;
@@ -89,21 +91,63 @@
                 }
             }
         }
+
         .products-part {
             display: flex;
             flex-direction: column;
             gap: 27px;
+
             .sorting-grid-list {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .view-switch {
+                    display: flex;
+                    gap: 13px;
+
+                    button {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        border: none;
+                        background-color: transparent;
+                        font-size: $font-size-normal;
+                        cursor: pointer;
+
+                        .grid-icon,
+                        .list-icon {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
+                    .grid-button,
+                    .list-button {
+                        color: $color-grey;
+                    }
+
+                    .grid-button-active,
+                    .list-button-active {
+                        color: $color-purple;
+                    }
+
+                    img {
+                        width: 19px;
+                        height: 19px;
+                    }
+                }
+
                 .dropdown-select {
                     font-family: 'Lato', sans-serif;
                     height: 3rem;
                     width: 268px;
-                    flex: 1;
                     font-size: 16px;
                     padding-left: 21px;
                     border: 2px solid $color-white;
                 }
             }
+
             .products-content {
                 display: flex;
                 flex-direction: column;
@@ -118,7 +162,13 @@
                     justify-content: space-between;
                     row-gap: 40px;
                 }
-    
+
+                .products-listview {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+                }
+
                 .explore-more-button {
                     width: 207px;
                     height: 56px;

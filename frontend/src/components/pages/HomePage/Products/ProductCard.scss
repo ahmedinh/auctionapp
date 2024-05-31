@@ -1,24 +1,28 @@
 @import "../../../utilities/Style.scss";
 
+img {
+    width: 262px;
+    height: 350px;
+    object-fit: contain;
+}
+
+h5 {
+    text-align: left;
+    margin: 0;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-large;
+    line-height: $line-height-large;
+    letter-spacing: 0.84px;
+}
+
 .product {
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 12px;
 
-    .picture {
-        width: 262px;
-        height: 262px;
-        object-fit: contain;
-    }
-
-    h5 {
-        text-align: left;
-        font-weight: $font-weight-semibold;
-        font-size: $font-size-large;
-        line-height: $line-height-large;
-        margin: 0;
-        color: $color-black
+    .picture-and-name {
+        cursor: pointer;
     }
 
     p {
@@ -33,5 +37,60 @@
     .price {
         color: $color-purple;
         font-weight: $font-weight-bold
+    }
+}
+
+.product-in-list {
+    display: flex;
+    gap: 24px;
+
+    .product-list-content {
+        display: flex;
+        flex-direction: column;
+        gap: 57px;
+
+        .headline-and-description {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .product-list-description {
+                color: $color-grey;
+                font-size: $font-size-normal;
+                margin: 0;
+            }
+        }
+
+        .start-price {
+            margin: 0;
+            letter-spacing: 0.5px;
+            color: $color-purple;
+            line-height: $line-height-normal;
+            font-size: $font-size-normal;
+            font-weight: $font-weight-semibold;
+        }
+
+        .bid-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 0;
+            font-size: $font-size-normal;
+            width: 71px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid $color-white;
+            cursor: pointer;
+
+            &:hover {
+                border: 2px solid $color-purple;
+            }
+
+            img {
+                height: 24px;
+                width: 24px;
+            }
+        }
     }
 }

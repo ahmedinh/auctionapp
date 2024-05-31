@@ -4,15 +4,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "../HomePage/Products/ProductCard";
 import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWithSubCategories";
 import Form from 'react-bootstrap/Form';
-import { sortProducts } from "../../utilities/Common";
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
+import { Icon } from '@iconify/react';
+import DollarSign from '../../../assets/dollar-sign-2.png';
 
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState();
     const [sortCriteria, setSortCriteria] = useState('');
+    const [view, setView] = useState('grid');
     const navigate = useNavigate();
+
+    const views = {
+        GRID: 'grid',
+        LIST: 'list'
+    }
 
     const {
         status: categoriesStatus,
@@ -75,6 +82,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         return <LoadingSpinner />;
     }
 
+    const productDataFlatMap = productsData?.pages.flatMap(page => page.content);
+
     return (
         <div className="search-page">
             <div className="content">
@@ -110,13 +119,21 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                             <option value='START_PRICE_LOW_TO_HIGH'>Price: Low to High</option>
                             <option value='START_PRICE_HIGH_TO_LOW'>Price: High to Low</option>
                         </Form.Select>
+                        <div className="view-switch">
+                            <button onClick={() => setView(views.GRID)} className={view === 'grid' ? 'grid-button-active' : 'grid-button'}><Icon icon="mdi-light:grid" className="grid-icon" />Grid</button>
+                            <button onClick={() => setView(views.LIST)} className={view === 'list' ? 'list-button-active' : 'list-button'}><Icon icon="mdi-light:menu" className="list-icon" />List</button>
+                        </div>
                     </div>
                     <div className="products-content">
-                        <div className="products-gridview">
-                            {productsData?.pages.flatMap(page => page.content).map(product => (
-                                <ProductCard key={product.id} product={product} height="350px" width="262px" />
+                        {view === views.GRID ? (<div className="products-gridview">
+                            {productDataFlatMap.map(product => (
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={true} />
                             ))}
-                        </div>
+                        </div>) : (<div className="products-listview">
+                            {productDataFlatMap.map(product => (
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={false} />
+                            ))}
+                        </div>)}
                         {hasNextPage && (
                             <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
                                 {isFetchingNextPage ? 'Loading...' : 'Explore More'}
