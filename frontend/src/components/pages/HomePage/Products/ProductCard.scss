@@ -21,6 +21,10 @@ h5 {
     flex-direction: column;
     gap: 12px;
 
+    .picture-and-name {
+        cursor: pointer;
+    }
+
     p {
         margin: 0;
         text-align: left;
