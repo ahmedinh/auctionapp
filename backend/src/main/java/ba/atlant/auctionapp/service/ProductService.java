@@ -208,8 +208,4 @@ public class ProductService {
         }
         return ResponseEntity.ok(recommendedProducts);
     }
-
-    public ResponseEntity filterProducts(List<Long> subCategoryIds) {
-        return ResponseEntity.ok("Nisticaaa");
-    }
 }

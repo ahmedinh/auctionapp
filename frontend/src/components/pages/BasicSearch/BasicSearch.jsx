@@ -15,6 +15,7 @@ export default function BasicSearch() {
 
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
     const {
         data: basicSearchResults,
@@ -24,7 +25,7 @@ export default function BasicSearch() {
         fetchNextPage,
         isFetchingNextPage,
         refetch
-    } = useBasicSearch(query, sortField, sortDirection);
+    } = useBasicSearch(query, sortField, sortDirection, selectedSubCategories);
     
     const {
         data: thresholdSearchResults
@@ -41,10 +42,14 @@ export default function BasicSearch() {
         setSearchParams({ query: name });
     };
 
+    useEffect(() => {
+        setSelectedSubCategories([]);
+    }, [query]);
+
     return (
         <div className="search-page-full">
             <div className="did-you-mean">
-                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name ? (
+                {basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && selectedSubCategories.length === 0 ? (
                     <p className="paragraph">Did you mean?&nbsp;
                         <a onClick={handleClick} className="navlink">
                             {thresholdSearchResults?.name}
@@ -63,6 +68,8 @@ export default function BasicSearch() {
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 onSortChange={handleSortChange}
+                selectedSubCategories={selectedSubCategories}
+                setSelectedSubCategories={setSelectedSubCategories}
             />
         </div>
     );

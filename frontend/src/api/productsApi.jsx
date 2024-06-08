@@ -38,20 +38,24 @@ export async function getProductsForCategory({ page, size = 9, categoryId, sortF
         sortField,
         sortDirection,
     };
-
     if (subCategoryIds && subCategoryIds.length > 0) {
         params.subCategoryIds = subCategoryIds.join(',');
     }
-
-    return axios.get(`${apiUrl}/api/product/all/category`, { params })
-        .then(res => res.data);
-
+    return axios.get(`${apiUrl}/api/product/all/category`, { params }).then(res => res.data);
 }
 
-export async function searchProducts({ page, size, query, sortField, sortDirection }) {
-    return axios.get(`${apiUrl}/api/product/search-products`, {
-        params: { page, size, query, sortField, sortDirection }
-    }).then(res => res.data);
+export async function searchProducts({ page, size, query, sortField, sortDirection, subCategoryIds }) {
+    const params = {
+        page,
+        size,
+        query,
+        sortField,
+        sortDirection,
+    };
+    if (subCategoryIds && subCategoryIds.length > 0) {
+        params.subCategoryIds = subCategoryIds.join(',');
+    }
+    return axios.get(`${apiUrl}/api/product/search-products`, { params }).then(res => res.data);
 };
 
 export async function searchSuggestion({ query }) {
