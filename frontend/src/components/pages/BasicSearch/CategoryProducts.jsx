@@ -8,6 +8,7 @@ export default function CategoryProducts() {
     const categoryId = urlCategoryId ? urlCategoryId : 0;
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
     const {
         data,
@@ -17,7 +18,7 @@ export default function CategoryProducts() {
         isFetchingNextPage,
         status,
         refetch
-    } = useCategoryProducts(categoryId, sortField, sortDirection);
+    } = useCategoryProducts(categoryId, sortField, sortDirection, selectedSubCategories);
 
     const handleSortChange = (field, direction) => {
         setSortField(field);
@@ -34,6 +35,8 @@ export default function CategoryProducts() {
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 onSortChange={handleSortChange}
+                selectedSubCategories={selectedSubCategories}
+                setSelectedSubCategories={setSelectedSubCategories}
             />
         </div>
     );

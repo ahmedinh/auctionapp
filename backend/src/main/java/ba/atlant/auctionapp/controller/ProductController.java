@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
@@ -73,8 +75,15 @@ public class ProductController {
             @RequestParam(defaultValue = "1") Long categoryId,
             @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "asc") String sortDirection,
-            @Nullable @RequestParam List<Long> subCategoryIds) {
-        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIds);
+            @Nullable @RequestParam String subCategoryIds) {
+
+        List<Long> subCategoryIdList = null;
+        if (subCategoryIds != null && !subCategoryIds.isEmpty()) {
+            subCategoryIdList = Arrays.stream(subCategoryIds.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+        }
+        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIdList);
     }
 
 
@@ -99,8 +108,9 @@ public class ProductController {
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query,
                                                                   @RequestParam(defaultValue = "name") String sortField,
-                                                                  @RequestParam(defaultValue = "asc") String sortDirection){
-        return productService.searchProducts(page, size, query, sortField, sortDirection);
+                                                                  @RequestParam(defaultValue = "asc") String sortDirection,
+                                                                  @Nullable @RequestParam List<Long> subCategoryIds){
+        return productService.searchProducts(page, size, query, sortField, sortDirection, subCategoryIds);
     }
 
     @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

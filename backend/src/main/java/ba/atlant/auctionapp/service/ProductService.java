@@ -124,12 +124,12 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductProjection>> searchProducts(
-            int page, int size, String query, String sortField, String sortDirection) {
+            int page, int size, String query, String sortField, String sortDirection, List<Long> subCategoryIds) {
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
         if (sortField.equalsIgnoreCase("auctionEnd"))
-            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, pageable));
+            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, subCategoryIds, pageable));
         else
-            return ResponseEntity.ok(productRepository.searchProducts(query, pageable));
+            return ResponseEntity.ok(productRepository.searchProducts(query, subCategoryIds, pageable));
     }
 
     private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {

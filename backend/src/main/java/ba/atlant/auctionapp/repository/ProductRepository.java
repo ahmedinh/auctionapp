@@ -68,8 +68,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
-            WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id)) AND (p.subCategory.category.id = :categoryId
-            OR (p.subCategory.id IN :subCategoryIds))
+            WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL AND p.subCategory.category.id = :categoryId) OR (p.subCategory.id IN :subCategoryIds))
             """)
     Page<ProductProjection> getProductsForCategory(@Param("categoryId") Long categoryId, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
 
@@ -88,7 +88,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND p.subCategory.id IN :subCategoryIds
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
             """)
     Page<ProductProjection> getProductsForAllCategories(@Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
 
@@ -107,7 +107,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
             WHERE p.subCategory.category.id = :categoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND p.subCategory.id IN :subCategoryIds
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL AND p.subCategory.category.id = :categoryId) OR (p.subCategory.id IN :subCategoryIds))
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForCategoryWithFutureAuctionEnd(@Param("categoryId") Long categoryId, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
@@ -127,7 +127,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
-            AND p.subCategory.id IN :subCategoryIds
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
     Page<ProductProjection> getProductsForAllCategoriesWithFutureAuctionEnd(@Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
@@ -216,8 +216,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
             OR LOWER(s.name) LIKE LOWER(:query)
             OR LOWER(c.name) LIKE LOWER(:query))
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
             """)
-    Page<ProductProjection> searchProducts(@Param("query") String query, Pageable pageable);
+    Page<ProductProjection> searchProducts(@Param("query") String query, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
 
     @Query(value = """
             SELECT p.id as id,
@@ -240,9 +241,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             OR LOWER(CONCAT(c.name, ' ', s.name)) LIKE LOWER(:query)
             OR LOWER(s.name) LIKE LOWER(:query)
             OR LOWER(c.name) LIKE LOWER(:query))
+            AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
-    Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query, Pageable pageable);
+    Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
 
     @Query("""
             SELECT p.id as id,

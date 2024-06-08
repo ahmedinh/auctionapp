@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 
-export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange }) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState(null);
     const [minValue, setMinValue] = useState(0);
@@ -27,6 +27,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             const index = categoriesData.findIndex(item => item.id.toString() === categoryId);
             if (index !== -1) {
                 setSelected(index);
+                setExpandedCategories([categoriesData[index].id]);
             }
         }
     }, [categoriesData, categoryId]);
@@ -99,12 +100,23 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         } else {
             setExpandedCategories([categoryId]);
         }
+        setSelectedSubCategories([]);
         navigate(`/shop/categories/${categoryId}`);
     };
 
     if (categoriesStatus === 'pending' || productsStatus === 'pending') {
         return <LoadingSpinner />;
     }
+
+    const handleSubCategoryChange = (event) => {
+        const { id, checked } = event.target;
+        const subcategoryId = Number(id);
+        if (checked) {
+            setSelectedSubCategories([...selectedSubCategories, subcategoryId]);
+        } else {
+            setSelectedSubCategories(selectedSubCategories.filter(id => id !== subcategoryId));
+        }
+    };
 
     return (
         <div className="search-page">
@@ -119,10 +131,10 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                     <span onClick={() => toggleCategory(item.id)}>{expandedCategories.includes(item.id) ? '-' : '+'}</span>
                                 </div>
                                 <div className={expandedCategories.includes(item.id) ? 'subcategories-show' : 'subcategories'}>
-                                    {item.subCategoryProjectionList.map((item2, i) => (
+                                    {item.subCategoryProjectionList.map((subCategoryItem, i) => (
                                         <div className="subitem" key={i}>
-                                            <input type="checkbox" id={`subcategory-${item2.id}`} name={`subcategory-${item2.id}`} value={item2.name} />
-                                            <p className="subcategory">{item2.name} ({item2.noOfProducts})</p>
+                                            <input type="checkbox" id={subCategoryItem.id} name={`subcategory-${subCategoryItem.id}`} value={subCategoryItem.name} onChange={handleSubCategoryChange} checked={selectedSubCategories.includes(subCategoryItem.id)} />
+                                            <p className="subcategory">{subCategoryItem.name} ({subCategoryItem.noOfProducts})</p>
                                         </div>
                                     ))}
                                 </div>
