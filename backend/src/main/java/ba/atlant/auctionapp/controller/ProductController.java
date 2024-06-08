@@ -13,12 +13,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +77,9 @@ public class ProductController {
             @RequestParam(defaultValue = "1") Long categoryId,
             @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "asc") String sortDirection,
-            @Nullable @RequestParam String subCategoryIds) {
+            @Nullable @RequestParam String subCategoryIds,
+            @RequestParam(defaultValue = "0") BigDecimal minPrice,
+            @RequestParam(defaultValue = "999999999") BigDecimal maxPrice) {
 
         List<Long> subCategoryIdList = null;
         if (subCategoryIds != null && !subCategoryIds.isEmpty()) {
@@ -83,9 +87,8 @@ public class ProductController {
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
         }
-        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIdList);
+        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIdList, minPrice, maxPrice);
     }
-
 
     @GetMapping("/all/sub-category")
     @Operation(summary = "All products for subcategory")
@@ -109,14 +112,16 @@ public class ProductController {
                                                                   @RequestParam("query") String query,
                                                                   @RequestParam(defaultValue = "name") String sortField,
                                                                   @RequestParam(defaultValue = "asc") String sortDirection,
-                                                                  @Nullable @RequestParam String subCategoryIds){
+                                                                  @Nullable @RequestParam String subCategoryIds,
+                                                                  @RequestParam(defaultValue = "0") BigDecimal minPrice,
+                                                                  @RequestParam(defaultValue = "999999999") BigDecimal maxPrice){
         List<Long> subCategoryIdList = null;
         if (subCategoryIds != null && !subCategoryIds.isEmpty()) {
             subCategoryIdList = Arrays.stream(subCategoryIds.split(","))
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
         }
-        return productService.searchProducts(page, size, query, sortField, sortDirection, subCategoryIdList);
+        return productService.searchProducts(page, size, query, sortField, sortDirection, subCategoryIdList, minPrice, maxPrice);
     }
 
     @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

@@ -30,13 +30,15 @@ export async function getProduct({ productId }) {
     }).then(res => res.data);
 }
 
-export async function getProductsForCategory({ page, size = 9, categoryId, sortField, sortDirection, subCategoryIds }) {
+export async function getProductsForCategory({ page, size = 9, categoryId, sortField, sortDirection, subCategoryIds, minValue, maxValue }) {
     const params = {
         page,
         size,
         categoryId,
         sortField,
         sortDirection,
+        minPrice: minValue,
+        maxPrice: maxValue,
     };
     if (subCategoryIds && subCategoryIds.length > 0) {
         params.subCategoryIds = subCategoryIds.join(',');
@@ -44,13 +46,15 @@ export async function getProductsForCategory({ page, size = 9, categoryId, sortF
     return axios.get(`${apiUrl}/api/product/all/category`, { params }).then(res => res.data);
 }
 
-export async function searchProducts({ page, size, query, sortField, sortDirection, subCategoryIds }) {
+export async function searchProducts({ page, size, query, sortField, sortDirection, subCategoryIds, minValue, maxValue }) {
     const params = {
         page,
         size,
         query,
         sortField,
         sortDirection,
+        minPrice: minValue,
+        maxPrice: maxValue,
     };
     if (subCategoryIds && subCategoryIds.length > 0) {
         params.subCategoryIds = subCategoryIds.join(',');

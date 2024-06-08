@@ -7,13 +7,14 @@ import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 
-export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories }) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, setPriceChangedFlag }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState(null);
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(1000);
     const [expandedCategories, setExpandedCategories] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('');
+    const [showApplyButton, setShowApplyButton] = useState(false);
+    const [initialMinValue, setInitialMinValue] = useState(minValue);
+    const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
     const navigate = useNavigate();
 
     const {
@@ -43,12 +44,20 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const handleInput = (e) => {
         setMinValue(e.minValue);
         setMaxValue(e.maxValue);
+        if (e.minValue !== initialMinValue || e.maxValue !== initialMaxValue) {
+            setPriceChangedFlag(true);
+            setShowApplyButton(true);
+        }
     };
 
     const handleMinChange = (event) => {
         const value = Number(event.target.value);
         if (value <= maxValue) {
             setMinValue(value);
+            if (value !== initialMinValue) {
+                setPriceChangedFlag(true);
+                setShowApplyButton(true);
+            }
         } else {
             setMinValue(maxValue);
         }
@@ -58,9 +67,20 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         const value = Number(event.target.value);
         if (value >= minValue) {
             setMaxValue(value);
+            if (value !== initialMaxValue) {
+                setPriceChangedFlag(true);
+                setShowApplyButton(true);
+            }
         } else {
             setMaxValue(minValue);
         }
+    };
+
+    const handleApplyClick = () => {
+        refetch();
+        setInitialMinValue(minValue);
+        setInitialMaxValue(maxValue);
+        setShowApplyButton(false);
     };
 
     const handleSortChange = (event) => {
@@ -175,6 +195,9 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 }}
                             />
                         </div>
+                        {showApplyButton && (
+                            <button className="apply-price-button" onClick={handleApplyClick}>APPLY</button>
+                        )}
                     </div>
                 </div>
                 <div className="products-part">

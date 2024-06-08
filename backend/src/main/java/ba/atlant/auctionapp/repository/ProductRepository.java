@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,8 +71,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL AND p.subCategory.category.id = :categoryId) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             """)
-    Page<ProductProjection> getProductsForCategory(@Param("categoryId") Long categoryId, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> getProductsForCategory(@Param("categoryId") Long categoryId,
+                                                   @Param("subCategoryIds") List<Long> subCategoryIds,
+                                                   @Param("minPrice") BigDecimal minPrice,
+                                                   @Param("maxPrice") BigDecimal maxPrice,
+                                                   Pageable pageable);
 
     @Query("""
             SELECT p.id as id,
@@ -89,8 +95,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             """)
-    Page<ProductProjection> getProductsForAllCategories(@Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> getProductsForAllCategories(@Param("subCategoryIds") List<Long> subCategoryIds,
+                                                        @Param("minPrice") BigDecimal minPrice,
+                                                        @Param("maxPrice") BigDecimal maxPrice,
+                                                        Pageable pageable);
 
     @Query("""
             SELECT p.id as id,
@@ -108,9 +118,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ON p.id = i.product.id
             WHERE p.subCategory.category.id = :categoryId AND i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL AND p.subCategory.category.id = :categoryId) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
-    Page<ProductProjection> getProductsForCategoryWithFutureAuctionEnd(@Param("categoryId") Long categoryId, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> getProductsForCategoryWithFutureAuctionEnd(@Param("categoryId") Long categoryId,
+                                                                       @Param("subCategoryIds") List<Long> subCategoryIds,
+                                                                       @Param("minPrice") BigDecimal minPrice,
+                                                                       @Param("maxPrice") BigDecimal maxPrice,
+                                                                       Pageable pageable);
 
     @Query("""
             SELECT p.id as id,
@@ -128,9 +143,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             ON p.id = i.product.id
             WHERE i.id = ((SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
-    Page<ProductProjection> getProductsForAllCategoriesWithFutureAuctionEnd(@Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> getProductsForAllCategoriesWithFutureAuctionEnd(@Param("subCategoryIds") List<Long> subCategoryIds,
+                                                                            @Param("minPrice") BigDecimal minPrice,
+                                                                            @Param("maxPrice") BigDecimal maxPrice,
+                                                                            Pageable pageable);
 
     @Query("""
             SELECT p.id as id,
@@ -217,8 +236,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             OR LOWER(s.name) LIKE LOWER(:query)
             OR LOWER(c.name) LIKE LOWER(:query))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             """)
-    Page<ProductProjection> searchProducts(@Param("query") String query, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> searchProducts(@Param("query") String query,
+                                           @Param("subCategoryIds") List<Long> subCategoryIds,
+                                           @Param("minPrice") BigDecimal minPrice,
+                                           @Param("maxPrice") BigDecimal maxPrice,
+                                           Pageable pageable);
 
     @Query(value = """
             SELECT p.id as id,
@@ -242,9 +266,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             OR LOWER(s.name) LIKE LOWER(:query)
             OR LOWER(c.name) LIKE LOWER(:query))
             AND ((COALESCE(:subCategoryIds, NULL) IS NULL) OR (p.subCategory.id IN :subCategoryIds))
+            AND (p.startPrice >= :minPrice AND p.startPrice <= :maxPrice)
             ORDER BY (CASE WHEN p.auctionEnd >= CURRENT_TIMESTAMP THEN 0 ELSE 1 END), p.auctionEnd ASC
             """)
-    Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query, @Param("subCategoryIds") List<Long> subCategoryIds, Pageable pageable);
+    Page<ProductProjection> searchProductsWithFutureAuctionEnd(@Param("query") String query,
+                                                               @Param("subCategoryIds") List<Long> subCategoryIds,
+                                                               @Param("minPrice") BigDecimal minPrice,
+                                                               @Param("maxPrice") BigDecimal maxPrice,
+                                                               Pageable pageable);
 
     @Query("""
             SELECT p.id as id,

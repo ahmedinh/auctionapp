@@ -92,7 +92,7 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductProjection>> getProductsForCategory(
-            int page, int size, Long categoryId, String sortField, String sortDirection, List<Long> subCategoryIds) {
+            int page, int size, Long categoryId, String sortField, String sortDirection, List<Long> subCategoryIds, BigDecimal minPrice, BigDecimal maxPrice) {
 
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
 
@@ -102,12 +102,12 @@ public class ProductService {
 
         if (isAllCategories) {
             products = isAuctionEndSort
-                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(subCategoryIds, pageable)
-                    : productRepository.getProductsForAllCategories(subCategoryIds, pageable);
+                    ? productRepository.getProductsForAllCategoriesWithFutureAuctionEnd(subCategoryIds, minPrice, maxPrice, pageable)
+                    : productRepository.getProductsForAllCategories(subCategoryIds, minPrice, maxPrice, pageable);
         } else {
             products = isAuctionEndSort
-                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, subCategoryIds, pageable)
-                    : productRepository.getProductsForCategory(categoryId, subCategoryIds, pageable);
+                    ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, subCategoryIds, minPrice, maxPrice, pageable)
+                    : productRepository.getProductsForCategory(categoryId, subCategoryIds, minPrice, maxPrice, pageable);
         }
         return ResponseEntity.ok(products);
     }
@@ -124,12 +124,12 @@ public class ProductService {
     }
 
     public ResponseEntity<Page<ProductProjection>> searchProducts(
-            int page, int size, String query, String sortField, String sortDirection, List<Long> subCategoryIds) {
+            int page, int size, String query, String sortField, String sortDirection, List<Long> subCategoryIds, BigDecimal minPrice, BigDecimal maxPrice) {
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
         if (sortField.equalsIgnoreCase("auctionEnd"))
-            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, subCategoryIds, pageable));
+            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, subCategoryIds, minPrice, maxPrice, pageable));
         else
-            return ResponseEntity.ok(productRepository.searchProducts(query, subCategoryIds, pageable));
+            return ResponseEntity.ok(productRepository.searchProducts(query, subCategoryIds, minPrice, maxPrice, pageable));
     }
 
     private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {

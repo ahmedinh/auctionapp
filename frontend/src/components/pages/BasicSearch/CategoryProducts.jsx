@@ -9,6 +9,9 @@ export default function CategoryProducts() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+    const [minValue, setMinValue] = useState(0);
+    const [maxValue, setMaxValue] = useState(1000);
+    const [priceChangedFlag, setPriceChangedFlag] = useState(false);
 
     const {
         data,
@@ -18,7 +21,7 @@ export default function CategoryProducts() {
         isFetchingNextPage,
         status,
         refetch
-    } = useCategoryProducts(categoryId, sortField, sortDirection, selectedSubCategories);
+    } = useCategoryProducts(categoryId, sortField, sortDirection, selectedSubCategories, minValue, maxValue);
 
     const handleSortChange = (field, direction) => {
         setSortField(field);
@@ -37,6 +40,12 @@ export default function CategoryProducts() {
                 onSortChange={handleSortChange}
                 selectedSubCategories={selectedSubCategories}
                 setSelectedSubCategories={setSelectedSubCategories}
+                minValue={minValue}
+                setMinValue={setMinValue}
+                maxValue={maxValue}
+                setMaxValue={setMaxValue}
+                refetch={refetch}
+                setPriceChangedFlag={setPriceChangedFlag}
             />
         </div>
     );

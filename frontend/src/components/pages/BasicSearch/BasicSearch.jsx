@@ -16,6 +16,9 @@ export default function BasicSearch() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+    const [minValue, setMinValue] = useState(0);
+    const [maxValue, setMaxValue] = useState(1000);
+    const [priceChangedFlag, setPriceChangedFlag] = useState(false);
 
     const {
         data: basicSearchResults,
@@ -25,7 +28,7 @@ export default function BasicSearch() {
         fetchNextPage,
         isFetchingNextPage,
         refetch
-    } = useBasicSearch(query, sortField, sortDirection, selectedSubCategories);
+    } = useBasicSearch(query, sortField, sortDirection, selectedSubCategories, minValue, maxValue);
     
     const {
         data: thresholdSearchResults
@@ -46,7 +49,7 @@ export default function BasicSearch() {
         setSelectedSubCategories([]);
     }, [query]);
 
-    const showDidYouMean = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && selectedSubCategories.length === 0;
+    const showDidYouMean = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && selectedSubCategories.length === 0 && !priceChangedFlag;
 
     return (
         <div className="search-page-full">
@@ -72,6 +75,12 @@ export default function BasicSearch() {
                 onSortChange={handleSortChange}
                 selectedSubCategories={selectedSubCategories}
                 setSelectedSubCategories={setSelectedSubCategories}
+                minValue={minValue}
+                setMinValue={setMinValue}
+                maxValue={maxValue}
+                setMaxValue={setMaxValue}
+                refetch={refetch}
+                setPriceChangedFlag={setPriceChangedFlag}
             />
         </div>
     );

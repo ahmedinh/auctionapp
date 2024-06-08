@@ -125,6 +125,15 @@
                         background-color: $color-purple;
                     }
                 }
+
+                .apply-price-button {
+                    height: 50px;
+                    font-size: $font-size-normal;
+                    border: none;
+                    background-color: $color-purple;
+                    color: #fff;
+                    font-weight: $font-weight-semibold;
+                }
             }
         }
 
