@@ -17,7 +17,7 @@ export default function BasicSearch() {
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
     const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(1000);
+    const [maxValue, setMaxValue] = useState(1500);
     const [priceChangedFlag, setPriceChangedFlag] = useState(false);
 
     const {

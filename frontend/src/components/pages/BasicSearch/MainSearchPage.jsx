@@ -6,6 +6,7 @@ import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWith
 import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, setPriceChangedFlag }) {
     const { categoryId } = useParams();
@@ -15,6 +16,10 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [showApplyButton, setShowApplyButton] = useState(false);
     const [initialMinValue, setInitialMinValue] = useState(minValue);
     const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
+    const [sortFieldHelp, setSortFieldHelp] = useState('name');
+    const [sortDirectionHelp, setSortDirectionHelp] = useState('ASC');
+    const [priceApplied, setPriceApplied] = useState(false);
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const {
@@ -78,9 +83,10 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
 
     const handleApplyClick = () => {
         refetch();
-        setInitialMinValue(minValue);
-        setInitialMaxValue(maxValue);
         setShowApplyButton(false);
+        setInitialMinValue(minValue);
+        setInitialMaxValue(maxValue)
+        setPriceApplied(minValue !== 0 || maxValue !== 1500);
     };
 
     const handleSortChange = (event) => {
@@ -109,6 +115,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 sortDirection = 'ASC';
                 break;
         }
+        setSortFieldHelp(sortField);
+        setSortDirectionHelp(sortDirection);
         setSortCriteria(value);
         onSortChange(sortField, sortDirection);
     };
@@ -137,6 +145,22 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setSelectedSubCategories(selectedSubCategories.filter(id => id !== subcategoryId));
         }
     };
+
+    const handleRemoveSubCategory = (subcategoryId) => {
+        setSelectedSubCategories(selectedSubCategories.filter(id => id !== subcategoryId));
+    };
+
+    const handleRemovePriceFilter = () => {
+        refetch();
+        setMinValue(0);
+        setMaxValue(1500);
+        setPriceApplied(false);
+    };
+
+    const handleClearAllFilters = () => {
+        setSelectedSubCategories([]);
+        handleRemovePriceFilter();
+    }
 
     return (
         <div className="search-page">
@@ -169,7 +193,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 value={minValue}
                                 onChange={handleMinChange}
                                 min="0"
-                                max="1000"
                                 className="min-input"
                             />
                             <span>-</span>
@@ -178,14 +201,13 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 value={maxValue}
                                 onChange={handleMaxChange}
                                 min="0"
-                                max="1000"
                                 className="max-input"
                             />
                         </div>
                         <div className="spinner">
                             <MultiRangeSlider
                                 min={0}
-                                max={1000}
+                                max={1500}
                                 step={1}
                                 minValue={minValue}
                                 maxValue={maxValue}
@@ -202,6 +224,41 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 </div>
                 <div className="products-part">
                     {productsStatus === 'loading' && <p>Loading...</p>}
+                    <div className="filter-tags-bar">
+                        {selectedSubCategories.length > 0 && (
+                            <div className="filter-category">
+                                <span className="tag-headline">Category</span>
+                                <div className="tag-content">
+                                    {selectedSubCategories.map(id => {
+                                        const category = categoriesData?.find(category =>
+                                            category.subCategoryProjectionList.some(sub => sub.id === id)
+                                        );
+                                        const subCategory = category?.subCategoryProjectionList.find(sub => sub.id === id);
+                                        return subCategory ? (
+                                            <span key={id} className="tag">
+                                                {category.name}/{subCategory.name}
+                                                <span className="remove-tag" onClick={() => handleRemoveSubCategory(id)}>X</span>
+                                            </span>
+                                        ) : null;
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                        {priceApplied && (
+                            <div className="filter-price">
+                                <span className="tag-headline">Price Range: </span>
+                                <span className="tag">
+                                    ${minValue}-${maxValue}
+                                    <span className="remove-tag" onClick={handleRemovePriceFilter}>X</span>
+                                </span>
+                            </div>
+                        )}
+                        {(selectedSubCategories.length > 0 || priceApplied) && (
+                            <div className="clear-all-section">
+                                <button onClick={handleClearAllFilters}><p>Clear all</p><span className="remove-tag">X</span></button>
+                            </div>
+                        )}
+                    </div>
                     <div className="sorting-grid-list">
                         <Form.Select className="dropdown-select" value={sortCriteria} onChange={handleSortChange}>
                             <option>Default Sorting</option>
