@@ -18,6 +18,7 @@
             display: flex;
             flex-direction: column;
             gap: 27px;
+
             .product-categories {
                 display: flex;
                 flex-direction: column;
@@ -99,14 +100,17 @@
                 gap: 2rem;
                 padding: 24px 24px 32px 24px;
                 border: 1px solid $color-white;
+
                 .price-range-text {
                     margin: 0;
                 }
+
                 .numbers {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     height: 3rem;
+
                     input {
                         border: 1px solid $color-grey;
                         height: 46px;
@@ -116,11 +120,13 @@
                         width: 88px;
                     }
                 }
+
                 .spinner {
                     .multi-range-slider {
                         box-shadow: none;
                         border: none;
                     }
+
                     .bar-inner {
                         background-color: $color-purple;
                     }
@@ -165,13 +171,16 @@
                     font-weight: 400;
                 }
 
-                .filter-category, .filter-price {
+                .filter-category,
+                .filter-price {
                     display: flex;
                     flex-direction: column;
                 }
 
-                .filter-category, .filter-price {
+                .filter-category,
+                .filter-price {
                     width: 220px;
+
                     .tag {
                         display: flex;
                         justify-content: space-between;
@@ -181,11 +190,13 @@
                 .clear-all-section {
                     display: flex;
                     align-items: center;
+
                     button {
                         p {
                             margin: 0;
                             color: $color-grey;
                         }
+
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
@@ -267,6 +278,7 @@
 
                 .products-listview {
                     display: flex;
+                    width: 834px;
                     flex-direction: column;
                     gap: 24px;
                 }
