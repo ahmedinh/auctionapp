@@ -8,7 +8,6 @@ import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Icon } from '@iconify/react';
-import DollarSign from '../../../assets/dollar-sign-2.png';
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
