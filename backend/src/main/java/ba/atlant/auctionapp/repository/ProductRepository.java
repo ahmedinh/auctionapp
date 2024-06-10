@@ -218,7 +218,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     """, nativeQuery = true)
     String getSuggestion(@Param("query") String query, @Param("maxThreshold") Integer maxThreshold, @Param("minThreshold") Integer minThreshold);
 
-
     @Query(value = """
             SELECT p.id as id,
             p.name as name,
@@ -260,7 +259,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.url as url,
+            (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
             INNER JOIN SubCategory s ON p.subCategory.id = s.id
