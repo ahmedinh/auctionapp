@@ -8,12 +8,11 @@ import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, setPriceChangedFlag }) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState(null);
     const [expandedCategories, setExpandedCategories] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('');
-    const [showApplyButton, setShowApplyButton] = useState(false);
     const [initialMinValue, setInitialMinValue] = useState(minValue);
     const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
     const [sortFieldHelp, setSortFieldHelp] = useState('name');
@@ -46,12 +45,25 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         }
     };
 
+    const debounceTimeout = 1000;
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
+                refetch();
+                setPriceApplied(minValue !== 0 || maxValue !== 1500);
+            }
+        }, debounceTimeout);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [minValue, maxValue, refetch, initialMinValue, initialMaxValue]);
+
     const handleInput = (e) => {
         setMinValue(e.minValue);
         setMaxValue(e.maxValue);
         if (e.minValue !== initialMinValue || e.maxValue !== initialMaxValue) {
             setPriceChangedFlag(true);
-            setShowApplyButton(true);
         }
     };
 
@@ -61,7 +73,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMinValue(value);
             if (value !== initialMinValue) {
                 setPriceChangedFlag(true);
-                setShowApplyButton(true);
             }
         } else {
             setMinValue(maxValue);
@@ -74,19 +85,10 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMaxValue(value);
             if (value !== initialMaxValue) {
                 setPriceChangedFlag(true);
-                setShowApplyButton(true);
             }
         } else {
             setMaxValue(minValue);
         }
-    };
-
-    const handleApplyClick = () => {
-        refetch();
-        setShowApplyButton(false);
-        setInitialMinValue(minValue);
-        setInitialMaxValue(maxValue)
-        setPriceApplied(minValue !== 0 || maxValue !== 1500);
     };
 
     const handleSortChange = (event) => {
@@ -151,16 +153,26 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     };
 
     const handleRemovePriceFilter = () => {
-        refetch();
         setMinValue(0);
         setMaxValue(1500);
         setPriceApplied(false);
+        setPriceChangedFlag(false);
+        const handler = setTimeout(() => {
+            if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
+                refetch();
+                setPriceApplied(minValue !== 0 || maxValue !== 1500);
+            }
+        }, 1);
+
+        return () => {
+            clearTimeout(handler);
+        };
     };
 
     const handleClearAllFilters = () => {
         setSelectedSubCategories([]);
         handleRemovePriceFilter();
-    }
+    };
 
     return (
         <div className="search-page">
@@ -217,9 +229,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 }}
                             />
                         </div>
-                        {showApplyButton && (
-                            <button className="apply-price-button" onClick={handleApplyClick}>APPLY</button>
-                        )}
                     </div>
                 </div>
                 <div className="products-part">
@@ -244,7 +253,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </div>
                             </div>
                         )}
-                        {priceApplied && (
+                        {priceApplied && priceChangedFlag && (
                             <div className="filter-price">
                                 <span className="tag-headline">Price Range: </span>
                                 <span className="tag">
@@ -253,7 +262,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </span>
                             </div>
                         )}
-                        {(selectedSubCategories.length > 0 || priceApplied) && (
+                        {(selectedSubCategories.length > 0 || (priceApplied && priceChangedFlag)) && (
                             <div className="clear-all-section">
                                 <button onClick={handleClearAllFilters}><p>Clear all</p><span className="remove-tag">X</span></button>
                             </div>

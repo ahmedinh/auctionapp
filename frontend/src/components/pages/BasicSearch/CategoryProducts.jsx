@@ -45,6 +45,7 @@ export default function CategoryProducts() {
                 maxValue={maxValue}
                 setMaxValue={setMaxValue}
                 refetch={refetch}
+                priceChangedFlag={priceChangedFlag}
                 setPriceChangedFlag={setPriceChangedFlag}
             />
         </div>

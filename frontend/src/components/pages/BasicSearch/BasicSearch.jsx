@@ -80,6 +80,7 @@ export default function BasicSearch() {
                 maxValue={maxValue}
                 setMaxValue={setMaxValue}
                 refetch={refetch}
+                priceChangedFlag={priceChangedFlag}
                 setPriceChangedFlag={setPriceChangedFlag}
             />
         </div>
