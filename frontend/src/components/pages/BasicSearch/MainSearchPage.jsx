@@ -7,6 +7,8 @@ import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Icon } from '@iconify/react';
+import DollarSign from '../../../assets/dollar-sign-2.png';
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
@@ -19,7 +21,13 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [sortDirectionHelp, setSortDirectionHelp] = useState('ASC');
     const [priceApplied, setPriceApplied] = useState(false);
     const queryClient = useQueryClient();
+    const [view, setView] = useState('grid');
     const navigate = useNavigate();
+
+    const views = {
+        GRID: 'grid',
+        LIST: 'list'
+    }
 
     const {
         status: categoriesStatus,
@@ -173,6 +181,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         setSelectedSubCategories([]);
         handleRemovePriceFilter();
     };
+    const productDataFlatMap = productsData?.pages.flatMap(page => page.content);
 
     return (
         <div className="search-page">
@@ -276,13 +285,21 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                             <option value='START_PRICE_LOW_TO_HIGH'>Price: Low to High</option>
                             <option value='START_PRICE_HIGH_TO_LOW'>Price: High to Low</option>
                         </Form.Select>
+                        <div className="view-switch">
+                            <button onClick={() => setView(views.GRID)} className={view === 'grid' ? 'grid-button-active' : 'grid-button'}><Icon icon="mdi-light:grid" className="grid-icon" />Grid</button>
+                            <button onClick={() => setView(views.LIST)} className={view === 'list' ? 'list-button-active' : 'list-button'}><Icon icon="mdi-light:menu" className="list-icon" />List</button>
+                        </div>
                     </div>
                     <div className="products-content">
-                        <div className="products-gridview">
-                            {productsData?.pages.flatMap(page => page.content).map(product => (
-                                <ProductCard key={product.id} product={product} height="350px" width="262px" />
+                        {view === views.GRID ? (<div className="products-gridview">
+                            {productDataFlatMap.map(product => (
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={true} />
                             ))}
-                        </div>
+                        </div>) : (<div className="products-listview">
+                            {productDataFlatMap.map(product => (
+                                <ProductCard key={product.id} product={product} height="350px" width="262px" grid={false} />
+                            ))}
+                        </div>)}
                         {hasNextPage && (
                             <button className="explore-more-button" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
                                 {isFetchingNextPage ? 'Loading...' : 'Explore More'}

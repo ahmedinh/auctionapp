@@ -47,7 +47,7 @@ export function Products({ fetchFunction, queryKeyPrefix }) {
             <div className="products">
                 <div className="products-grid">
                     {data?.pages.flatMap(page => page.content).map(product =>
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product.id} product={product} grid={true}/>
                     )}
                 </div>
             </div>

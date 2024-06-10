@@ -16,4 +16,5 @@ public interface ProductProjection {
     String getColor();
     String getUrl();
     Integer getBidCount();
+    BigDecimal getHighestBid();
 }

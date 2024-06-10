@@ -11,6 +11,7 @@
         display: flex;
         width: 1120px;
         margin-bottom: 4rem;
+        gap: 24px;
         justify-content: space-between;
 
         .all-filters {
@@ -28,8 +29,7 @@
                     color: $color-purple;
                     white-space: nowrap;
                     padding: 0;
-                    margin: 0;
-                    margin-bottom: 24px;
+                    margin: 0 0 24px;
                     border: none;
                 }
 
@@ -200,11 +200,50 @@
             }
 
             .sorting-grid-list {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .view-switch {
+                    display: flex;
+                    gap: 13px;
+
+                    button {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        border: none;
+                        background-color: transparent;
+                        font-size: $font-size-normal;
+                        cursor: pointer;
+
+                        .grid-icon,
+                        .list-icon {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
+                    .grid-button,
+                    .list-button {
+                        color: $color-grey;
+                    }
+
+                    .grid-button-active,
+                    .list-button-active {
+                        color: $color-purple;
+                    }
+
+                    img {
+                        width: 19px;
+                        height: 19px;
+                    }
+                }
+
                 .dropdown-select {
                     font-family: 'Lato', sans-serif;
                     height: 3rem;
                     width: 268px;
-                    flex: 1;
                     font-size: 16px;
                     padding-left: 21px;
                     border: 2px solid $color-white;
@@ -224,6 +263,12 @@
                     width: 834px;
                     justify-content: space-between;
                     row-gap: 40px;
+                }
+
+                .products-listview {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
                 }
 
                 .explore-more-button {

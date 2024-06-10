@@ -49,12 +49,12 @@ export default function BasicSearch() {
         setSelectedSubCategories([]);
     }, [query]);
 
-    const showDidYouMean = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && selectedSubCategories.length === 0 && !priceChangedFlag;
+    const displaySuggestion = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name && selectedSubCategories.length === 0 && !priceChangedFlag;
 
     return (
         <div className="search-page-full">
             <div className="did-you-mean">
-                {showDidYouMean ? (
+                {displaySuggestion ? (
                     <p className="paragraph">Did you mean?&nbsp;
                         <a onClick={handleClick} className="navlink">
                             {thresholdSearchResults?.name}
