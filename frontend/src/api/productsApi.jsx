@@ -156,3 +156,14 @@ export async function getProductBids({ productId, page }) {
         }
     }).then(res => res.data)
 }
+
+export async function addProductsCSV({ file }) {
+    const userToken = getToken();
+    const formData = new FormData();
+    formData.append('file', file);
+    return axios.post(`${apiUrl}/api/product/add-with-csv`, formData, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    })
+}

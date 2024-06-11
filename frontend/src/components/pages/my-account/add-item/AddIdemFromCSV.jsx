@@ -1,14 +1,18 @@
 import React, { useRef, useState } from 'react';
 import './AddItemFromCSV.scss';
+import { useAddProductsFromCSV } from '../../../../hooks/addProductsFromCSV';
 
 export default function AddItemFromCSV() {
     const fileInputRef = useRef(null);
     const [uploadedCSV, setUploadedCSV] = useState(null);
+    const [error, setError] = useState('');
+    const { mutate: addProducts } = useAddProductsFromCSV(setError);
 
     const handleFilesUpload = (files) => {
         const file = files[0];
         setUploadedCSV(file);
         fileInputRef.current.value = null;
+        setError('');
     };
 
     const handleDrop = (event) => {
@@ -27,6 +31,15 @@ export default function AddItemFromCSV() {
     const handleFileInputChange = (event) => {
         handleFilesUpload(event.target.files);
     };
+
+    const handleSubmit = () => {
+        if (uploadedCSV) {
+            addProducts(uploadedCSV);
+        }
+        else {
+            alert('Add file first');
+        }
+    }
 
     return (
         <div className="csv-content">
@@ -54,8 +67,11 @@ export default function AddItemFromCSV() {
                     <div className="file-name">
                         <p>Selected file: {uploadedCSV.name}</p>
                     </div>
-                    <button className='upload-button'>UPLOAD</button>
+                    <button className='upload-button' onClick={handleSubmit}>UPLOAD</button>
                 </>
+            )}
+            {error && (
+                <p className='error-message'>Error: {error.response?.data.error_message}</p>
             )}
         </div>
     );

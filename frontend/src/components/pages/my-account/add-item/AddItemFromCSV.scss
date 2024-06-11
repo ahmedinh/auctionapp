@@ -52,4 +52,10 @@
         padding: 12px 16px 12px 16px;
         cursor: pointer;
     }
+
+    .error-message {
+        font-size: $font-size-normal;
+        font-weight: $font-weight-semibold;
+        color: red;
+    }
 }

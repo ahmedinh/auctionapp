@@ -164,7 +164,7 @@ public class ProductController {
     @PostMapping(value = "/add-with-csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Add products from CSV file", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> addProductsWithCSV(@RequestHeader("Authorization") String authHeader,
-                                                @RequestParam("file") MultipartFile file) {
+                                                @RequestBody MultipartFile file) {
         return productService.addProductsWithCSV(authHeader, file);
     }
 }
