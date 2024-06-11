@@ -71,6 +71,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         setMaxValue(e.maxValue);
         if (e.minValue !== initialMinValue || e.maxValue !== initialMaxValue) {
             setPriceChangedFlag(true);
+        } else if (e.minValue === 0 && e.maxValue === 1500) {
+            setPriceChangedFlag(false);
         }
     };
 
@@ -80,6 +82,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMinValue(value);
             if (value !== initialMinValue) {
                 setPriceChangedFlag(true);
+            } else if (value === 0 && maxValue === 1500) {
+                setPriceChangedFlag(false);
             }
         } else {
             setMinValue(maxValue);
@@ -92,6 +96,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMaxValue(value);
             if (value !== initialMaxValue) {
                 setPriceChangedFlag(true);
+            } else if (minValue === 0 && value === 1500) {
+                setPriceChangedFlag(false);
             }
         } else {
             setMaxValue(minValue);
