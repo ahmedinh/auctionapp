@@ -101,8 +101,6 @@ public class Product {
                    LocalDateTime createdAt,
                    LocalDate auctionStart,
                    LocalDate auctionEnd,
-                   Size size,
-                   Color color,
                    SubCategory subCategory,
                    Person person) {
         this.name = name;
@@ -111,8 +109,6 @@ public class Product {
         this.createdAt = createdAt;
         this.auctionStart = auctionStart;
         this.auctionEnd = auctionEnd;
-        this.size = size;
-        this.color = color;
         this.subCategory = subCategory;
         this.person = person;
     }

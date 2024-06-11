@@ -1,6 +1,7 @@
 package ba.atlant.auctionapp.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,6 +36,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(Exception e) {
+        return new ResponseEntity<>(getReturnMap(e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleResourceNotFound(Exception e) {
         return new ResponseEntity<>(getReturnMap(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
