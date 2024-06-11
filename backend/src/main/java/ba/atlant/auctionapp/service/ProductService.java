@@ -261,12 +261,22 @@ public class ProductService {
                 LocalDate auctionStart = formatLocalDate(recordMap.get("AuctionStart").trim(), csvRecord.getRecordNumber());
                 LocalDate auctionEnd = formatLocalDate(recordMap.get("AuctionEnd").trim(), csvRecord.getRecordNumber());
 
-                productList.add(new Product(name, description, price, LocalDateTime.now(), auctionStart, auctionEnd, subCategory, person));
+                Product product = new Product(name, description, price, LocalDateTime.now(), auctionStart, auctionEnd, subCategory, person);
+                productList.add(product);
                 System.out.println("Processed Product: " + name + ", " + description + ", " + price + ", " + auctionStart + ", " + category.getName() + ", " + subCategory.getName());
             }
-            productRepository.saveAll(productList);
-            return ResponseEntity.ok(productList);
 
+            productRepository.saveAll(productList);
+
+            productList.forEach(product -> {
+                List<ProductPicture> productPictureList = new ArrayList<>();
+                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic1.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic1.png", product));
+                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic2.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic2.png", product));
+                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic3.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic3.png", product));
+                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic4.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic4.png", product));
+                productPictureRepository.saveAll(productPictureList);
+            });
+            return ResponseEntity.ok(productList);
         } catch (IOException e) {
             return new ResponseEntity<>("Error processing CSV file", HttpStatus.INTERNAL_SERVER_ERROR);
         }
