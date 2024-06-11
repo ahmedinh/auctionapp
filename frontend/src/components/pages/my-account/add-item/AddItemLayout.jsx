@@ -3,6 +3,7 @@ import './AddItemLayout.scss';
 import BreadCrumbsMenu from "../../../utilities/BreadCrumbsMenu";
 import { Outlet, useLocation } from "react-router-dom";
 import ScrollToTop from "../../../utilities/ScrollToTop";
+import { addItemFromCSV } from "../../../utilities/AppUrls";
 
 export default function AddItemLayout() {
 
@@ -33,11 +34,17 @@ export default function AddItemLayout() {
         return 'line';
     };
 
+    const showProgress = () => {
+        if (currentRoute === addItemFromCSV)
+            return false;
+        return true;
+    }
+
     return (
         <div className="full-page">
             <BreadCrumbsMenu title="Seller" rightLink="my-account/add-item" fontWeight={700} />
             <div className="content">
-                <div className="upper-track">
+                {showProgress() && (<div className="upper-track">
                     <div className="dots">
                         <div className="white-dots">
                             <span className="white-dot"></span>
@@ -55,7 +62,7 @@ export default function AddItemLayout() {
                             <hr key={index} className={getLineClass(index)} />
                         ))}
                     </div>
-                </div>
+                </div>)}
                 <Outlet />
             </div>
         </div>

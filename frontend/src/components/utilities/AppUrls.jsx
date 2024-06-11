@@ -11,3 +11,5 @@ export const sellerSoldRoute = myAccountRoute + "seller/sold"
 export const addProductInfoRoute = myAccountRoute + "add-item/product-info"
 
 export const myProfileRoute = myAccountRoute + "profile"
+
+export const addItemFromCSV = myAccountRoute + "add-item/csv"

@@ -25,6 +25,7 @@ import Settings from '../pages/my-account/settings/Settings';
 import SellerTable from '../pages/my-account/seller/SellerTable';
 import Error from '../pages/error/Error';
 import { sellerActiveRoute, myProfileRoute, newArrivalsRoute, addProductInfoRoute } from './AppUrls';
+import AddItemFromCSV from '../pages/my-account/add-item/AddIdemFromCSV';
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -68,6 +69,7 @@ const Router = createBrowserRouter(
                         <Route path="product-info" element={<ProductInfo />} />
                         <Route path="product-price" element={<ProductPrice />} />
                         <Route path="location-shipping" element={<LocationShipping />} />
+                        <Route path="csv" element={<AddItemFromCSV />} />
                     </Route>
                 </Route>
             </Route>

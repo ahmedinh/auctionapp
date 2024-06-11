@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../../../utilities/Style.scss';
 import { clearSessionStorageProduct } from "../../../utilities/Common";
 import { useCategoriesWithSubCategories } from "../../../../hooks/categoriesWithSubcategories";
+import { addItemFromCSV } from "../../../utilities/AppUrls";
 
 export default function ProductInfo() {
     const navigate = useNavigate();
@@ -152,6 +153,10 @@ export default function ProductInfo() {
         fileInputRef.current.value = null;
     };
 
+    const handleCsvButtonClick = () => {
+        navigate(addItemFromCSV);
+    }
+
     const remainingImages = minImages - uploadedImages.length;
 
     const wordsCount = countWords(productInfo?.description);
@@ -165,6 +170,7 @@ export default function ProductInfo() {
         <div className="product-info-form">
             <div className="upper-part">
                 <h5 className="product-add-h5">ADD ITEM</h5>
+                <button className="add-csv" onClick={handleCsvButtonClick}>Add items from CSV</button>
                 <div className="form-fields">
                     <div className="product-name">
                         <p>What do you sell?</p>
