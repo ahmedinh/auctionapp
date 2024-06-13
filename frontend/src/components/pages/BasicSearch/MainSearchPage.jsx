@@ -19,11 +19,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
 
-    console.log('Initial min value: ', initialMinValue);
-    console.log('Initial max value: ', initialMaxValue);
-    console.log('Max value: ', maxValue);
-    console.log('Min value: ', minValue);
-
     const views = {
         GRID: 'grid',
         LIST: 'list'
