@@ -134,11 +134,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
 
     const handleCategoryClick = (i, categoryId) => {
         setSelected(i);
-        if (expandedCategories.includes(categoryId)) {
-            setExpandedCategories([]);
-        } else {
-            setExpandedCategories([categoryId]);
-        }
+        setExpandedCategories(expandedCategories.filter(cat => cat.id === categoryId))
         setSelectedSubCategories([]);
         navigate(`/shop/categories/${categoryId}`);
     };
