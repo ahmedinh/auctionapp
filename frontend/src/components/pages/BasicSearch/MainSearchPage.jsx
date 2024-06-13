@@ -170,6 +170,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         handleRemovePriceFilter();
     };
     const productDataFlatMap = productsData?.pages.flatMap(page => page.content);
+    const showPriceFilterTag = priceApplied && priceChangedFlag;
+    const showClearAllButton = (selectedSubCategories.length > 0 || showPriceFilterTag);
 
     return (
         <div className="search-page">
@@ -250,7 +252,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </div>
                             </div>
                         )}
-                        {priceApplied && priceChangedFlag && (
+                        {showPriceFilterTag && (
                             <div className="filter-price">
                                 <span className="tag-headline">Price Range: </span>
                                 <span className="tag">
@@ -259,7 +261,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </span>
                             </div>
                         )}
-                        {(selectedSubCategories.length > 0 || (priceApplied && priceChangedFlag)) && (
+                        {showClearAllButton && (
                             <div className="clear-all-section">
                                 <button onClick={handleClearAllFilters}><p>Clear all</p><span className="remove-tag">X</span></button>
                             </div>
