@@ -47,6 +47,8 @@ export default function BasicSearch() {
 
     useEffect(() => {
         setSelectedSubCategories([]);
+        setMinValue(0);
+        setMaxValue(1500);
     }, [query]);
 
     const displaySuggestion = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name && selectedSubCategories.length === 0 && !priceChangedFlag;
