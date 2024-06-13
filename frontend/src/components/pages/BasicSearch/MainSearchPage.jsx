@@ -6,8 +6,8 @@ import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWith
 import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Icon } from '@iconify/react';
+import { debounceTimeoutConstant } from "../../utilities/constants";
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
@@ -16,10 +16,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [sortCriteria, setSortCriteria] = useState('');
     const [initialMinValue, setInitialMinValue] = useState(minValue);
     const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
-    const [sortFieldHelp, setSortFieldHelp] = useState('name');
-    const [sortDirectionHelp, setSortDirectionHelp] = useState('ASC');
-    const [priceApplied, setPriceApplied] = useState(false);
-    const queryClient = useQueryClient();
+    const [priceApplied, setPriceApplied] = useState(minValue !== 0 || maxValue !== 1500);
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
 
@@ -52,14 +49,15 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         }
     };
 
-    const debounceTimeout = 1000;
     useEffect(() => {
         const handler = setTimeout(() => {
             if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
                 refetch();
+                setInitialMinValue(minValue);
+                setInitialMaxValue(maxValue);
                 setPriceApplied(minValue !== 0 || maxValue !== 1500);
             }
-        }, debounceTimeout);
+        }, debounceTimeoutConstant);
 
         return () => {
             clearTimeout(handler);
@@ -130,19 +128,13 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 sortDirection = 'ASC';
                 break;
         }
-        setSortFieldHelp(sortField);
-        setSortDirectionHelp(sortDirection);
         setSortCriteria(value);
         onSortChange(sortField, sortDirection);
     };
 
     const handleCategoryClick = (i, categoryId) => {
         setSelected(i);
-        if (expandedCategories.includes(categoryId)) {
-            setExpandedCategories([]);
-        } else {
-            setExpandedCategories([categoryId]);
-        }
+        setExpandedCategories(expandedCategories.filter(cat => cat.id === categoryId))
         setSelectedSubCategories([]);
         navigate(`/shop/categories/${categoryId}`);
     };
@@ -170,16 +162,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         setMaxValue(1500);
         setPriceApplied(false);
         setPriceChangedFlag(false);
-        const handler = setTimeout(() => {
-            if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
-                refetch();
-                setPriceApplied(minValue !== 0 || maxValue !== 1500);
-            }
-        }, 1);
-
-        return () => {
-            clearTimeout(handler);
-        };
+        refetch();
     };
 
     const handleClearAllFilters = () => {
@@ -187,6 +170,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         handleRemovePriceFilter();
     };
     const productDataFlatMap = productsData?.pages.flatMap(page => page.content);
+    const showPriceFilterTag = priceApplied && priceChangedFlag;
+    const showClearAllButton = (selectedSubCategories.length > 0 || showPriceFilterTag);
 
     return (
         <div className="search-page">
@@ -267,7 +252,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </div>
                             </div>
                         )}
-                        {priceApplied && priceChangedFlag && (
+                        {showPriceFilterTag && (
                             <div className="filter-price">
                                 <span className="tag-headline">Price Range: </span>
                                 <span className="tag">
@@ -276,7 +261,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 </span>
                             </div>
                         )}
-                        {(selectedSubCategories.length > 0 || (priceApplied && priceChangedFlag)) && (
+                        {showClearAllButton && (
                             <div className="clear-all-section">
                                 <button onClick={handleClearAllFilters}><p>Clear all</p><span className="remove-tag">X</span></button>
                             </div>

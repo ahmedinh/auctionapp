@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
@@ -6,6 +6,7 @@ import { useThresholdSearch } from "../../../hooks/useThresholdSearch";
 import { useBasicSearch } from '../../../hooks/useBasicSearch';
 import "./BasicSearch.scss";
 import { homePageRoute } from "../../utilities/AppUrls";
+import { PriceContext } from "../../../provider/PriceProvider";
 
 
 export default function BasicSearch() {
@@ -16,9 +17,8 @@ export default function BasicSearch() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(1500);
-    const [priceChangedFlag, setPriceChangedFlag] = useState(false);
+    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag } = useContext(PriceContext);
+    
 
     const {
         data: basicSearchResults,
@@ -29,7 +29,7 @@ export default function BasicSearch() {
         isFetchingNextPage,
         refetch
     } = useBasicSearch(query, sortField, sortDirection, selectedSubCategories, minValue, maxValue);
-    
+
     const {
         data: thresholdSearchResults
     } = useThresholdSearch(query);
