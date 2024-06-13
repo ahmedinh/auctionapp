@@ -5,10 +5,12 @@ import Logo from "../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import '../utilities/Style.scss'
 import { homePageRoute } from "../utilities/AppUrls";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NavbarWhite = () => {
     const [input, setInput] = useState("");
     const [isSearchFocused] = useState(false);
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -31,6 +33,7 @@ const NavbarWhite = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
+        queryClient.invalidateQueries("products-basic-search");
         navigate(homePageRoute + `search?query=${encodeURIComponent(input)}`);
     };
 

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useCategoryProducts } from "../../../hooks/useCategoryProducts";
 import { useParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
+import { PriceContext } from "../../../provider/PriceProvider";
 
 export default function CategoryProducts() {
     const { categoryId: urlCategoryId } = useParams();
@@ -9,9 +10,7 @@ export default function CategoryProducts() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(1500);
-    const [priceChangedFlag, setPriceChangedFlag] = useState(false);
+    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag } = useContext(PriceContext);
 
     const {
         data,

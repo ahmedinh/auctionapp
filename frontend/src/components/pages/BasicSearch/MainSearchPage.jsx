@@ -6,7 +6,6 @@ import { useCategoriesWithSubCategories } from "../../../hooks/useCategoriesWith
 import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Icon } from '@iconify/react';
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
@@ -16,12 +15,14 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [sortCriteria, setSortCriteria] = useState('');
     const [initialMinValue, setInitialMinValue] = useState(minValue);
     const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
-    const [sortFieldHelp, setSortFieldHelp] = useState('name');
-    const [sortDirectionHelp, setSortDirectionHelp] = useState('ASC');
-    const [priceApplied, setPriceApplied] = useState(false);
-    const queryClient = useQueryClient();
+    const [priceApplied, setPriceApplied] = useState(minValue !== 0 || maxValue !== 1500);
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
+
+    console.log('Initial min value: ', initialMinValue);
+    console.log('Initial max value: ', initialMaxValue);
+    console.log('Max value: ', maxValue);
+    console.log('Min value: ', minValue);
 
     const views = {
         GRID: 'grid',
@@ -57,6 +58,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         const handler = setTimeout(() => {
             if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
                 refetch();
+                setInitialMinValue(minValue);
+                setInitialMaxValue(maxValue);
                 setPriceApplied(minValue !== 0 || maxValue !== 1500);
             }
         }, debounceTimeout);
@@ -130,8 +133,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 sortDirection = 'ASC';
                 break;
         }
-        setSortFieldHelp(sortField);
-        setSortDirectionHelp(sortDirection);
         setSortCriteria(value);
         onSortChange(sortField, sortDirection);
     };
