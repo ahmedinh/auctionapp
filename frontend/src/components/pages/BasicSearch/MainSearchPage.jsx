@@ -162,16 +162,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         setMaxValue(1500);
         setPriceApplied(false);
         setPriceChangedFlag(false);
-        const handler = setTimeout(() => {
-            if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
-                refetch();
-                setPriceApplied(minValue !== 0 || maxValue !== 1500);
-            }
-        }, 1);
-
-        return () => {
-            clearTimeout(handler);
-        };
+        refetch();
     };
 
     const handleClearAllFilters = () => {
