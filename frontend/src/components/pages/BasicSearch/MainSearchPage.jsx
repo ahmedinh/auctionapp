@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 import { Icon } from '@iconify/react';
+import { debounceTimeoutConstant } from "../../utilities/constants";
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
@@ -48,7 +49,6 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         }
     };
 
-    const debounceTimeout = 1000;
     useEffect(() => {
         const handler = setTimeout(() => {
             if (minValue !== initialMinValue || maxValue !== initialMaxValue) {
@@ -57,7 +57,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 setInitialMaxValue(maxValue);
                 setPriceApplied(minValue !== 0 || maxValue !== 1500);
             }
-        }, debounceTimeout);
+        }, debounceTimeoutConstant);
 
         return () => {
             clearTimeout(handler);
