@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.config.CustomMultipartFile;
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
@@ -24,10 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -254,28 +254,32 @@ public class ProductService {
                 if (!subCategory.getCategory().getName().equals(category.getName()))
                     throw new IllegalArgumentException("Category does not contain that subcategory in row " + csvRecord.getRecordNumber());
                 if (price.compareTo(BigDecimal.valueOf(0)) < 0.5)
-                    throw new IllegalArgumentException("Price is negative in row " + csvRecord.getRecordNumber());
+                    throw new IllegalArgumentException("Price is negative in row " + csvRecord.getRecordNumber() + ". Price must be a positive number with 2 decimals.");
                 if (productRepository.findByName(name).isPresent())
                     throw new IllegalArgumentException("Product already exists with name in row " + csvRecord.getRecordNumber());
 
                 LocalDate auctionStart = formatLocalDate(recordMap.get("AuctionStart").trim(), csvRecord.getRecordNumber());
                 LocalDate auctionEnd = formatLocalDate(recordMap.get("AuctionEnd").trim(), csvRecord.getRecordNumber());
 
+                if (auctionStart.isBefore(LocalDate.now()))
+                    throw new IllegalArgumentException("Start date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+                if (auctionEnd.isBefore(LocalDate.now()))
+                    throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+                if (auctionEnd.isBefore(auctionStart.plusDays(1)))
+                    throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be before start date");
+
                 Product product = new Product(name, description, price, LocalDateTime.now(), auctionStart, auctionEnd, subCategory, person);
                 productList.add(product);
-                System.out.println("Processed Product: " + name + ", " + description + ", " + price + ", " + auctionStart + ", " + category.getName() + ", " + subCategory.getName());
+                productRepository.save(product);
+
+                String pictureUrls = recordMap.get("PictureURLs").trim();
+                String[] urls = pictureUrls.split(",");
+                MultipartFile[] multipartFiles = new MultipartFile[urls.length];
+                for (int i = 0; i < urls.length; i++) {
+                    multipartFiles[i] = downloadImageFromURL(i + 1, urls[i].trim());
+                }
+                this.addProductPictures(multipartFiles, product.getName());
             }
-
-            productRepository.saveAll(productList);
-
-            productList.forEach(product -> {
-                List<ProductPicture> productPictureList = new ArrayList<>();
-                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic1.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic1.png", product));
-                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic2.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic2.png", product));
-                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic3.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic3.png", product));
-                productPictureList.add(new ProductPicture(product.getName() + "_" + product.getId() + "_" + "pic4.png","https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_product_pictures/pic4.png", product));
-                productPictureRepository.saveAll(productPictureList);
-            });
             return ResponseEntity.ok(productList);
         } catch (IOException e) {
             return new ResponseEntity<>("Error processing CSV file", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -296,5 +300,18 @@ public class ProductService {
             }
         }
         throw new IllegalArgumentException("Unable to parse string to any valid format date in row " + recordNumber);
+    }
+
+    private static MultipartFile downloadImageFromURL(Integer number, String url) throws IOException {
+        URL imageUrl = new URL(url);
+        try (InputStream in = imageUrl.openStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int n;
+            while ((n = in.read(buffer)) != -1) {
+                out.write(buffer, 0, n);
+            }
+            byte[] imageBytes = out.toByteArray();
+            return new CustomMultipartFile(imageBytes, "picture_" + number + ".jpg", "image/jpeg");
+        }
     }
 }

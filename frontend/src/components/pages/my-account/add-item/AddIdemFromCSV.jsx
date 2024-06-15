@@ -1,12 +1,14 @@
 import React, { useRef, useState } from 'react';
 import './AddItemFromCSV.scss';
 import { useAddProductsFromCSV } from '../../../../hooks/addProductsFromCSV';
+import LoadingSpinner from '../../../utilities/loading-spinner/LoadingSpinner';
 
 export default function AddItemFromCSV() {
     const fileInputRef = useRef(null);
     const [uploadedCSV, setUploadedCSV] = useState(null);
     const [error, setError] = useState('');
-    const { mutate: addProducts } = useAddProductsFromCSV(setError);
+    const [loading, setLoading] = useState(false);
+    const { mutate: addProducts } = useAddProductsFromCSV(setError, setLoading);
 
     const handleFilesUpload = (files) => {
         const file = files[0];
@@ -62,7 +64,7 @@ export default function AddItemFromCSV() {
                     <p className="or-just">or just drag and drop</p>
                 </div>
             </div>
-            {uploadedCSV && (
+            {uploadedCSV && !loading && (
                 <>
                     <div className="file-name">
                         <p>Selected file: {uploadedCSV.name}</p>
@@ -72,6 +74,11 @@ export default function AddItemFromCSV() {
             )}
             {error && (
                 <p className='error-message'>Error: {error.response?.data.error_message}</p>
+            )}
+            {loading && (
+                <>
+                    <LoadingSpinner />
+                </>
             )}
         </div>
     );
