@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addProductsCSV } from "../api/productsApi";
 import { useNavigate } from "react-router-dom";
-import { newArrivalsRoute } from "../components/utilities/AppUrls";
+import { sellerActiveRoute } from "../components/utilities/AppUrls";
 
 export function useAddProductsFromCSV(setError, setLoading) {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ export function useAddProductsFromCSV(setError, setLoading) {
             alert('Products successfully added');
             queryClient.invalidateQueries('newArrivals');
             queryClient.invalidateQueries('lastChance');
-            navigate(newArrivalsRoute)
+            navigate(sellerActiveRoute);
         },
         onError: (error) => {
             setError(error);

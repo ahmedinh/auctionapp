@@ -233,7 +233,7 @@ public class ProductService {
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
             List<Product> productList = new ArrayList<>();
-            String[] requiredFields = {"Name", "Description", "Price", "Category", "SubCategory", "AuctionStart", "AuctionEnd"};
+            String[] requiredFields = {"Name", "Description", "Price", "Category", "SubCategory", "AuctionStart", "AuctionEnd", "PictureURLs"};
             Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No person found for provided ID"));
 
             for (CSVRecord csvRecord : csvParser) {
@@ -241,7 +241,7 @@ public class ProductService {
 
                 for (String field : requiredFields) {
                     if (recordMap.get(field).trim().isEmpty()) {
-                        throw new IllegalArgumentException("Missing data in column " + field.toUpperCase());
+                        throw new IllegalArgumentException("Missing data in column " + field.toUpperCase() + " in row " + csvRecord.getRecordNumber());
                     }
                 }
 

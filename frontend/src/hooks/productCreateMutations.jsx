@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPicturesToProduct, createProduct, deleteProduct } from "../api/productsApi";
 import { clearSessionStorageProduct } from "../components/utilities/Common";
+import { sellerActiveRoute } from "../components/utilities/AppUrls";
 
 export const useProductMutations = (navigate, productName, uploadedImages) => {
     const queryClient = useQueryClient();
@@ -23,7 +24,7 @@ export const useProductMutations = (navigate, productName, uploadedImages) => {
             queryClient.invalidateQueries("newArrivals","infinite")
             queryClient.invalidateQueries("lastChance","infinite")
             clearSessionStorageProduct();
-            navigate('/home/new-arrivals');
+            navigate(sellerActiveRoute);
         },
         onError: (error) => {
             console.error('Error creating product:', error);
