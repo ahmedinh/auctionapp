@@ -90,7 +90,7 @@ const AccordionExpandIcon = () => {
         }))
     }
 
-    if (userPicture.status === 'pending' || userInfo.status === 'pending')
+    if (userPicture.status === 'pending' || userInfo.status === 'pending' || userPicture.status === 'loading' || userInfo.status === 'loading')
         return <LoadingSpinner />;
 
     return (

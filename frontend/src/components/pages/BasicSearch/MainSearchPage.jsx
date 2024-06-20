@@ -8,6 +8,7 @@ import LoadingSpinner from "../../utilities/loading-spinner/LoadingSpinner";
 import MultiRangeSlider from "multi-range-slider-react";
 import { Icon } from '@iconify/react';
 import { debounceTimeoutConstant } from "../../utilities/constants";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
     const { categoryId } = useParams();
@@ -19,6 +20,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     const [priceApplied, setPriceApplied] = useState(minValue !== 0 || maxValue !== 1500);
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const views = {
         GRID: 'grid',
@@ -133,6 +135,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     };
 
     const handleCategoryClick = (i, categoryId) => {
+        queryClient.invalidateQueries('categoryProducts');
         setSelected(i);
         setExpandedCategories(expandedCategories.filter(cat => cat.id === categoryId))
         setSelectedSubCategories([]);
@@ -166,6 +169,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     };
 
     const handleClearAllFilters = () => {
+        queryClient.invalidateQueries('categoryProducts');
+        queryClient.invalidateQueries('products-basic-search');
         setSelectedSubCategories([]);
         handleRemovePriceFilter();
     };

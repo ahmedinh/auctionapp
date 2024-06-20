@@ -123,7 +123,7 @@ INSERT INTO product_picture (name, url, product_id) VALUES
                                                         ('Laptop Acer Aspire 3 A315-440-R67R/pic3.png', 'https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/Laptop+Acer+Aspire+3+A315-440-R67R/pic3.png', (SELECT p.id FROM product p WHERE p.name='Laptop Acer Aspire 3 A315-440-R67R'));
 insert into bid (amount, user_id, product_id, bid_timestamp)
 values (71.00, 2, 2, '2024-05-05T01:00:00.000'),
-       (72.00, 2, 3, '2024-05-05T01:00:00.000'),
+       (77.00, 2, 3, '2024-05-05T01:00:00.000'),
        (533.00, 2, 19, '2024-05-05T01:00:00.000'),
        (534.00, 3, 19, '2024-05-05T01:15:00.000'),
        (73.00, 2, 4, '2024-05-05T01:15:00.000'),

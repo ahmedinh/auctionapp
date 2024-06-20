@@ -160,4 +160,11 @@ public class ProductController {
     public ResponseEntity<List<ProductProjection>> getSimilarProducts(@RequestParam(value = "productId") Long productId) {
         return productService.getSimilarProducts(productId);
     }
+
+    @PostMapping(value = "/add-with-csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Add products from CSV file", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> addProductsWithCSV(@RequestHeader("Authorization") String authHeader,
+                                                @RequestBody MultipartFile file) {
+        return productService.addProductsWithCSV(authHeader, file);
+    }
 }

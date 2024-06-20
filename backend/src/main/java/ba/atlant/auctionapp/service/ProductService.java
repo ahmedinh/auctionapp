@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.service;
 
+import ba.atlant.auctionapp.config.CustomMultipartFile;
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
@@ -9,19 +10,28 @@ import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
 import ba.atlant.auctionapp.projection.SubCategoryProjection;
 import ba.atlant.auctionapp.repository.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -212,5 +222,98 @@ public class ProductService {
     public ResponseEntity<List<ProductProjection>> getSimilarProducts(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with provided ID."));
         return ResponseEntity.ok(productRepository.getSimilarProducts(productId, product.getSubCategory().getCategory().getId()));
+    }
+
+    @Transactional
+    public ResponseEntity<?> addProductsWithCSV(String authHeader, MultipartFile file) {
+        if (file.isEmpty())
+            throw new ResourceNotFoundException("File is empty");
+        Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
+        try (BufferedReader fileReader = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+            List<Product> productList = new ArrayList<>();
+            String[] requiredFields = {"Name", "Description", "Price", "Category", "SubCategory", "AuctionStart", "AuctionEnd", "PictureURLs"};
+            Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No person found for provided ID"));
+
+            for (CSVRecord csvRecord : csvParser) {
+                Map<String, String> recordMap = csvRecord.toMap();
+
+                for (String field : requiredFields) {
+                    if (recordMap.get(field).trim().isEmpty()) {
+                        throw new IllegalArgumentException("Missing data in column " + field.toUpperCase() + " in row " + csvRecord.getRecordNumber());
+                    }
+                }
+
+                String name = recordMap.get("Name").trim();
+                String description = recordMap.get("Description").trim();
+                BigDecimal price = BigDecimal.valueOf(Double.parseDouble(recordMap.get("Price").trim()));
+                Category category = categoryRepository.findByName(recordMap.get("Category").trim()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given name in row " + csvRecord.getRecordNumber()));
+                SubCategory subCategory = subCategoryRepository.findByNameAndCategory(recordMap.get("SubCategory").trim(), category).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given name in row " + csvRecord.getRecordNumber()));
+                LocalDate auctionStart = formatLocalDate(recordMap.get("AuctionStart").trim(), csvRecord.getRecordNumber());
+                LocalDate auctionEnd = formatLocalDate(recordMap.get("AuctionEnd").trim(), csvRecord.getRecordNumber());
+
+                validateFields(csvRecord, name, price, category, subCategory, auctionStart, auctionEnd);
+
+                Product product = new Product(name, description, price, LocalDateTime.now(), auctionStart, auctionEnd, subCategory, person);
+                productList.add(product);
+                productRepository.save(product);
+
+                String pictureUrls = recordMap.get("PictureURLs").trim();
+                String[] urls = pictureUrls.split(",");
+                MultipartFile[] multipartFiles = new MultipartFile[urls.length];
+                for (int i = 0; i < urls.length; i++) {
+                    multipartFiles[i] = downloadImageFromURL(i + 1, urls[i].trim());
+                }
+                this.addProductPictures(multipartFiles, product.getName());
+            }
+            return ResponseEntity.ok(productList);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error processing CSV file", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void validateFields(CSVRecord csvRecord, String name, BigDecimal price, Category category, SubCategory subCategory, LocalDate auctionStart, LocalDate auctionEnd) {
+        if (!subCategory.getCategory().getName().equals(category.getName()))
+            throw new IllegalArgumentException("Category does not contain that subcategory in row " + csvRecord.getRecordNumber());
+        if (price.compareTo(BigDecimal.valueOf(0)) < 0.5)
+            throw new IllegalArgumentException("Price is negative in row " + csvRecord.getRecordNumber() + ". Price must be a positive number with 2 decimals.");
+        if (productRepository.findByName(name).isPresent())
+            throw new IllegalArgumentException("Product already exists with name in row " + csvRecord.getRecordNumber());
+        if (auctionStart.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Start date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+        if (auctionEnd.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+        if (auctionEnd.isBefore(auctionStart.plusDays(1)))
+            throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be before start date");
+    }
+
+    private LocalDate formatLocalDate(String stringDate, long recordNumber) {
+        List<String> datePatterns = Arrays.asList(
+                "MM/dd/yyyy",
+                "M/dd/yyyy"
+        );
+        for (String pattern : datePatterns) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            try {
+                return LocalDate.parse(stringDate, formatter);
+            } catch (Exception e) {
+                System.out.println("Failed to parse date with pattern: " + pattern);
+            }
+        }
+        throw new IllegalArgumentException("Unable to parse string to any valid format date in row " + recordNumber);
+    }
+
+    private static MultipartFile downloadImageFromURL(Integer number, String url) throws IOException {
+        URL imageUrl = new URL(url);
+        try (InputStream in = imageUrl.openStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int n;
+            while ((n = in.read(buffer)) != -1) {
+                out.write(buffer, 0, n);
+            }
+            byte[] imageBytes = out.toByteArray();
+            return new CustomMultipartFile(imageBytes, "picture_" + number + ".jpg", "image/jpeg");
+        }
     }
 }
