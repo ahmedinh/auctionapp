@@ -250,23 +250,10 @@ public class ProductService {
                 BigDecimal price = BigDecimal.valueOf(Double.parseDouble(recordMap.get("Price").trim()));
                 Category category = categoryRepository.findByName(recordMap.get("Category").trim()).orElseThrow(() -> new ResourceNotFoundException("Category not found for given name in row " + csvRecord.getRecordNumber()));
                 SubCategory subCategory = subCategoryRepository.findByNameAndCategory(recordMap.get("SubCategory").trim(), category).orElseThrow(() -> new ResourceNotFoundException("SubCategory not found for given name in row " + csvRecord.getRecordNumber()));
-
-                if (!subCategory.getCategory().getName().equals(category.getName()))
-                    throw new IllegalArgumentException("Category does not contain that subcategory in row " + csvRecord.getRecordNumber());
-                if (price.compareTo(BigDecimal.valueOf(0)) < 0.5)
-                    throw new IllegalArgumentException("Price is negative in row " + csvRecord.getRecordNumber() + ". Price must be a positive number with 2 decimals.");
-                if (productRepository.findByName(name).isPresent())
-                    throw new IllegalArgumentException("Product already exists with name in row " + csvRecord.getRecordNumber());
-
                 LocalDate auctionStart = formatLocalDate(recordMap.get("AuctionStart").trim(), csvRecord.getRecordNumber());
                 LocalDate auctionEnd = formatLocalDate(recordMap.get("AuctionEnd").trim(), csvRecord.getRecordNumber());
 
-                if (auctionStart.isBefore(LocalDate.now()))
-                    throw new IllegalArgumentException("Start date for row " + csvRecord.getRecordNumber() + " cannot be in past");
-                if (auctionEnd.isBefore(LocalDate.now()))
-                    throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be in past");
-                if (auctionEnd.isBefore(auctionStart.plusDays(1)))
-                    throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be before start date");
+                validateFields(csvRecord, name, price, category, subCategory, auctionStart, auctionEnd);
 
                 Product product = new Product(name, description, price, LocalDateTime.now(), auctionStart, auctionEnd, subCategory, person);
                 productList.add(product);
@@ -284,6 +271,21 @@ public class ProductService {
         } catch (IOException e) {
             return new ResponseEntity<>("Error processing CSV file", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void validateFields(CSVRecord csvRecord, String name, BigDecimal price, Category category, SubCategory subCategory, LocalDate auctionStart, LocalDate auctionEnd) {
+        if (!subCategory.getCategory().getName().equals(category.getName()))
+            throw new IllegalArgumentException("Category does not contain that subcategory in row " + csvRecord.getRecordNumber());
+        if (price.compareTo(BigDecimal.valueOf(0)) < 0.5)
+            throw new IllegalArgumentException("Price is negative in row " + csvRecord.getRecordNumber() + ". Price must be a positive number with 2 decimals.");
+        if (productRepository.findByName(name).isPresent())
+            throw new IllegalArgumentException("Product already exists with name in row " + csvRecord.getRecordNumber());
+        if (auctionStart.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Start date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+        if (auctionEnd.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be in past");
+        if (auctionEnd.isBefore(auctionStart.plusDays(1)))
+            throw new IllegalArgumentException("End date for row " + csvRecord.getRecordNumber() + " cannot be before start date");
     }
 
     private LocalDate formatLocalDate(String stringDate, long recordNumber) {
