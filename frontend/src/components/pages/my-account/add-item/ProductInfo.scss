@@ -29,6 +29,15 @@
         align-items: center;
         gap: 3rem;
 
+        .add-csv {
+            font-size: $font-size-normal;
+            border: none;
+            background-color: $color-purple;
+            color: #fff;
+            font-weight: $font-weight-semibold;
+            padding: 12px 16px 12px 16px;
+        }
+
         .form-fields {
             display: flex;
             flex-direction: column;

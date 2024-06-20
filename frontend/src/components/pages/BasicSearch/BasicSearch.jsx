@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import MainSearchPage from "./MainSearchPage";
 import Breadcrumbs from "../../utilities/Breadcrumbs";
@@ -6,6 +6,7 @@ import { useThresholdSearch } from "../../../hooks/useThresholdSearch";
 import { useBasicSearch } from '../../../hooks/useBasicSearch';
 import "./BasicSearch.scss";
 import { homePageRoute } from "../../utilities/AppUrls";
+import { PriceContext } from "../../../provider/PriceProvider";
 
 
 export default function BasicSearch() {
@@ -15,6 +16,9 @@ export default function BasicSearch() {
 
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag } = useContext(PriceContext);
+    
 
     const {
         data: basicSearchResults,
@@ -24,8 +28,8 @@ export default function BasicSearch() {
         fetchNextPage,
         isFetchingNextPage,
         refetch
-    } = useBasicSearch(query, sortField, sortDirection);
-    
+    } = useBasicSearch(query, sortField, sortDirection, selectedSubCategories, minValue, maxValue);
+
     const {
         data: thresholdSearchResults
     } = useThresholdSearch(query);
@@ -41,7 +45,11 @@ export default function BasicSearch() {
         setSearchParams({ query: name });
     };
 
-    const displaySuggestion = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name;
+    useEffect(() => {
+        setSelectedSubCategories([]);
+    }, [query]);
+
+    const displaySuggestion = basicSearchResults?.pages[0].empty && thresholdSearchResults?.name && query.toLocaleLowerCase() !== thresholdSearchResults?.name && selectedSubCategories.length === 0 && !priceChangedFlag;
 
     return (
         <div className="search-page-full">
@@ -65,6 +73,15 @@ export default function BasicSearch() {
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 onSortChange={handleSortChange}
+                selectedSubCategories={selectedSubCategories}
+                setSelectedSubCategories={setSelectedSubCategories}
+                minValue={minValue}
+                setMinValue={setMinValue}
+                maxValue={maxValue}
+                setMaxValue={setMaxValue}
+                refetch={refetch}
+                priceChangedFlag={priceChangedFlag}
+                setPriceChangedFlag={setPriceChangedFlag}
             />
         </div>
     );

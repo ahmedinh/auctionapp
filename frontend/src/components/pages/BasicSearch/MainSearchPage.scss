@@ -15,19 +15,22 @@
         justify-content: space-between;
 
         .all-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 27px;
+
             .product-categories {
                 display: flex;
                 flex-direction: column;
                 width: 214px;
                 padding: 24px;
-                border: 1px solid $color-grey;
+                border: 1px solid $color-white;
 
                 &.headline {
                     color: $color-purple;
                     white-space: nowrap;
                     padding: 0;
-                    margin: 0;
-                    margin-bottom: 24px;
+                    margin: 0 0 24px;
                     border: none;
                 }
 
@@ -90,12 +93,122 @@
                     margin: 0;
                 }
             }
+
+            .price-filter {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                padding: 24px 24px 32px 24px;
+                border: 1px solid $color-white;
+
+                .price-range-text {
+                    margin: 0;
+                }
+
+                .numbers {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 3rem;
+
+                    input {
+                        border: 1px solid $color-grey;
+                        height: 46px;
+                        padding: 0;
+                        color: $color-grey;
+                        text-align: center;
+                        width: 88px;
+                    }
+                }
+
+                .spinner {
+                    .multi-range-slider {
+                        box-shadow: none;
+                        border: none;
+                    }
+
+                    .bar-inner {
+                        background-color: $color-purple;
+                    }
+                }
+
+                .apply-price-button {
+                    height: 50px;
+                    font-size: $font-size-normal;
+                    border: none;
+                    background-color: $color-purple;
+                    color: #fff;
+                    font-weight: $font-weight-semibold;
+                }
+            }
         }
 
         .products-part {
             display: flex;
             flex-direction: column;
             gap: 27px;
+
+            .filter-tags-bar {
+                display: flex;
+                justify-content: space-between;
+
+                .remove-tag {
+                    font-size: 10px;
+                    color: $color-grey;
+                    cursor: pointer;
+                }
+
+                .tag-headline {
+                    font-size: 14px;
+                    font-weight: $font-size-normal;
+                    color: $color-grey;
+                    line-height: 24px;
+                }
+
+                .tag-text {
+                    font-size: $font-size-normal;
+                    color: $color-black;
+                    font-weight: 400;
+                }
+
+                .filter-category,
+                .filter-price {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .filter-category,
+                .filter-price {
+                    width: 220px;
+
+                    .tag {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+
+                .clear-all-section {
+                    display: flex;
+                    align-items: center;
+
+                    button {
+                        p {
+                            margin: 0;
+                            color: $color-grey;
+                        }
+
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border: 1px solid $color-white;
+                        background-color: #fff;
+                        gap: 8px;
+                        height: 40px;
+                        padding: 8px 16px 8px 16px;
+
+                    }
+                }
+            }
 
             .sorting-grid-list {
                 display: flex;

@@ -30,16 +30,36 @@ export async function getProduct({ productId }) {
     }).then(res => res.data);
 }
 
-export async function getProductsForCategory({ page, size = 9, categoryId, sortField, sortDirection }) {
-    return axios.get(`${apiUrl}/api/product/all/category`, {
-        params: { page, size, categoryId, sortField, sortDirection }
-    }).then(res => res.data);
+export async function getProductsForCategory({ page, size = 9, categoryId, sortField, sortDirection, subCategoryIds, minValue, maxValue }) {
+    const params = {
+        page,
+        size,
+        categoryId,
+        sortField,
+        sortDirection,
+        minPrice: minValue,
+        maxPrice: maxValue,
+    };
+    if (subCategoryIds && subCategoryIds.length > 0) {
+        params.subCategoryIds = subCategoryIds.join(',');
+    }
+    return axios.get(`${apiUrl}/api/product/all/category`, { params }).then(res => res.data);
 }
 
-export async function searchProducts({ page, size, query, sortField, sortDirection }) {
-    return axios.get(`${apiUrl}/api/product/search-products`, {
-        params: { page, size, query, sortField, sortDirection }
-    }).then(res => res.data);
+export async function searchProducts({ page, size, query, sortField, sortDirection, subCategoryIds, minValue, maxValue }) {
+    const params = {
+        page,
+        size,
+        query,
+        sortField,
+        sortDirection,
+        minPrice: minValue,
+        maxPrice: maxValue,
+    };
+    if (subCategoryIds && subCategoryIds.length > 0) {
+        params.subCategoryIds = subCategoryIds.join(',');
+    }
+    return axios.get(`${apiUrl}/api/product/search-products`, { params }).then(res => res.data);
 };
 
 export async function searchSuggestion({ query }) {
@@ -135,4 +155,15 @@ export async function getProductBids({ productId, page }) {
             page
         }
     }).then(res => res.data)
+}
+
+export async function addProductsCSV({ file }) {
+    const userToken = getToken();
+    const formData = new FormData();
+    formData.append('file', file);
+    return axios.post(`${apiUrl}/api/product/add-with-csv`, formData, {
+        headers: {
+            'Authorization': `Bearer ${userToken}`
+        }
+    })
 }

@@ -13,14 +13,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
@@ -72,10 +76,19 @@ public class ProductController {
             @RequestParam(defaultValue = "9") int size,
             @RequestParam(defaultValue = "1") Long categoryId,
             @RequestParam(defaultValue = "name") String sortField,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
-        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection);
-    }
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @Nullable @RequestParam String subCategoryIds,
+            @RequestParam(defaultValue = "0") BigDecimal minPrice,
+            @RequestParam(defaultValue = "999999999") BigDecimal maxPrice) {
 
+        List<Long> subCategoryIdList = null;
+        if (subCategoryIds != null && !subCategoryIds.isEmpty()) {
+            subCategoryIdList = Arrays.stream(subCategoryIds.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+        }
+        return productService.getProductsForCategory(page, size, categoryId, sortField, sortDirection, subCategoryIdList, minPrice, maxPrice);
+    }
 
     @GetMapping("/all/sub-category")
     @Operation(summary = "All products for subcategory")
@@ -98,8 +111,17 @@ public class ProductController {
                                                                   @RequestParam(defaultValue = "9") int size,
                                                                   @RequestParam("query") String query,
                                                                   @RequestParam(defaultValue = "name") String sortField,
-                                                                  @RequestParam(defaultValue = "asc") String sortDirection){
-        return productService.searchProducts(page, size, query, sortField, sortDirection);
+                                                                  @RequestParam(defaultValue = "asc") String sortDirection,
+                                                                  @Nullable @RequestParam String subCategoryIds,
+                                                                  @RequestParam(defaultValue = "0") BigDecimal minPrice,
+                                                                  @RequestParam(defaultValue = "999999999") BigDecimal maxPrice){
+        List<Long> subCategoryIdList = null;
+        if (subCategoryIds != null && !subCategoryIds.isEmpty()) {
+            subCategoryIdList = Arrays.stream(subCategoryIds.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+        }
+        return productService.searchProducts(page, size, query, sortField, sortDirection, subCategoryIdList, minPrice, maxPrice);
     }
 
     @PostMapping(value = "/add-picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -137,5 +159,12 @@ public class ProductController {
     @Operation(summary = "Fetch similar products to the current product that is currently opened")
     public ResponseEntity<List<ProductProjection>> getSimilarProducts(@RequestParam(value = "productId") Long productId) {
         return productService.getSimilarProducts(productId);
+    }
+
+    @PostMapping(value = "/add-with-csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Add products from CSV file", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> addProductsWithCSV(@RequestHeader("Authorization") String authHeader,
+                                                @RequestBody MultipartFile file) {
+        return productService.addProductsWithCSV(authHeader, file);
     }
 }

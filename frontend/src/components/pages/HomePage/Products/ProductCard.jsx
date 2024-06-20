@@ -6,6 +6,8 @@ import DollarSign from '../../../../assets/dollar-sign-2.png';
 const ProductCard = ({ product, width, height, grid }) => {
     const navigate = useNavigate();
     const productLink = `/shop/product/${product.id}`;
+    const sanitizedDescription = product.description.split('\\n').join('. ');
+    console.log(sanitizedDescription)
     return (
         (grid ? (
             <div className="product" key={product.id}>
@@ -21,7 +23,7 @@ const ProductCard = ({ product, width, height, grid }) => {
                 <div className="product-list-content">
                     <div className="headline-and-description" onClick={() => navigate(productLink)}>
                         <h5>{product.name}</h5>
-                        <p className="product-list-description">{product.description}</p>
+                        <p className="product-list-description">{sanitizedDescription}</p>
                     </div>
                     {product.highestBid ?
                         (<p className="start-price">Highest bid ${product.highestBid.toFixed(2)}</p>) :

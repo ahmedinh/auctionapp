@@ -1,0 +1,1 @@
+export const debounceTimeoutConstant = 1000;
