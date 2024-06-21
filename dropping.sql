@@ -2,7 +2,6 @@ drop table flyway_schema_history;
 drop table wish_list;
 drop table credit_card;
 drop table bid;
-drop table credit_card;
 drop table product_picture;
 drop table product;
 drop table person;
