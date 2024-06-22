@@ -17,7 +17,7 @@ export default function BasicSearch() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag } = useContext(PriceContext);
+    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag, fullMinPrice, fullMaxPrice } = useContext(PriceContext);
     
 
     const {
@@ -82,6 +82,8 @@ export default function BasicSearch() {
                 refetch={refetch}
                 priceChangedFlag={priceChangedFlag}
                 setPriceChangedFlag={setPriceChangedFlag}
+                fullMinPrice={fullMinPrice}
+                fullMaxPrice={fullMaxPrice}
             />
         </div>
     );

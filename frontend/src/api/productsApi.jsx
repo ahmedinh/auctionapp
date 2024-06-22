@@ -167,3 +167,7 @@ export async function addProductsCSV({ file }) {
         }
     })
 }
+
+export async function getMinMaxPrices() {
+    return axios.get(`${apiUrl}/api/product/get-min-max-prices`).then(res => res.data);
+}

@@ -7,7 +7,6 @@ const ProductCard = ({ product, width, height, grid }) => {
     const navigate = useNavigate();
     const productLink = `/shop/product/${product.id}`;
     const sanitizedDescription = product.description.split('\\n').join('. ');
-    console.log(sanitizedDescription)
     return (
         (grid ? (
             <div className="product" key={product.id}>
