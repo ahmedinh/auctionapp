@@ -391,4 +391,16 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             LIMIT 3
     """)
     List<ProductProjection> getSimilarProducts(@Param("productId") Long productId, @Param("categoryId") Long categoryId);
+
+    @Query("""
+    SELECT MAX(p.startPrice)
+    FROM Product p
+""")
+    BigDecimal getMaxStartPrice();
+
+    @Query("""
+    SELECT MIN(p.startPrice)
+    FROM Product p
+""")
+    BigDecimal getMinStartPrice();
 }
