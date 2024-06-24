@@ -43,7 +43,8 @@ public class WebSecurityConfiguration {
     private static final String[] PROTECTED_POST = new String[] {
             "/api/product",
             "/api/product/add-picture",
-            "/api/product/add-with-csv"
+            "/api/product/add-with-csv",
+            "/api/payment/charge"
     };
 
     private static final String[] PROTECTED_PUT = new String[] {
