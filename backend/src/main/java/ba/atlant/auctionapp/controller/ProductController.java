@@ -167,4 +167,10 @@ public class ProductController {
                                                 @RequestBody MultipartFile file) {
         return productService.addProductsWithCSV(authHeader, file);
     }
+
+    @GetMapping(value = "/get-min-max-prices")
+    @Operation(summary = "Getting min and max price for CSV filter")
+    public ResponseEntity<Map<String, BigDecimal>> getMaxPriceForProducts() {
+        return productService.getMaxPriceForProducts();
+    }
 }

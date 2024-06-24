@@ -316,4 +316,11 @@ public class ProductService {
             return new CustomMultipartFile(imageBytes, "picture_" + number + ".jpg", "image/jpeg");
         }
     }
+
+    public ResponseEntity<Map<String, BigDecimal>> getMaxPriceForProducts() {
+        Map<String, BigDecimal> prices = new HashMap<>();
+        prices.put("max_price",productRepository.getMaxStartPrice());
+        prices.put("min_price",productRepository.getMinStartPrice());
+        return ResponseEntity.ok(prices);
+    }
 }

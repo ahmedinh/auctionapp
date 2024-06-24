@@ -10,14 +10,14 @@ import { Icon } from '@iconify/react';
 import { debounceTimeoutConstant } from "../../utilities/constants";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag }) {
+export default function MainSearchPage({ productsData, productsStatus, productsError, hasNextPage, fetchNextPage, isFetchingNextPage, onSortChange, selectedSubCategories, setSelectedSubCategories, minValue, setMinValue, maxValue, setMaxValue, refetch, priceChangedFlag, setPriceChangedFlag, fullMinPrice, fullMaxPrice }) {
     const { categoryId } = useParams();
     const [selected, setSelected] = useState(null);
     const [expandedCategories, setExpandedCategories] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('');
-    const [initialMinValue, setInitialMinValue] = useState(minValue);
-    const [initialMaxValue, setInitialMaxValue] = useState(maxValue);
-    const [priceApplied, setPriceApplied] = useState(minValue !== 0 || maxValue !== 1500);
+    const [initialMinValue, setInitialMinValue] = useState(fullMinPrice);
+    const [initialMaxValue, setInitialMaxValue] = useState(fullMaxPrice);
+    const [priceApplied, setPriceApplied] = useState(false);
     const [view, setView] = useState('grid');
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -57,7 +57,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                 refetch();
                 setInitialMinValue(minValue);
                 setInitialMaxValue(maxValue);
-                setPriceApplied(minValue !== 0 || maxValue !== 1500);
+                setPriceApplied(minValue !== fullMinPrice || maxValue !== fullMaxPrice);
             }
         }, debounceTimeoutConstant);
 
@@ -71,7 +71,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
         setMaxValue(e.maxValue);
         if (e.minValue !== initialMinValue || e.maxValue !== initialMaxValue) {
             setPriceChangedFlag(true);
-        } else if (e.minValue === 0 && e.maxValue === 1500) {
+        } else if (e.minValue === fullMinPrice && e.maxValue === fullMaxPrice) {
             setPriceChangedFlag(false);
         }
     };
@@ -82,7 +82,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMinValue(value);
             if (value !== initialMinValue) {
                 setPriceChangedFlag(true);
-            } else if (value === 0 && maxValue === 1500) {
+            } else if (value === fullMinPrice && maxValue === fullMaxPrice) {
                 setPriceChangedFlag(false);
             }
         } else {
@@ -96,7 +96,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
             setMaxValue(value);
             if (value !== initialMaxValue) {
                 setPriceChangedFlag(true);
-            } else if (minValue === 0 && value === 1500) {
+            } else if (minValue === fullMinPrice && value === fullMaxPrice) {
                 setPriceChangedFlag(false);
             }
         } else {
@@ -161,8 +161,8 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
     };
 
     const handleRemovePriceFilter = () => {
-        setMinValue(0);
-        setMaxValue(1500);
+        setMinValue(fullMinPrice);
+        setMaxValue(fullMaxPrice);
         setPriceApplied(false);
         setPriceChangedFlag(false);
         refetch();
@@ -208,7 +208,7 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 type="text"
                                 value={minValue}
                                 onChange={handleMinChange}
-                                min="0"
+                                min={fullMinPrice}
                                 className="min-input"
                             />
                             <span>-</span>
@@ -216,14 +216,14 @@ export default function MainSearchPage({ productsData, productsStatus, productsE
                                 type="text"
                                 value={maxValue}
                                 onChange={handleMaxChange}
-                                min="0"
+                                min={fullMinPrice}
                                 className="max-input"
                             />
                         </div>
                         <div className="spinner">
                             <MultiRangeSlider
-                                min={0}
-                                max={1500}
+                                min={fullMinPrice}
+                                max={fullMaxPrice}
                                 step={1}
                                 minValue={minValue}
                                 maxValue={maxValue}

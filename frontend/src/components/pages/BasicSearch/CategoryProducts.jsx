@@ -10,7 +10,7 @@ export default function CategoryProducts() {
     const [sortField, setSortField] = useState('name');
     const [sortDirection, setSortDirection] = useState('asc');
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag } = useContext(PriceContext);
+    const { minValue, setMinValue, maxValue, setMaxValue, priceChangedFlag, setPriceChangedFlag, fullMinPrice, fullMaxPrice } = useContext(PriceContext);
 
     const {
         data,
@@ -46,6 +46,8 @@ export default function CategoryProducts() {
                 refetch={refetch}
                 priceChangedFlag={priceChangedFlag}
                 setPriceChangedFlag={setPriceChangedFlag}
+                fullMinPrice={fullMinPrice}
+                fullMaxPrice={fullMaxPrice}
             />
         </div>
     );
