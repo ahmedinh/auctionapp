@@ -1,16 +1,18 @@
 import React from "react";
 import StripeCheckout from "react-stripe-checkout";
 import axios from "axios";
+import { getToken } from '../../utilities/Common';
 const apiUrl = process.env.REACT_APP_API_URL
 
 export default function Payment({ email, amount, productId, refetchBids }) {
     async function handleToken(token) {
-        console.log(token);
+        const userToken = getToken();
         await axios
             .post(`${apiUrl}/api/payment/charge`, "", {
                 headers: {
                     token: token.id,
                     amount: amount,
+                    'Authorization': `Bearer ${userToken}`
                 },
                 params: {
                     productId
