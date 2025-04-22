@@ -18,7 +18,7 @@ public class ProductPicture {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Transient
     private String url;
 
     @JsonIgnore

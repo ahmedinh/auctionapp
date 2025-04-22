@@ -27,7 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.name as pictureName
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -46,7 +46,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.name as pictureName
             FROM Product p
             INNER JOIN ProductPicture i
             ON p.id = i.product.id
@@ -65,7 +65,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
@@ -90,7 +90,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
@@ -114,7 +114,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
@@ -140,7 +140,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
@@ -165,7 +165,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i
@@ -228,7 +228,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
@@ -259,7 +259,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             (SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id) as highestBid
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
@@ -286,7 +286,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.name as name,
             p.auctionEnd as auctionEnd,
             p.startPrice as startPrice,
-            (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
+            (SELECT MIN(pp.name) FROM ProductPicture pp WHERE pp.product.id = p.id) as pictureName,
             COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
             COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids,
             get_time_left(p.auctionEnd) as timeLeft
@@ -300,7 +300,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.name as name,
             p.auctionEnd as auctionEnd,
             p.startPrice as startPrice,
-            (SELECT MIN(pp.url) FROM ProductPicture pp WHERE pp.product.id = p.id) as url,
+            (SELECT MIN(pp.name) FROM ProductPicture pp WHERE pp.product.id = p.id) as pictureName,
             COALESCE((SELECT MAX(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as maxBid,
             COALESCE((SELECT COUNT(b.amount) FROM Bid b WHERE b.product.id = p.id),0) as noOfBids,
             get_time_left(p.auctionEnd) as timeLeft
@@ -322,14 +322,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url,
+            i.name as pictureName,
             COUNT(b.id) as bidCount
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
             LEFT JOIN Bid b ON b.product.id = p.id
             WHERE i.id = (SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id)
             AND p.auctionEnd > CURRENT_TIMESTAMP
-            GROUP BY p.id, p.name, p.description, p.startPrice, p.createdAt, p.auctionStart, p.auctionEnd, p.size, p.color, i.url
+            GROUP BY p.id, p.name, p.description, p.startPrice, p.createdAt, p.auctionStart, p.auctionEnd, p.size, p.color, i.name
             ORDER BY bidCount DESC, p.auctionEnd ASC
             LIMIT 3
             """)
@@ -351,7 +351,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.createdAt as createdAt,
             p.auctionStart as auctionStart,
             p.auctionEnd as auctionEnd,
-            i.url as url,
+            i.name as pictureName,
             (SELECT COUNT(b.id) FROM Bid b WHERE b.product.id = p.id AND b.person.id <> :userId) AS bidCount
             FROM Product p
             INNER JOIN ProductPicture i
@@ -380,7 +380,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
             p.auctionEnd as auctionEnd,
             p.size as size,
             p.color as color,
-            i.url as url
+            i.name as pictureName
             FROM Product p
             INNER JOIN ProductPicture i ON p.id = i.product.id
             WHERE i.id = (SELECT MIN(ii.id) FROM ProductPicture ii WHERE ii.product.id = p.id)

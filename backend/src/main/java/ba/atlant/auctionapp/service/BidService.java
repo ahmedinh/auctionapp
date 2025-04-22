@@ -1,10 +1,11 @@
 package ba.atlant.auctionapp.service;
 
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
+import ba.atlant.auctionapp.dto.BidRecord;
+import ba.atlant.auctionapp.dto.BidTableRecord;
 import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.Product;
-import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.projection.BidTableProjection;
 import ba.atlant.auctionapp.repository.BidRepository;
 import ba.atlant.auctionapp.repository.PersonRepository;
@@ -30,18 +31,30 @@ public class BidService {
     private final ProductRepository productRepository;
     private final PersonRepository personRepository;
     private final JwtUtils jwtUtils;
+    private final S3Service s3Service;
 
-    public BidService(BidRepository bidRepository, ProductRepository productRepository, PersonRepository personRepository, JwtUtils jwtUtils) {
+    public BidService(BidRepository bidRepository, ProductRepository productRepository, PersonRepository personRepository, JwtUtils jwtUtils, S3Service s3Service) {
         this.bidRepository = bidRepository;
         this.productRepository = productRepository;
         this.personRepository = personRepository;
         this.jwtUtils = jwtUtils;
+        this.s3Service = s3Service;
     }
 
-    public ResponseEntity<List<BidProjection>> getUserBids(String token) {
+    public ResponseEntity<List<BidRecord>> getUserBids(String token) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok(bidRepository.getUserBids(userId));
+        return ResponseEntity.ok(bidRepository.getUserBids(userId).stream().map(b -> new BidRecord(
+                b.getProductId(),
+                b.getProductName(),
+                s3Service.generateUrl(b.getProductPictureUrl()),
+                b.getAuctionEnd(),
+                b.getUserPrice(),
+                b.getNoOfBids(),
+                b.getMaxBid(),
+                b.getTimeLeft(),
+                b.getIsPaid()
+        )).toList());
     }
 
     private BidResponse isBidValid(BidRequest bidRequest, Product product) {
@@ -77,12 +90,21 @@ public class BidService {
         return bidResponse;
     }
 
-    public ResponseEntity<Page<BidTableProjection>> getProductBids(String token, Long productId, int page, int size) {
+    public ResponseEntity<Page<BidTableRecord>> getProductBids(String token, Long productId, int page, int size) {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(token.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Person not found for given ID."));
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
         if (!product.getPerson().getId().equals(person.getId()))
             throw new AuthorizationServiceException("Provided person is not the owner of the product.");
-        return ResponseEntity.ok(bidRepository.getBidsByProductId(productId, PageRequest.of(page, size)));
+        return ResponseEntity.ok(bidRepository.getBidsByProductId(productId, PageRequest.of(page, size)).map(
+                b -> new BidTableRecord(
+                        b.getId(),
+                        b.getPersonFirstName(),
+                        b.getPersonLastName(),
+                        b.getBidAmount(),
+                        b.getBidTimeStamp(),
+                        s3Service.generateUrl(b.getPersonPictureUrl())
+                )
+        ));
     }
 }

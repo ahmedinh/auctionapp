@@ -24,7 +24,7 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
     @Query(value = """
             SELECT b.product_id as productId,
             p.name as productName,
-            (SELECT pp.url FROM product_picture pp WHERE pp.id = (SELECT MIN(pp2.id) FROM product_picture pp2 WHERE pp2.product_id = p.id)) as productPictureUrl,
+            (SELECT pp.name FROM product_picture pp WHERE pp.id = (SELECT MIN(pp2.id) FROM product_picture pp2 WHERE pp2.product_id = p.id)) as productPictureUrl,
             b.amount as userPrice,
             (SELECT COUNT(bb.id) FROM bid bb WHERE bb.product_id = p.id) as noOfBids,
             (SELECT MAX(bb.amount) FROM bid bb WHERE bb.product_id = p.id) as maxBid,
@@ -45,7 +45,7 @@ public interface BidRepository extends JpaRepository<Bid, Long>, PagingAndSortin
             b.person.lastName as personLastName,
             b.amount as bidAmount,
             b.bidTimeStamp as bidTimeStamp,
-            b.person.pictureUrl as personPictureUrl
+            b.person.pictureName as personPictureUrl
             FROM Bid b
             WHERE b.product.id = :productId
             ORDER BY b.amount desc

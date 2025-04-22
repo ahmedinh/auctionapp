@@ -61,8 +61,8 @@ public class Person {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @Column(name = "picture_url")
-    private String pictureUrl;
+    @Column(name = "picture_name")
+    private String pictureName;
 
     public Person() {
     }
@@ -97,7 +97,7 @@ public class Person {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.pictureUrl = "https://auction-s3-bucket.s3.eu-central-1.amazonaws.com/default_user_profile_picture/profile-picture.png";
+        this.pictureName = "default_user/default_image.png";
     }
 
     public Long getId() {
@@ -208,11 +208,11 @@ public class Person {
         this.active = active;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getPictureName() {
+        return pictureName;
     }
 
-    public void setPictureUrl(String bucketName, String region, String originalFilename) {
-        this.pictureUrl = String.format("https://%s.s3.%s.amazonaws.com/user_%s/%s", bucketName, region, getId(), originalFilename);
+    public void setPictureUrl(String originalFilename) {
+        this.pictureName = String.format("user_%s/%s", getId(), originalFilename);
     }
 }

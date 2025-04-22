@@ -14,7 +14,7 @@ public interface ProductProjection {
     LocalDate getAuctionEnd();
     String getSize();
     String getColor();
-    String getUrl();
+    String getPictureName();
     Integer getBidCount();
     BigDecimal getHighestBid();
 }

@@ -1,5 +1,7 @@
 package ba.atlant.auctionapp.controller;
 
+import ba.atlant.auctionapp.dto.BidRecord;
+import ba.atlant.auctionapp.dto.BidTableRecord;
 import ba.atlant.auctionapp.model.Bid;
 import ba.atlant.auctionapp.projection.BidProjection;
 import ba.atlant.auctionapp.projection.BidTableProjection;
@@ -26,16 +28,16 @@ public class BidController {
 
     @GetMapping(value = "/user/all")
     @Operation(summary = "All bids created by single user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<List<BidProjection>> getUserBids(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<BidRecord>> getUserBids(@RequestHeader("Authorization") String token) {
         return bidService.getUserBids(token);
     }
 
     @GetMapping(value = "/product/all")
     @Operation(summary = "All bids for user product on product overview page", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Page<BidTableProjection>> getProductBids(@RequestHeader("Authorization") String token,
-                                                                   @RequestParam(name = "productId") Long productId,
-                                                                   @RequestParam(defaultValue = "0") int page,
-                                                                   @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<Page<BidTableRecord>> getProductBids(@RequestHeader("Authorization") String token,
+                                                               @RequestParam(name = "productId") Long productId,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "5") int size) {
         return bidService.getProductBids(token, productId, page, size);
     }
 }

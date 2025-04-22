@@ -4,6 +4,8 @@ import ba.atlant.auctionapp.config.CustomMultipartFile;
 import ba.atlant.auctionapp.config.jwt.JwtUtils;
 import ba.atlant.auctionapp.dto.ProductCreationDTO;
 import ba.atlant.auctionapp.dto.ProductDTO;
+import ba.atlant.auctionapp.dto.ProductSmallDTO;
+import ba.atlant.auctionapp.dto.ProductUserRecord;
 import ba.atlant.auctionapp.exception.ServiceException;
 import ba.atlant.auctionapp.model.*;
 import ba.atlant.auctionapp.projection.ProductProjection;
@@ -55,17 +57,6 @@ public class ProductService {
         this.bidRepository = bidRepository;
         this.s3Service = s3Service;
         this.jwtUtils = jwtUtils;
-        refreshPictureURLs();
-    }
-
-    private void refreshPictureURLs() {
-        System.out.println("Refreshing URLs for pictures");
-        List<ProductPicture> productPictureList = productPictureRepository.findAll();
-        for (var temp : productPictureList) {
-            System.out.println("Picture name is: " + temp.getName());
-            temp.setUrl(s3Service.generateUrl(temp.getName()));
-        }
-        productPictureRepository.saveAll(productPictureList);
     }
 
     @Transactional
@@ -87,24 +78,50 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<Page<ProductProjection>> getNewArrivals(int page, int size) {
-        Page<ProductProjection> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size));
+    public ResponseEntity<Page<ProductSmallDTO>> getNewArrivals(int page, int size) {
+        Page<ProductSmallDTO> productProjectionPage = productRepository.getNewArrivalsProducts(PageRequest.of(page,size)).map(p -> new ProductSmallDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getStartPrice(),
+                p.getCreatedAt(),
+                p.getAuctionStart(),
+                p.getAuctionEnd(),
+                p.getSize(),
+                p.getColor(),
+                s3Service.generateUrl(p.getPictureName()),
+                0,
+                BigDecimal.valueOf(0)
+        ));
         return ResponseEntity.ok(productProjectionPage);
     }
 
-    public ResponseEntity<Page<ProductProjection>> getLastChance(int page, int size) {
-        Page<ProductProjection> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size));
+    public ResponseEntity<Page<ProductSmallDTO>> getLastChance(int page, int size) {
+        Page<ProductSmallDTO> productProjectionPage = productRepository.getLastChanceProducts(PageRequest.of(page,size)).map(p -> new ProductSmallDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getStartPrice(),
+                p.getCreatedAt(),
+                p.getAuctionStart(),
+                p.getAuctionEnd(),
+                p.getSize(),
+                p.getColor(),
+                s3Service.generateUrl(p.getPictureName()),
+                0,
+                BigDecimal.valueOf(0)
+        ));
         return ResponseEntity.ok(productProjectionPage);
     }
 
     public ResponseEntity<ProductDTO> getHighlighted() {
         Product product = productRepository.findById(5L).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
-        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(5L)));
+        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(5L).stream().peek(p -> p.setUrl(s3Service.generateUrl(p.getName()))).toList()));
     }
 
     public ResponseEntity<ProductDTO> getProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
-        List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id);
+        List<ProductPicture> productPictureList = productPictureRepository.findAllByProductId(id).stream().peek(p -> p.setUrl(s3Service.generateUrl(p.getName()))).toList();
         List<Bid> bidList = bidRepository.findAllByProductId(id);
         if (bidList.isEmpty())
             return ResponseEntity.ok(new ProductDTO(product, productPictureList, BigDecimal.valueOf(0), 0));
@@ -112,7 +129,7 @@ public class ProductService {
             return ResponseEntity.ok(new ProductDTO(product, productPictureList, bidList.stream().max(Comparator.comparing(Bid::getAmount)).get().getAmount(), bidList.size()));
     }
 
-    public ResponseEntity<Page<ProductProjection>> getProductsForCategory(
+    public ResponseEntity<Page<ProductSmallDTO>> getProductsForCategory(
             int page, int size, Long categoryId, String sortField, String sortDirection, List<Long> subCategoryIds, BigDecimal minPrice, BigDecimal maxPrice) {
 
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
@@ -130,12 +147,38 @@ public class ProductService {
                     ? productRepository.getProductsForCategoryWithFutureAuctionEnd(categoryId, subCategoryIds, minPrice, maxPrice, pageable)
                     : productRepository.getProductsForCategory(categoryId, subCategoryIds, minPrice, maxPrice, pageable);
         }
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(products.map(p -> new ProductSmallDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getStartPrice(),
+                p.getCreatedAt(),
+                p.getAuctionStart(),
+                p.getAuctionEnd(),
+                p.getSize(),
+                p.getColor(),
+                s3Service.generateUrl(p.getPictureName()),
+                0,
+                BigDecimal.valueOf(0)
+        )));
     }
 
-    public ResponseEntity<Page<ProductProjection>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
+    public ResponseEntity<Page<ProductSmallDTO>> getProductsForSubCategory(int page, int size, Long subCategoryId) {
         Page<ProductProjection> productProjectionPage = productRepository.getProductsForSubCategory(subCategoryId, PageRequest.of(page,size));
-        return ResponseEntity.ok(productProjectionPage);
+        return ResponseEntity.ok(productProjectionPage.map(p -> new ProductSmallDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getStartPrice(),
+                p.getCreatedAt(),
+                p.getAuctionStart(),
+                p.getAuctionEnd(),
+                p.getSize(),
+                p.getColor(),
+                s3Service.generateUrl(p.getPictureName()),
+                p.getBidCount(),
+                p.getHighestBid()
+        )));
     }
 
     public ResponseEntity<Map<String, String>> getSuggestion(String query, Integer threshold) {
@@ -144,13 +187,39 @@ public class ProductService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<Page<ProductProjection>> searchProducts(
+    public ResponseEntity<Page<ProductSmallDTO>> searchProducts(
             int page, int size, String query, String sortField, String sortDirection, List<Long> subCategoryIds, BigDecimal minPrice, BigDecimal maxPrice) {
         Pageable pageable = makeSortObject(page, size, sortField, sortDirection);
         if (sortField.equalsIgnoreCase("auctionEnd"))
-            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, subCategoryIds, minPrice, maxPrice, pageable));
+            return ResponseEntity.ok(productRepository.searchProductsWithFutureAuctionEnd(query, subCategoryIds, minPrice, maxPrice, pageable).map(p -> new ProductSmallDTO(
+                    p.getId(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getStartPrice(),
+                    p.getCreatedAt(),
+                    p.getAuctionStart(),
+                    p.getAuctionEnd(),
+                    p.getSize(),
+                    p.getColor(),
+                    s3Service.generateUrl(p.getPictureName()),
+                    p.getBidCount(),
+                    p.getHighestBid()
+            )));
         else
-            return ResponseEntity.ok(productRepository.searchProducts(query, subCategoryIds, minPrice, maxPrice, pageable));
+            return ResponseEntity.ok(productRepository.searchProducts(query, subCategoryIds, minPrice, maxPrice, pageable).map(p -> new ProductSmallDTO(
+                    p.getId(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getStartPrice(),
+                    p.getCreatedAt(),
+                    p.getAuctionStart(),
+                    p.getAuctionEnd(),
+                    p.getSize(),
+                    p.getColor(),
+                    s3Service.generateUrl(p.getPictureName()),
+                    p.getBidCount(),
+                    p.getHighestBid()
+            )));
     }
 
     private Pageable makeSortObject(int page, int size, String sortField, String sortDirection) {
@@ -186,14 +255,36 @@ public class ProductService {
         return ResponseEntity.ok(productPictureList);
     }
 
-    public ResponseEntity<List<ProductUserProjection>> activeUserProducts(Long userId) {
+    public ResponseEntity<List<ProductUserRecord>> activeUserProducts(Long userId) {
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok().body(productRepository.getActiveUserProducts(userId));
+        return ResponseEntity.ok().body(productRepository.getActiveUserProducts(userId).stream().map(
+                p -> new ProductUserRecord(
+                        p.getId(),
+                        p.getName(),
+                        p.getStartPrice(),
+                        p.getAuctionEnd(),
+                        s3Service.generateUrl(p.getPictureName()),
+                        p.getMaxBid(),
+                        p.getNoOfBids(),
+                        p.getTimeLeft()
+                )
+        ).toList());
     }
 
-    public ResponseEntity<List<ProductUserProjection>> soldUserProducts(Long userId) {
+    public ResponseEntity<List<ProductUserRecord>> soldUserProducts(Long userId) {
         personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId));
+        return ResponseEntity.ok().body(productRepository.getSoldUserProducts(userId).stream().map(
+                p -> new ProductUserRecord(
+                        p.getId(),
+                        p.getName(),
+                        p.getStartPrice(),
+                        p.getAuctionEnd(),
+                        s3Service.generateUrl(p.getPictureName()),
+                        p.getMaxBid(),
+                        p.getNoOfBids(),
+                        p.getTimeLeft()
+                )
+        ).toList());
     }
 
     @Transactional
@@ -208,9 +299,24 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public ResponseEntity<List<ProductProjection>> getRecommendedProducts(Long userId) {
+    public ResponseEntity<List<ProductSmallDTO>> getRecommendedProducts(Long userId) {
         if (userId == null || bidRepository.getUserBids(userId).isEmpty()) {
-            return ResponseEntity.ok(productRepository.getDefaultRecommendedProducts());
+            return ResponseEntity.ok(productRepository.getDefaultRecommendedProducts().stream().map(
+                    p -> new ProductSmallDTO(
+                            p.getId(),
+                            p.getName(),
+                            p.getDescription(),
+                            p.getStartPrice(),
+                            p.getCreatedAt(),
+                            p.getAuctionStart(),
+                            p.getAuctionEnd(),
+                            p.getSize(),
+                            p.getColor(),
+                            s3Service.generateUrl(p.getPictureName()),
+                            p.getBidCount(),
+                            p.getHighestBid()
+                    )
+            ).toList());
         }
         List<SubCategoryProjection> subCategoryListWithMostUserBids = subCategoryRepository.getSubCategoriesByMostUserBids(userId);
         List<ProductProjection> mostPopularProductsForUser = productRepository.getProductsFromPopularSubCategoryForUser(userId, subCategoryListWithMostUserBids.get(0).getId());
@@ -230,12 +336,42 @@ public class ProductService {
             if (!secondMostPopularProductsForSubCategory.isEmpty())
                 recommendedProducts.set(2, secondMostPopularProductsForSubCategory.get(0));
         }
-        return ResponseEntity.ok(recommendedProducts);
+        return ResponseEntity.ok(recommendedProducts.stream().map(p -> new ProductSmallDTO(
+                p.getId(),
+                p.getName(),
+                p.getDescription(),
+                p.getStartPrice(),
+                p.getCreatedAt(),
+                p.getAuctionStart(),
+                p.getAuctionEnd(),
+                p.getSize(),
+                p.getColor(),
+                s3Service.generateUrl(p.getPictureName()),
+                p.getBidCount(),
+                p.getHighestBid()
+        )).toList());
     }
 
-    public ResponseEntity<List<ProductProjection>> getSimilarProducts(Long productId) {
+    public ResponseEntity<List<ProductSmallDTO>> getSimilarProducts(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found with provided ID."));
-        return ResponseEntity.ok(productRepository.getSimilarProducts(productId, product.getSubCategory().getCategory().getId()));
+        return ResponseEntity.ok(productRepository.getSimilarProducts(
+                productId,
+                product.getSubCategory().getCategory().getId())
+                .stream()
+                .map(p -> new ProductSmallDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getDescription(),
+                        p.getStartPrice(),
+                        p.getCreatedAt(),
+                        p.getAuctionStart(),
+                        p.getAuctionEnd(),
+                        p.getSize(),
+                        p.getColor(),
+                        s3Service.generateUrl(p.getPictureName()),
+                        p.getBidCount(),
+                        p.getHighestBid()
+                )).toList());
     }
 
     @Transactional

@@ -158,9 +158,11 @@ public class PersonService {
     public ResponseEntity<Person> addPictureToUser(String authHeader, MultipartFile file) throws IOException {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
-        s3Service.deleteObject(person.getPictureUrl());
+        if (!person.getPictureName().equals("default_user/default_image.png")) {
+            s3Service.deleteObject(person.getPictureName());
+        }
         s3Service.uploadFile("user_" + userId + "/" + file.getOriginalFilename(), file);
-        person.setPictureUrl(s3Service.getBucketName(), s3Service.getRegion(), file.getOriginalFilename());
+        person.setPictureUrl(file.getOriginalFilename());
         personRepository.save(person);
         return ResponseEntity.ok(person);
     }
@@ -169,7 +171,7 @@ public class PersonService {
         Long userId = Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader.substring(7)));
         Person person = personRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with provided ID."));
         Map<String, String> personPictureUrl = new HashMap<>();
-        personPictureUrl.put("url", person.getPictureUrl());
+        personPictureUrl.put("url", s3Service.generateUrl(person.getPictureName()));
         return ResponseEntity.ok(personPictureUrl);
     }
 

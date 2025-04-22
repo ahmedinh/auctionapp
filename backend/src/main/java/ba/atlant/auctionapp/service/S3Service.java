@@ -36,7 +36,7 @@ public class S3Service {
 
     public String generateUrl(String fileName) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
         Date expiration = calendar.getTime();
 
         return s3client.generatePresignedUrl(bucketName, fileName, expiration, HttpMethod.GET).toString();

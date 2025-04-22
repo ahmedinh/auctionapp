@@ -9,7 +9,7 @@ public interface ProductUserProjection {
     String getName();
     BigDecimal getStartPrice();
     LocalDate getAuctionEnd();
-    String getUrl();
+    String getPictureName();
     BigDecimal getMaxBid();
     Integer getNoOfBids();
     String getTimeLeft();
