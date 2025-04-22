@@ -1,17 +1,12 @@
 version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
     container_name: postgres
-    environment:
-      POSTGRES_DB: auction
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    restart: always
     ports:
       - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auction

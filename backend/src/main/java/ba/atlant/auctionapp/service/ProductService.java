@@ -55,6 +55,17 @@ public class ProductService {
         this.bidRepository = bidRepository;
         this.s3Service = s3Service;
         this.jwtUtils = jwtUtils;
+        refreshPictureURLs();
+    }
+
+    private void refreshPictureURLs() {
+        System.out.println("Refreshing URLs for pictures");
+        List<ProductPicture> productPictureList = productPictureRepository.findAll();
+        for (var temp : productPictureList) {
+            System.out.println("Picture name is: " + temp.getName());
+            temp.setUrl(s3Service.generateUrl(temp.getName()));
+        }
+        productPictureRepository.saveAll(productPictureList);
     }
 
     @Transactional
@@ -87,8 +98,8 @@ public class ProductService {
     }
 
     public ResponseEntity<ProductDTO> getHighlighted() {
-        Product product = productRepository.findById(9L).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
-        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(9L)));
+        Product product = productRepository.findById(5L).orElseThrow(() -> new ResourceNotFoundException("Product not found for given ID."));
+        return ResponseEntity.ok(new ProductDTO(product, productPictureRepository.findAllByProductId(5L)));
     }
 
     public ResponseEntity<ProductDTO> getProduct(Long id) {
@@ -160,10 +171,13 @@ public class ProductService {
         int counter = 1;
         for (MultipartFile file : files) {
             String pictureDefault = "picture_" + counter;
-            s3Service.uploadFile(productName + "/" + pictureDefault + "/" + file.getOriginalFilename(), file);
+            String keyName = productName + "/" + pictureDefault + "/" + file.getOriginalFilename();
+            s3Service.uploadFile(keyName, file);
+            String pictureUrl = s3Service.generateUrl(keyName);
+            System.out.println("Picture URL for " + productName + " is " + pictureUrl);
             productPictureList.add(new ProductPicture(
-                    productName + "/" + pictureDefault + "/" + file.getOriginalFilename(),
-                    String.format("https://%s.s3.%s.amazonaws.com/%s/%s/%s",s3Service.getBucketName(),s3Service.getRegion(),productName,pictureDefault,file.getOriginalFilename()),
+                    keyName,
+                    pictureUrl,
                     product
             ));
             counter++;

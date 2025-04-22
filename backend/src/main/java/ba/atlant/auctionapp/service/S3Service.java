@@ -34,12 +34,12 @@ public class S3Service {
         return s3client.getObject(bucketName, keyName);
     }
 
-    public String generateUrl(String fileName, HttpMethod httpMethod) {
+    public String generateUrl(String fileName) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, 7);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        Date expiration = calendar.getTime();
 
-        return s3client.generatePresignedUrl(bucketName, fileName, calendar.getTime(), httpMethod).toString();
+        return s3client.generatePresignedUrl(bucketName, fileName, expiration, HttpMethod.GET).toString();
     }
 
     public String getBucketName() {
