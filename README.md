@@ -13,13 +13,16 @@ This application provides a platform for users to participate in auctions, allow
 1. Navigate to the backend directory: `cd backend`
 2. Install maven dependencies: `mvn -U clean install`
 3. Run the Spring Boot application `mvn spring-boot:run`
+
 In order to start backend, you need .env file which will contain secrets for AWS S3 bucket and Stripe. Content should be this:
+```
 STRIPE_PUBLIC_KEY=...
 STRIPE_SECRET_KEY=...
 AWS_ACCESS_KEY=...
 AWS_SECRET_KEY=...
 AWS_S3_BUCKET=...
-All necessary values will be provided locally
+```
+All necessary values will be provided through direct conversation
 ## Frontend Setup
 1. Navigate to the frontend directory: `cd frontend`
 2. Install npm packages: `npm install`
