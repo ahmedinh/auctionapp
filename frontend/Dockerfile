@@ -1,14 +1,24 @@
-FROM node:16-alpine AS build
+# 1) Build stage
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-copy package*.json ./
-RUN npm ci
+# Copy package files and install
+COPY package.json package-lock.json* ./
+RUN npm install
 
+# Copy the rest of your React source
 COPY . .
+
+# Build the production bundle
 RUN npm run build
 
+# 2) Serve with nginx
 FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+# Remove default HTML
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy React build artifacts
+COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
