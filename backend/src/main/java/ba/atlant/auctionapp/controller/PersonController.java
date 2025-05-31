@@ -75,6 +75,7 @@ public class PersonController {
     @Operation(summary = "Insert picture link for user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Person> addPictureToUser(@RequestHeader("Authorization") String authHeader,
                                                    @RequestBody MultipartFile file) throws IOException {
+        ProductController.validateImageFiles(new MultipartFile[]{file});
         return personService.addPictureToUser(authHeader,file);
     }
 

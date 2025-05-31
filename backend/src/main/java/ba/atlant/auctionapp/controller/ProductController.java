@@ -6,25 +6,24 @@ import ba.atlant.auctionapp.dto.ProductSmallDTO;
 import ba.atlant.auctionapp.dto.ProductUserRecord;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.model.ProductPicture;
-import ba.atlant.auctionapp.projection.ProductProjection;
-import ba.atlant.auctionapp.projection.ProductUserProjection;
 import ba.atlant.auctionapp.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,6 +33,9 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductService productService;
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
+            "jpg", "jpeg", "png", "bmp", "webp"
+    );
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -129,7 +131,39 @@ public class ProductController {
     @Operation(summary = "Add pictures to product", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<ProductPicture>> addProductPictures (@RequestBody MultipartFile[] files,
                                                                     @RequestParam("productName") String productName) throws IOException {
+        validateImageFiles(files);
         return productService.addProductPictures(files, productName);
+    }
+
+    public static void validateImageFiles(MultipartFile[] files) {
+        for (MultipartFile file : files) {
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null || originalFilename.isBlank()) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "One of the uploaded files has an invalid or missing filename."
+                );
+            }
+
+            String ext = StringUtils.substringAfterLast(originalFilename, ".")
+                    .toLowerCase(Locale.ROOT);
+
+            if (ext.isEmpty() || !ALLOWED_EXTENSIONS.contains(ext)) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Invalid file type for \"" + originalFilename +
+                                "\". Allowed extensions are: " + ALLOWED_EXTENSIONS
+                );
+            }
+
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "\"" + originalFilename + "\" is not a recognized image (content-type=" + contentType + ")."
+                );
+            }
+        }
     }
 
     @GetMapping(value = "/user/active")

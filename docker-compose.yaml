@@ -43,7 +43,7 @@ services:
     container_name: auction-frontend
     restart: on-failure
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
 
