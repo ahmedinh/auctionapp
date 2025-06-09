@@ -1,5 +1,6 @@
 package ba.atlant.auctionapp.repository;
 
+import ba.atlant.auctionapp.model.Person;
 import ba.atlant.auctionapp.model.Product;
 import ba.atlant.auctionapp.projection.ProductProjection;
 import ba.atlant.auctionapp.projection.ProductUserProjection;
@@ -403,4 +404,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, PagingA
     FROM Product p
 """)
     BigDecimal getMinStartPrice();
+
+    Optional<Product> findProductByNameAndPerson(String productName, Person person);
 }

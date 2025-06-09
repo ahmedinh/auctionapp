@@ -180,8 +180,9 @@ public class ProductController {
 
     @DeleteMapping(value = "/delete")
     @Operation(summary = "Deletion of product created by user", security = @SecurityRequirement(name = "bearerAuth"))
-    public void deleteProduct(@RequestParam("productName") String productName) {
-        productService.deleteProduct(productName);
+    public void deleteProduct(@RequestHeader("Authorization") String authHeader,
+                              @RequestParam("productName") String productName) {
+        productService.deleteProduct(authHeader, productName);
     }
 
     @GetMapping(value = "/recommended")

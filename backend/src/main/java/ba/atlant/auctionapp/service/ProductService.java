@@ -288,8 +288,12 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(String productName) {
-        Product product = productRepository.findByName(productName).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found."));
+    public void deleteProduct(String authHeader, String productName) {
+        Optional<Person> person = personRepository.findById(Long.valueOf(jwtUtils.getUserIdFromJwtToken(authHeader)));
+        if (person.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        Product product = productRepository.findProductByNameAndPerson(productName, person.get()).orElseThrow(() -> new ResourceNotFoundException("Product with provided name is not found for provided user."));
         List<ProductPicture> pictures = productPictureRepository.findAllByProductId(product.getId());
         if (pictures != null && !pictures.isEmpty()) {
             for (ProductPicture productPicture : pictures)
